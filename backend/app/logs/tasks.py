@@ -3,6 +3,7 @@ from celery import shared_task
 from elasticsearch import Elasticsearch
 from django.conf import settings
 from .parsers import LogParser
+from .logstash_forwarder import get_logstash_forwarder
 
 logger = logging.getLogger(__name__)
 
@@ -39,42 +40,15 @@ def process_and_ingest_logs(self, content: str, format_type: str, metadata: dict
         
         logger.info(f"Task {task_id}: Parsed {total_entries} log entries")
         
-        # Connect to Elasticsearch
-        es_config = settings.ELASTICSEARCH_DSL['default']
-        es = Elasticsearch(
-            hosts=es_config['hosts'],
-            http_auth=es_config.get('http_auth')
-        )
+        # Determine ingestion method (Logstash or direct Elasticsearch)
+        use_logstash = getattr(settings, 'USE_LOGSTASH', True)
         
-        # Bulk index logs
-        indexed_count = 0
-        failed_count = 0
-        batch_size = 500
-        
-        for i in range(0, total_entries, batch_size):
-            batch = parsed_entries[i:i + batch_size]
-            
-            try:
-                success, failed = bulk_index_logs(es, batch, metadata.get('tenant_id', 'default'))
-                indexed_count += success
-                failed_count += failed
-                
-                logger.info(
-                    f"Task {task_id}: Batch {i//batch_size + 1}: "
-                    f"Indexed {success}, Failed {failed}"
-                )
-                
-            except Exception as e:
-                logger.error(f"Task {task_id}: Batch indexing error: {e}")
-                failed_count += len(batch)
-        
-        result = {
-            'status': 'success' if failed_count == 0 else 'partial',
-            'message': f'Processed {total_entries} entries',
-            'total_entries': total_entries,
-            'indexed_entries': indexed_count,
-            'failed_entries': failed_count
-        }
+        if use_logstash:
+            # Forward to Logstash
+            result = forward_to_logstash(task_id, parsed_entries, metadata)
+        else:
+            # Direct Elasticsearch ingestion
+            result = ingest_to_elasticsearch(task_id, parsed_entries, metadata)
         
         logger.info(f"Task {task_id}: Completed - {result}")
         return result
@@ -93,6 +67,128 @@ def process_and_ingest_logs(self, content: str, format_type: str, metadata: dict
             'total_entries': 0,
             'indexed_entries': 0,
             'failed_entries': 0
+        }
+
+
+def forward_to_logstash(task_id: str, entries: list, metadata: dict) -> dict:
+    """
+    Forward parsed logs to Logstash
+    
+    Args:
+        task_id: Celery task ID
+        entries: Parsed log entries
+        metadata: Additional metadata
+    
+    Returns:
+        dict: Processing results
+    """
+    try:
+        forwarder = get_logstash_forwarder()
+        
+        # Add metadata to each entry
+        enriched_entries = []
+        for entry in entries:
+            enriched_entry = entry.copy()
+            enriched_entry.update({
+                'tenant_id': metadata.get('tenant_id', 'default'),
+                'source': metadata.get('source', 'api_upload'),
+                'task_id': task_id
+            })
+            enriched_entries.append(enriched_entry)
+        
+        # Send to Logstash in batches
+        batch_size = getattr(settings, 'LOGSTASH_BATCH_SIZE', 100)
+        result = forwarder.send_batch(enriched_entries, batch_size=batch_size)
+        
+        logger.info(
+            f"Task {task_id}: Forwarded to Logstash - "
+            f"Sent: {result['sent']}, Failed: {result['failed']}"
+        )
+        
+        return {
+            'status': 'success' if result['failed'] == 0 else 'partial',
+            'message': f"Forwarded {result['sent']} entries to Logstash",
+            'total_entries': result['total'],
+            'indexed_entries': result['sent'],
+            'failed_entries': result['failed'],
+            'ingestion_method': 'logstash'
+        }
+        
+    except Exception as e:
+        logger.error(f"Task {task_id}: Logstash forwarding error: {e}")
+        return {
+            'status': 'error',
+            'message': f"Logstash forwarding failed: {str(e)}",
+            'total_entries': len(entries),
+            'indexed_entries': 0,
+            'failed_entries': len(entries),
+            'ingestion_method': 'logstash'
+        }
+
+
+def ingest_to_elasticsearch(task_id: str, entries: list, metadata: dict) -> dict:
+    """
+    Direct ingestion to Elasticsearch (fallback method)
+    
+    Args:
+        task_id: Celery task ID
+        entries: Parsed log entries
+        metadata: Additional metadata
+    
+    Returns:
+        dict: Processing results
+    """
+    try:
+        # Connect to Elasticsearch
+        es_config = settings.ELASTICSEARCH_DSL['default']
+        es = Elasticsearch(
+            hosts=es_config['hosts'],
+            http_auth=es_config.get('http_auth')
+        )
+        
+        # Bulk index logs
+        indexed_count = 0
+        failed_count = 0
+        batch_size = 500
+        
+        for i in range(0, len(entries), batch_size):
+            batch = entries[i:i + batch_size]
+            
+            try:
+                success, failed = bulk_index_logs(es, batch, metadata.get('tenant_id', 'default'))
+                indexed_count += success
+                failed_count += failed
+                
+                logger.info(
+                    f"Task {task_id}: Batch {i//batch_size + 1}: "
+                    f"Indexed {success}, Failed {failed}"
+                )
+                
+            except Exception as e:
+                logger.error(f"Task {task_id}: Batch indexing error: {e}")
+                failed_count += len(batch)
+        
+        result = {
+            'status': 'success' if failed_count == 0 else 'partial',
+            'message': f'Processed {len(entries)} entries via Elasticsearch',
+            'total_entries': len(entries),
+            'indexed_entries': indexed_count,
+            'failed_entries': failed_count,
+            'ingestion_method': 'elasticsearch'
+        }
+        
+        logger.info(f"Task {task_id}: Elasticsearch ingestion - {result}")
+        return result
+        
+    except Exception as e:
+        logger.error(f"Task {task_id}: Elasticsearch ingestion error: {e}")
+        return {
+            'status': 'error',
+            'message': f"Elasticsearch ingestion failed: {str(e)}",
+            'total_entries': len(entries),
+            'indexed_entries': 0,
+            'failed_entries': len(entries),
+            'ingestion_method': 'elasticsearch'
         }
 
 

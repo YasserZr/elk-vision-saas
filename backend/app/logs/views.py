@@ -8,6 +8,7 @@ from django.conf import settings
 from .serializers import LogFileUploadSerializer, LogUploadResponseSerializer
 from .parsers import LogParser, estimate_log_count
 from .tasks import process_and_ingest_logs
+from .logstash_forwarder import get_logstash_forwarder
 
 logger = logging.getLogger(__name__)
 
@@ -264,6 +265,132 @@ class LogSearchView(APIView):
                 'message': str(e),
                 'results': [],
                 'total': 0
+            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    
+    def _get_tenant_id(self, user):
+        """Get tenant ID for the user"""
+        return getattr(user, 'tenant_id', 'default')
+
+
+class LogstashMonitorView(APIView):
+    """
+    Monitor Logstash forwarder health and statistics
+    """
+    permission_classes = [IsAuthenticated]
+    
+    def get(self, request):
+        """
+        Get Logstash forwarder status and statistics
+        
+        Returns:
+        - health: Connection health status
+        - statistics: Success/failure counters
+        - configuration: Current settings
+        """
+        try:
+            forwarder = get_logstash_forwarder()
+            
+            # Get health status
+            health = forwarder.health_check()
+            
+            # Get statistics
+            stats = forwarder.get_statistics()
+            
+            # Configuration info
+            config = {
+                'host': forwarder.host,
+                'port': forwarder.port,
+                'protocol': forwarder.protocol,
+                'timeout': forwarder.timeout,
+                'max_retries': forwarder.max_retries,
+                'retry_delay': forwarder.retry_delay,
+                'enabled': getattr(settings, 'USE_LOGSTASH', True)
+            }
+            
+            response_data = {
+                'health': health,
+                'statistics': stats,
+                'configuration': config,
+                'timestamp': forwarder._stats.get('last_success')
+            }
+            
+            logger.info(
+                f"Logstash monitor check - Status: {health['status']}, "
+                f"Sent: {stats['total_sent']}, Failed: {stats['total_failed']}"
+            )
+            
+            return Response(response_data, status=status.HTTP_200_OK)
+            
+        except Exception as e:
+            logger.error(f"Logstash monitor error: {e}", exc_info=True)
+            return Response({
+                'error': 'Monitor check failed',
+                'message': str(e),
+                'health': {'status': 'unknown'},
+                'statistics': {},
+                'configuration': {}
+            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    
+    def post(self, request):
+        """
+        Send test message to Logstash
+        """
+        try:
+            forwarder = get_logstash_forwarder()
+            
+            test_log = {
+                '@timestamp': request.data.get('timestamp'),
+                'message': request.data.get('message', 'Test message from API'),
+                'level': 'INFO',
+                'source': 'monitor_test',
+                'tenant_id': self._get_tenant_id(request.user),
+                'test': True
+            }
+            
+            success = forwarder.send_log(test_log)
+            
+            if success:
+                logger.info(f"Test message sent successfully to Logstash")
+                return Response({
+                    'success': True,
+                    'message': 'Test message sent successfully',
+                    'log': test_log
+                }, status=status.HTTP_200_OK)
+            else:
+                logger.warning(f"Failed to send test message to Logstash")
+                return Response({
+                    'success': False,
+                    'message': 'Failed to send test message',
+                    'error': forwarder._stats.get('last_error')
+                }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+                
+        except Exception as e:
+            logger.error(f"Test message error: {e}", exc_info=True)
+            return Response({
+                'success': False,
+                'error': 'Test failed',
+                'message': str(e)
+            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    
+    def delete(self, request):
+        """
+        Reset Logstash forwarder statistics
+        """
+        try:
+            forwarder = get_logstash_forwarder()
+            forwarder.reset_statistics()
+            
+            logger.info(f"Logstash statistics reset by {request.user.username}")
+            
+            return Response({
+                'message': 'Statistics reset successfully'
+            }, status=status.HTTP_200_OK)
+            
+        except Exception as e:
+            logger.error(f"Statistics reset error: {e}")
+            return Response({
+                'error': 'Reset failed',
+                'message': str(e)
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
     
     def _get_tenant_id(self, user):

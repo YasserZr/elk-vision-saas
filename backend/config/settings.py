@@ -89,13 +89,23 @@ MONGODB = {
 # Elasticsearch Configuration
 ELASTICSEARCH_DSL = {
     'default': {
-        'hosts': config('ELASTICSEARCH_HOSTS', default='http://elasticsearch:9200'),
+        'hosts': config('ELASTICSEARCH_HOST', default='localhost:9200'),
         'http_auth': (
             config('ELASTICSEARCH_USER', default='elastic'),
             config('ELASTICSEARCH_PASSWORD', default='changeme')
         ),
     },
 }
+
+# Logstash Configuration
+LOGSTASH_HOST = config('LOGSTASH_HOST', default='logstash')
+LOGSTASH_PORT = config('LOGSTASH_PORT', default=5000, cast=int)
+LOGSTASH_PROTOCOL = config('LOGSTASH_PROTOCOL', default='tcp')  # tcp or udp
+LOGSTASH_TIMEOUT = config('LOGSTASH_TIMEOUT', default=5, cast=int)
+LOGSTASH_MAX_RETRIES = config('LOGSTASH_MAX_RETRIES', default=3, cast=int)
+LOGSTASH_RETRY_DELAY = config('LOGSTASH_RETRY_DELAY', default=2, cast=int)
+LOGSTASH_BATCH_SIZE = config('LOGSTASH_BATCH_SIZE', default=100, cast=int)
+USE_LOGSTASH = config('USE_LOGSTASH', default=True, cast=bool)  # True: Logstash, False: Direct ES
 
 # Redis Configuration
 REDIS_HOST = config('REDIS_HOST', default='redis')
