@@ -1,16 +1,271 @@
+import logging
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
+from rest_framework import status
+from rest_framework.parsers import MultiPartParser, FormParser
+from django.conf import settings
+from .serializers import LogFileUploadSerializer, LogUploadResponseSerializer
+from .parsers import LogParser, estimate_log_count
+from .tasks import process_and_ingest_logs
+
+logger = logging.getLogger(__name__)
+
+
+class LogUploadView(APIView):
+    """
+    API endpoint for uploading log files
+    Accepts JSON, CSV, and text/log formats
+    """
+    permission_classes = [IsAuthenticated]
+    parser_classes = [MultiPartParser, FormParser]
+    
+    def post(self, request):
+        """
+        Upload and process log files
+        
+        Expected form-data:
+        - file: Log file (required)
+        - source: Source identifier (optional)
+        - environment: Environment (production/staging/development/testing)
+        - service_name: Service name (optional)
+        - tags: Comma-separated tags (optional)
+        """
+        logger.info(f"Log upload request from user: {request.user.username}")
+        
+        # Validate request
+        serializer = LogFileUploadSerializer(data=request.data)
+        
+        if not serializer.is_valid():
+            logger.warning(f"Invalid upload request: {serializer.errors}")
+            return Response({
+                'error': 'Validation failed',
+                'details': serializer.errors
+            }, status=status.HTTP_400_BAD_REQUEST)
+        
+        validated_data = serializer.validated_data
+        uploaded_file = validated_data['file']
+        
+        try:
+            # Read file content
+            file_content = uploaded_file.read().decode('utf-8')
+            
+            # Detect format
+            format_type = LogParser.detect_format(uploaded_file.name)
+            
+            # Estimate log count
+            estimated_count = estimate_log_count(file_content, format_type)
+            
+            # Prepare metadata
+            metadata = {
+                'source': validated_data.get('source', 'manual_upload'),
+                'environment': validated_data.get('environment', 'production'),
+                'service_name': validated_data.get('service_name', 'unknown'),
+                'tags': validated_data.get('tags', []),
+                'tenant_id': self._get_tenant_id(request.user),
+                'uploaded_by': request.user.username,
+                'file_name': uploaded_file.name
+            }
+            
+            # Submit async task for processing
+            task = process_and_ingest_logs.delay(
+                content=file_content,
+                format_type=format_type,
+                metadata=metadata
+            )
+            
+            logger.info(
+                f"Log upload task created: {task.id} for file: {uploaded_file.name} "
+                f"({uploaded_file.size} bytes, ~{estimated_count} entries)"
+            )
+            
+            # Prepare response
+            response_data = {
+                'task_id': task.id,
+                'message': 'File uploaded successfully and queued for processing',
+                'file_name': uploaded_file.name,
+                'file_size': uploaded_file.size,
+                'format': format_type,
+                'estimated_entries': estimated_count,
+                'status': 'processing'
+            }
+            
+            response_serializer = LogUploadResponseSerializer(data=response_data)
+            response_serializer.is_valid(raise_exception=True)
+            
+            return Response(
+                response_serializer.data,
+                status=status.HTTP_202_ACCEPTED
+            )
+            
+        except UnicodeDecodeError:
+            logger.error(f"File encoding error for {uploaded_file.name}")
+            return Response({
+                'error': 'File encoding error',
+                'message': 'File must be UTF-8 encoded'
+            }, status=status.HTTP_400_BAD_REQUEST)
+            
+        except Exception as e:
+            logger.error(f"Upload error: {e}", exc_info=True)
+            return Response({
+                'error': 'Upload failed',
+                'message': str(e)
+            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    
+    def _get_tenant_id(self, user):
+        """Get tenant ID for the user (simplified - should come from user profile)"""
+        # TODO: Implement proper tenant resolution from user profile
+        return getattr(user, 'tenant_id', 'default')
+
+
+class LogUploadStatusView(APIView):
+    """Check status of log upload task"""
+    permission_classes = [IsAuthenticated]
+    
+    def get(self, request, task_id):
+        """Get task status"""
+        from celery.result import AsyncResult
+        
+        try:
+            task = AsyncResult(task_id)
+            
+            response = {
+                'task_id': task_id,
+                'status': task.state,
+            }
+            
+            if task.state == 'PENDING':
+                response['message'] = 'Task is waiting to be processed'
+            elif task.state == 'STARTED':
+                response['message'] = 'Task is being processed'
+            elif task.state == 'SUCCESS':
+                response['message'] = 'Task completed successfully'
+                response['result'] = task.result
+            elif task.state == 'FAILURE':
+                response['message'] = 'Task failed'
+                response['error'] = str(task.info)
+            elif task.state == 'RETRY':
+                response['message'] = 'Task is being retried'
+            
+            return Response(response, status=status.HTTP_200_OK)
+            
+        except Exception as e:
+            logger.error(f"Error checking task status: {e}")
+            return Response({
+                'error': 'Status check failed',
+                'message': str(e)
+            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 class LogSearchView(APIView):
+    """Search logs in Elasticsearch"""
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
-        # TODO: Implement Elasticsearch query
+        """
+        Search logs with query parameters
+        
+        Query params:
+        - q: Search query
+        - from: Start time
+        - to: End time
+        - level: Log level filter
+        - service: Service name filter
+        - size: Number of results (default 100)
+        - page: Page number
+        """
+        from elasticsearch import Elasticsearch
+        from datetime import datetime, timedelta
+        
         query = request.query_params.get('q', '')
-        return Response({
-            'query': query,
-            'results': [],
-            'total': 0,
-        })
+        log_level = request.query_params.get('level', '')
+        service = request.query_params.get('service', '')
+        size = int(request.query_params.get('size', 100))
+        page = int(request.query_params.get('page', 1))
+        
+        # Time range
+        time_to = request.query_params.get('to', datetime.utcnow().isoformat())
+        time_from = request.query_params.get(
+            'from',
+            (datetime.utcnow() - timedelta(hours=24)).isoformat()
+        )
+        
+        try:
+            es_config = settings.ELASTICSEARCH_DSL['default']
+            es = Elasticsearch(
+                hosts=es_config['hosts'],
+                http_auth=es_config.get('http_auth')
+            )
+            
+            # Build query
+            tenant_id = self._get_tenant_id(request.user)
+            must_clauses = [
+                {'term': {'tenant_id': tenant_id}}
+            ]
+            
+            if query:
+                must_clauses.append({
+                    'multi_match': {
+                        'query': query,
+                        'fields': ['message', 'raw_log', 'original']
+                    }
+                })
+            
+            if log_level:
+                must_clauses.append({'term': {'level': log_level.upper()}})
+            
+            if service:
+                must_clauses.append({'term': {'service_name': service}})
+            
+            search_body = {
+                'query': {
+                    'bool': {
+                        'must': must_clauses,
+                        'filter': [
+                            {
+                                'range': {
+                                    '@timestamp': {
+                                        'gte': time_from,
+                                        'lte': time_to
+                                    }
+                                }
+                            }
+                        ]
+                    }
+                },
+                'sort': [{'@timestamp': {'order': 'desc'}}],
+                'size': size,
+                'from': (page - 1) * size
+            }
+            
+            # Execute search
+            result = es.search(
+                index=f'logs-{tenant_id}-*',
+                body=search_body
+            )
+            
+            # Format results
+            hits = result['hits']['hits']
+            logs = [hit['_source'] for hit in hits]
+            
+            return Response({
+                'query': query,
+                'results': logs,
+                'total': result['hits']['total']['value'],
+                'page': page,
+                'size': size,
+                'took': result['took']
+            })
+            
+        except Exception as e:
+            logger.error(f"Search error: {e}", exc_info=True)
+            return Response({
+                'error': 'Search failed',
+                'message': str(e),
+                'results': [],
+                'total': 0
+            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    
+    def _get_tenant_id(self, user):
+        """Get tenant ID for the user"""
+        return getattr(user, 'tenant_id', 'default')

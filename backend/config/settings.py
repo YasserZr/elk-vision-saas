@@ -67,20 +67,23 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'config.wsgi.application'
 
-# Database - MongoDB
+# Database - SQLite for Django internal tables (auth, sessions, admin)
+# MongoDB will be used directly via pymongo for application data
 DATABASES = {
     'default': {
-        'ENGINE': 'djongo',
-        'NAME': config('MONGO_DB_NAME', default='elk_vision'),
-        'CLIENT': {
-            'host': config('MONGO_HOST', default='mongodb'),
-            'port': int(config('MONGO_PORT', default=27017)),
-            'username': config('MONGO_USER', default='admin'),
-            'password': config('MONGO_PASSWORD', default='password'),
-            'authSource': 'admin',
-            'authMechanism': 'SCRAM-SHA-1',
-        }
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
+}
+
+# MongoDB Configuration (accessed via pymongo directly, not through Django ORM)
+MONGODB = {
+    'host': config('MONGO_HOST', default='mongodb'),
+    'port': int(config('MONGO_PORT', default=27017)),
+    'database': config('MONGO_DB_NAME', default='elk_vision'),
+    'username': config('MONGO_USER', default='admin'),
+    'password': config('MONGO_PASSWORD', default='password'),
+    'authSource': 'admin',
 }
 
 # Elasticsearch Configuration
