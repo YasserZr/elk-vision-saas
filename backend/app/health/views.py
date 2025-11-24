@@ -5,9 +5,10 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import AllowAny
-from redis import Redis
 from elasticsearch import Elasticsearch
-import pymongo
+
+from app.core.mongodb import health_check_mongodb
+from app.core.redis_cache import health_check_redis
 
 logger = logging.getLogger(__name__)
 
@@ -26,12 +27,12 @@ class HealthCheckView(APIView):
             'checks': {}
         }
 
-        # Check Database (MongoDB)
+        # Check Django Database (SQLite)
         try:
             connection.ensure_connection()
             health_status['checks']['database'] = {
                 'status': 'up',
-                'type': 'mongodb'
+                'type': 'sqlite'
             }
         except Exception as e:
             logger.error(f"Database health check failed: {e}")
@@ -40,22 +41,17 @@ class HealthCheckView(APIView):
                 'error': str(e)
             }
             health_status['status'] = 'unhealthy'
+        
+        # Check MongoDB
+        mongo_health = health_check_mongodb()
+        health_status['checks']['mongodb'] = mongo_health
+        if mongo_health['status'] != 'healthy':
+            health_status['status'] = 'unhealthy'
 
         # Check Redis
-        try:
-            redis_client = Redis(
-                host=settings.REDIS_HOST,
-                port=settings.REDIS_PORT,
-                socket_connect_timeout=settings.HEALTH_CHECK_TIMEOUT
-            )
-            redis_client.ping()
-            health_status['checks']['redis'] = {'status': 'up'}
-        except Exception as e:
-            logger.error(f"Redis health check failed: {e}")
-            health_status['checks']['redis'] = {
-                'status': 'down',
-                'error': str(e)
-            }
+        redis_health = health_check_redis()
+        health_status['checks']['redis'] = redis_health
+        if redis_health['status'] != 'healthy':
             health_status['status'] = 'unhealthy'
 
         # Check Elasticsearch
@@ -96,14 +92,15 @@ class ReadinessCheckView(APIView):
     def get(self, request):
         try:
             # Check critical dependencies
-            connection.ensure_connection()
+            mongo_health = health_check_mongodb()
+            redis_health = health_check_redis()
             
-            redis_client = Redis(
-                host=settings.REDIS_HOST,
-                port=settings.REDIS_PORT,
-                socket_connect_timeout=2
-            )
-            redis_client.ping()
+            if mongo_health['status'] != 'healthy' or redis_health['status'] != 'healthy':
+                return Response({
+                    'status': 'not_ready',
+                    'mongodb': mongo_health,
+                    'redis': redis_health
+                }, status=status.HTTP_503_SERVICE_UNAVAILABLE)
 
             return Response({
                 'status': 'ready',
