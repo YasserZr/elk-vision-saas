@@ -27,7 +27,8 @@ class UserProfileView(APIView):
         """
         Get current user's profile
 
-        Returns user profile from MongoDB with preferences and quota info
+        Returns user profile from MongoDB with preferences and quota info.
+        If no MongoDB profile exists, returns basic Django user info.
         """
         try:
             # Try cache first
@@ -38,16 +39,19 @@ class UserProfileView(APIView):
             # Get from MongoDB
             profile = UserProfile.get_by_user_id(request.user.id)
 
-            if not profile:
-                return Response(
-                    {
-                        "error": "Profile not found",
-                        "message": "User profile does not exist",
+            if profile:
+                profile_data = profile.to_dict()
+            else:
+                # Return basic profile from Django user if no MongoDB profile exists
+                profile_data = {
+                    "user_id": request.user.id,
+                    "preferences": {},
+                    "quota": {
+                        "max_logs_per_day": 10000,
+                        "max_storage_mb": 1000,
+                        "max_retention_days": 30,
                     },
-                    status=status.HTTP_404_NOT_FOUND,
-                )
-
-            profile_data = profile.to_dict()
+                }
 
             # Add Django user info
             profile_data["username"] = request.user.username
