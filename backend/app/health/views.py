@@ -1,5 +1,7 @@
 import logging
 
+from app.core.mongodb import health_check_mongodb
+from app.core.redis_cache import health_check_redis
 from django.conf import settings
 from django.db import connection
 from elasticsearch import Elasticsearch
@@ -7,9 +9,6 @@ from rest_framework import status
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
-
-from app.core.mongodb import health_check_mongodb
-from app.core.redis_cache import health_check_redis
 
 logger = logging.getLogger(__name__)
 

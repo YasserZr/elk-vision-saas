@@ -4,14 +4,13 @@ API views for user profile management with MongoDB
 
 import logging
 
+from app.core.redis_cache import QueryCache, SessionCache
+from app.users.models_mongo import UserProfile, create_user_profile_indexes
 from django.core.cache import cache
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
-
-from app.core.redis_cache import QueryCache, SessionCache
-from app.users.models_mongo import UserProfile, create_user_profile_indexes
 
 logger = logging.getLogger(__name__)
 

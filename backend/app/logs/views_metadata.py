@@ -4,14 +4,13 @@ API views for log metadata management with MongoDB
 
 import logging
 
+from app.core.redis_cache import QueryCache
+from app.logs.models_mongo import LogMetadata, create_log_metadata_indexes
+from app.users.models_mongo import UserProfile
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
-
-from app.core.redis_cache import QueryCache
-from app.logs.models_mongo import LogMetadata, create_log_metadata_indexes
-from app.users.models_mongo import UserProfile
 
 logger = logging.getLogger(__name__)
 

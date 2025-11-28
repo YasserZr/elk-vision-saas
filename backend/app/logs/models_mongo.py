@@ -5,9 +5,8 @@ MongoDB models/schemas for log metadata
 from datetime import datetime
 from typing import Any, Dict, List, Optional
 
-from bson import ObjectId
-
 from app.core.mongodb import COLLECTION_LOG_METADATA, get_collection
+from bson import ObjectId
 
 
 class LogMetadata:
