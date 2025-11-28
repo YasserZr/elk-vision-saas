@@ -1,16 +1,20 @@
 import logging
+
 from django.contrib.auth.models import User
-from rest_framework.views import APIView
+from rest_framework import generics, status
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated, AllowAny
-from rest_framework import status, generics
-from .serializers import UserSerializer, RegisterSerializer, ChangePasswordSerializer
+from rest_framework.views import APIView
+
+from .serializers import (ChangePasswordSerializer, RegisterSerializer,
+                          UserSerializer)
 
 logger = logging.getLogger(__name__)
 
 
 class UserProfileView(APIView):
     """Get authenticated user profile"""
+
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
@@ -31,6 +35,7 @@ class UserProfileView(APIView):
 
 class RegisterView(generics.CreateAPIView):
     """User registration endpoint"""
+
     queryset = User.objects.all()
     permission_classes = [AllowAny]
     serializer_class = RegisterSerializer
@@ -40,30 +45,35 @@ class RegisterView(generics.CreateAPIView):
         if serializer.is_valid():
             user = serializer.save()
             logger.info(f"New user registered: {user.username}")
-            return Response({
-                'user': UserSerializer(user).data,
-                'message': 'User registered successfully'
-            }, status=status.HTTP_201_CREATED)
+            return Response(
+                {
+                    "user": UserSerializer(user).data,
+                    "message": "User registered successfully",
+                },
+                status=status.HTTP_201_CREATED,
+            )
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class ChangePasswordView(APIView):
     """Change user password"""
+
     permission_classes = [IsAuthenticated]
 
     def post(self, request):
         serializer = ChangePasswordSerializer(data=request.data)
         if serializer.is_valid():
             user = request.user
-            if not user.check_password(serializer.data.get('old_password')):
-                return Response({
-                    'old_password': ['Wrong password.']
-                }, status=status.HTTP_400_BAD_REQUEST)
-            
-            user.set_password(serializer.data.get('new_password'))
+            if not user.check_password(serializer.data.get("old_password")):
+                return Response(
+                    {"old_password": ["Wrong password."]},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
+
+            user.set_password(serializer.data.get("new_password"))
             user.save()
             logger.info(f"User {user.username} changed their password")
-            return Response({
-                'message': 'Password updated successfully'
-            }, status=status.HTTP_200_OK)
+            return Response(
+                {"message": "Password updated successfully"}, status=status.HTTP_200_OK
+            )
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
