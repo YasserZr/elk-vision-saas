@@ -1,10 +1,14 @@
 from django.urls import path
 
 from . import views
-from .views_metadata import (InitializeLogMetadataIndexesView,
-                             LogMetadataByTaskView, LogMetadataDetailView,
-                             LogMetadataListView, LogMetadataRecentView,
-                             LogMetadataStatsView)
+from .views_metadata import (
+    InitializeLogMetadataIndexesView,
+    LogMetadataByTaskView,
+    LogMetadataDetailView,
+    LogMetadataListView,
+    LogMetadataRecentView,
+    LogMetadataStatsView,
+)
 
 urlpatterns = [
     # Existing routes

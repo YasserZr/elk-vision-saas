@@ -5,8 +5,7 @@ from unittest.mock import MagicMock, Mock, patch
 import pytest
 from django.conf import settings
 
-from app.logs.logstash_forwarder import (LogstashForwarder,
-                                         get_logstash_forwarder)
+from app.logs.logstash_forwarder import LogstashForwarder, get_logstash_forwarder
 
 
 class TestLogstashForwarder:
