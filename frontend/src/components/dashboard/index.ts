@@ -10,6 +10,8 @@ export { default as LogViewer } from './LogViewer';
 export type { LogEntry, LogViewerProps } from './LogViewer';
 export { default as FileUpload } from './FileUpload';
 export type { FileUploadProps, UploadFile } from './FileUpload';
+export { default as LogFileUpload } from './LogFileUpload';
+export type { LogFile, LogFileUploadProps } from './LogFileUpload';
 export {
   ChartContainer,
   SimpleBarChart,
