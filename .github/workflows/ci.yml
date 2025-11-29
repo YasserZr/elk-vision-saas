@@ -106,6 +106,12 @@ jobs:
       working-directory: ./frontend
       run: npm ci
     
+    - name: Generate Next.js types
+      working-directory: ./frontend
+      run: |
+        echo '/// <reference types="next" />' > next-env.d.ts
+        echo '/// <reference types="next/image-types/global" />' >> next-env.d.ts
+    
     - name: Run linting
       working-directory: ./frontend
       run: npm run lint
