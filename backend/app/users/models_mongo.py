@@ -5,8 +5,9 @@ MongoDB models/schemas for user profiles
 from datetime import datetime
 from typing import List, Optional
 
-from app.core.mongodb import COLLECTION_USER_PROFILES, get_collection
 from bson import ObjectId
+
+from app.core.mongodb import COLLECTION_USER_PROFILES, get_collection
 
 
 class UserProfile:
