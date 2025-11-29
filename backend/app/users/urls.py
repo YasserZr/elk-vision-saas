@@ -1,9 +1,14 @@
 from django.urls import path
 
 from . import views
-from .views_profile import (InitializeIndexesView, TenantUsersView,
-                            UserProfileAdminView, UserProfileCreateView,
-                            UserProfileView, UserQuotaView)
+from .views_profile import (
+    InitializeIndexesView,
+    TenantUsersView,
+    UserProfileAdminView,
+    UserProfileCreateView,
+    UserProfileView,
+    UserQuotaView,
+)
 
 urlpatterns = [
     # Existing routes
