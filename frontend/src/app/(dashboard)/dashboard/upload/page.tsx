@@ -89,7 +89,7 @@ export default function UploadPage() {
               ? metadata.tags.split(',').map((t) => t.trim())
               : undefined,
           },
-          (progress) => {
+          (progress: number) => {
             setFiles((prev) =>
               prev.map((f) =>
                 f.id === uploadFile.id ? { ...f, progress } : f
