@@ -2,6 +2,7 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
+import { NotificationCenter } from '@/components/notifications';
 
 interface HeaderProps {
   onMenuClick: () => void;
@@ -10,9 +11,7 @@ interface HeaderProps {
 export default function Header({ onMenuClick }: HeaderProps) {
   const { user, logout } = useAuth();
   const [isProfileOpen, setIsProfileOpen] = useState(false);
-  const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
   const profileRef = useRef<HTMLDivElement>(null);
-  const notificationsRef = useRef<HTMLDivElement>(null);
 
   // Close dropdowns on outside click
   useEffect(() => {
@@ -20,22 +19,11 @@ export default function Header({ onMenuClick }: HeaderProps) {
       if (profileRef.current && !profileRef.current.contains(event.target as Node)) {
         setIsProfileOpen(false);
       }
-      if (notificationsRef.current && !notificationsRef.current.contains(event.target as Node)) {
-        setIsNotificationsOpen(false);
-      }
     };
 
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
-
-  const notifications = [
-    { id: 1, title: 'New alert triggered', message: 'High CPU usage detected', time: '5m ago', read: false },
-    { id: 2, title: 'Upload complete', message: '1,234 logs processed', time: '1h ago', read: false },
-    { id: 3, title: 'Weekly report ready', message: 'View your analytics', time: '2h ago', read: true },
-  ];
-
-  const unreadCount = notifications.filter(n => !n.read).length;
 
   return (
     <header className="sticky top-0 z-30 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800">
@@ -77,28 +65,8 @@ export default function Header({ onMenuClick }: HeaderProps) {
 
         {/* Right side */}
         <div className="flex items-center gap-2">
-          {/* Notifications */}
-          <div className="relative" ref={notificationsRef}>
-            <button
-              onClick={() => setIsNotificationsOpen(!isNotificationsOpen)}
-              className="relative p-2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
-              aria-label={`Notifications (${unreadCount} unread)`}
-              aria-expanded={isNotificationsOpen}
-            >
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
-                />
-              </svg>
-              {unreadCount > 0 && (
-                <span className="absolute top-1 right-1 w-4 h-4 bg-red-500 text-white text-xs font-medium rounded-full flex items-center justify-center">
-                  {unreadCount}
-                </span>
-              )}
-            </button>
+          {/* Real-time Notifications */}
+          <NotificationCenter position="top-right" />
 
             {/* Notifications dropdown */}
             {isNotificationsOpen && (

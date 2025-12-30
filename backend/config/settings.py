@@ -17,6 +17,7 @@ ALLOWED_HOSTS = config("ALLOWED_HOSTS", default="localhost,127.0.0.1").split(","
 
 # Application definition
 INSTALLED_APPS = [
+    "daphne",  # Must be first for WebSocket support
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -27,6 +28,7 @@ INSTALLED_APPS = [
     "rest_framework",
     "rest_framework_simplejwt",
     "corsheaders",
+    "channels",
     # Local apps
     "app.users",
     "app.logs",
@@ -48,6 +50,18 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = "config.urls"
+
+ASGI_APPLICATION = "config.asgi.application"
+
+# Channel Layers (Redis backend for WebSocket communication)
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [(config("REDIS_HOST", default="redis"), int(config("REDIS_PORT", default=6379)))],
+        },
+    },
+}
 
 TEMPLATES = [
     {
