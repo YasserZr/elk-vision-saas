@@ -1,5 +1,5 @@
 # Multi-stage build for Django backend with WebSocket support
-FROM python:3.11-slim as base
+FROM python:3.14-slim as base
 
 # Set environment variables
 ENV PYTHONDONTWRITEBYTECODE=1 \
