@@ -1,0 +1,1500 @@
+openapi: 3.0.3
+info:
+  title: ELK Vision SaaS API
+  description: |
+    Complete REST API documentation for the ELK Vision SaaS log monitoring platform.
+    
+    ## Overview
+    
+    This API provides endpoints for managing log files, alerts, analytics, and real-time notifications.
+    All endpoints require authentication via JWT tokens unless otherwise specified.
+    
+    ## Authentication
+    
+    All authenticated requests must include a JWT Bearer token in the Authorization header:
+    ```
+    Authorization: Bearer <access_token>
+    ```
+    
+    ## Rate Limiting
+    
+    API requests are rate-limited:
+    - Anonymous: 100 requests/hour
+    - Authenticated: 1000 requests/hour
+    - Premium: 10000 requests/hour
+    
+    ## WebSocket
+    
+    Real-time notifications are available via WebSocket:
+    - Endpoint: `wss://yourdomain.com/ws/notifications/<user_id>/`
+    - Authentication: Send JWT token after connection
+    
+    ## Pagination
+    
+    List endpoints return paginated results:
+    ```json
+    {
+      "count": 100,
+      "next": "https://api.example.com/api/logs/?page=2",
+      "previous": null,
+      "results": [...]
+    }
+    ```
+    
+  version: 1.0.0
+  contact:
+    name: API Support
+    email: support@elkvision.com
+    url: https://elkvision.com/support
+  license:
+    name: Proprietary
+    url: https://elkvision.com/license
+
+servers:
+  - url: https://api.elkvision.com
+    description: Production server
+  - url: https://staging-api.elkvision.com
+    description: Staging server
+  - url: http://localhost:8000
+    description: Local development server
+
+tags:
+  - name: Authentication
+    description: User registration, login, and token management
+  - name: Log Management
+    description: Upload, retrieve, and manage log files
+  - name: Alerts
+    description: Configure and manage alerts for log events
+  - name: Analytics
+    description: Retrieve analytics and statistics
+  - name: User Profile
+    description: User profile and settings management
+  - name: Health & Metrics
+    description: System health checks and Prometheus metrics
+
+security:
+  - BearerAuth: []
+
+paths:
+  # ==================== Authentication ====================
+  /api/auth/register/:
+    post:
+      tags:
+        - Authentication
+      summary: Register a new user
+      description: Create a new user account with email and password
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - username
+                - email
+                - password
+                - password_confirm
+              properties:
+                username:
+                  type: string
+                  minLength: 3
+                  maxLength: 150
+                  example: johndoe
+                email:
+                  type: string
+                  format: email
+                  example: john@example.com
+                password:
+                  type: string
+                  format: password
+                  minLength: 8
+                  example: SecurePass123!
+                password_confirm:
+                  type: string
+                  format: password
+                  example: SecurePass123!
+                first_name:
+                  type: string
+                  example: John
+                last_name:
+                  type: string
+                  example: Doe
+      responses:
+        '201':
+          description: User successfully registered
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    example: 1
+                  username:
+                    type: string
+                    example: johndoe
+                  email:
+                    type: string
+                    example: john@example.com
+                  access:
+                    type: string
+                    description: JWT access token
+                    example: eyJ0eXAiOiJKV1QiLCJhbGc...
+                  refresh:
+                    type: string
+                    description: JWT refresh token
+                    example: eyJ0eXAiOiJKV1QiLCJhbGc...
+        '400':
+          $ref: '#/components/responses/BadRequest'
+
+  /api/auth/login/:
+    post:
+      tags:
+        - Authentication
+      summary: User login
+      description: Authenticate user and receive JWT tokens
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - username
+                - password
+              properties:
+                username:
+                  type: string
+                  example: johndoe
+                password:
+                  type: string
+                  format: password
+                  example: SecurePass123!
+      responses:
+        '200':
+          description: Login successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenPair'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /api/auth/token/refresh/:
+    post:
+      tags:
+        - Authentication
+      summary: Refresh access token
+      description: Obtain a new access token using refresh token
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - refresh
+              properties:
+                refresh:
+                  type: string
+                  description: Refresh token
+                  example: eyJ0eXAiOiJKV1QiLCJhbGc...
+      responses:
+        '200':
+          description: New access token generated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  access:
+                    type: string
+                    example: eyJ0eXAiOiJKV1QiLCJhbGc...
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /api/auth/token/verify/:
+    post:
+      tags:
+        - Authentication
+      summary: Verify token validity
+      description: Check if a token is still valid
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - token
+              properties:
+                token:
+                  type: string
+                  example: eyJ0eXAiOiJKV1QiLCJhbGc...
+      responses:
+        '200':
+          description: Token is valid
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  valid:
+                    type: boolean
+                    example: true
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /api/auth/logout/:
+    post:
+      tags:
+        - Authentication
+      summary: User logout
+      description: Blacklist refresh token
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - refresh
+              properties:
+                refresh:
+                  type: string
+                  example: eyJ0eXAiOiJKV1QiLCJhbGc...
+      responses:
+        '205':
+          description: Successfully logged out
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  # ==================== Log Management ====================
+  /api/logs/:
+    get:
+      tags:
+        - Log Management
+      summary: List log files
+      description: Retrieve a paginated list of log files for the authenticated user
+      parameters:
+        - $ref: '#/components/parameters/PageParam'
+        - $ref: '#/components/parameters/PageSizeParam'
+        - name: status
+          in: query
+          description: Filter by processing status
+          schema:
+            type: string
+            enum: [pending, processing, completed, failed]
+        - name: search
+          in: query
+          description: Search in filename
+          schema:
+            type: string
+        - name: ordering
+          in: query
+          description: Sort field (prefix with - for descending)
+          schema:
+            type: string
+            enum: [created_at, -created_at, filename, -filename, size, -size]
+      responses:
+        '200':
+          description: List of log files
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    type: integer
+                    example: 150
+                  next:
+                    type: string
+                    nullable: true
+                    example: https://api.elkvision.com/api/logs/?page=2
+                  previous:
+                    type: string
+                    nullable: true
+                    example: null
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/LogFile'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+    post:
+      tags:
+        - Log Management
+      summary: Upload a log file
+      description: Upload and process a new log file
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+                - file
+              properties:
+                file:
+                  type: string
+                  format: binary
+                  description: Log file (max 100MB)
+                description:
+                  type: string
+                  description: Optional description
+                  example: Production server logs
+                tags:
+                  type: array
+                  items:
+                    type: string
+                  description: Optional tags
+                  example: [production, web-server, nginx]
+      responses:
+        '201':
+          description: Log file uploaded successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LogFile'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '413':
+          description: File too large
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /api/logs/{id}/:
+    get:
+      tags:
+        - Log Management
+      summary: Get log file details
+      description: Retrieve detailed information about a specific log file
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Log file ID
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Log file details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LogFileDetailed'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+    put:
+      tags:
+        - Log Management
+      summary: Update log file
+      description: Update log file metadata
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                description:
+                  type: string
+                tags:
+                  type: array
+                  items:
+                    type: string
+      responses:
+        '200':
+          description: Log file updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LogFile'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+    delete:
+      tags:
+        - Log Management
+      summary: Delete log file
+      description: Delete a log file and associated data
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Log file deleted successfully
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  /api/logs/{id}/download/:
+    get:
+      tags:
+        - Log Management
+      summary: Download log file
+      description: Download the original log file
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: File download
+          content:
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  /api/logs/{id}/content/:
+    get:
+      tags:
+        - Log Management
+      summary: Get log file content
+      description: Retrieve parsed log entries from the file
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - $ref: '#/components/parameters/PageParam'
+        - $ref: '#/components/parameters/PageSizeParam'
+        - name: level
+          in: query
+          description: Filter by log level
+          schema:
+            type: string
+            enum: [DEBUG, INFO, WARNING, ERROR, CRITICAL]
+        - name: start_time
+          in: query
+          description: Filter logs after this time
+          schema:
+            type: string
+            format: date-time
+        - name: end_time
+          in: query
+          description: Filter logs before this time
+          schema:
+            type: string
+            format: date-time
+        - name: search
+          in: query
+          description: Search in log message
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Log entries
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    type: integer
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/LogEntry'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  /api/logs/search/:
+    post:
+      tags:
+        - Log Management
+      summary: Advanced log search
+      description: Search logs using Elasticsearch queries
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                query:
+                  type: string
+                  description: Search query
+                  example: error OR exception
+                filters:
+                  type: object
+                  properties:
+                    level:
+                      type: array
+                      items:
+                        type: string
+                    date_range:
+                      type: object
+                      properties:
+                        start:
+                          type: string
+                          format: date-time
+                        end:
+                          type: string
+                          format: date-time
+                aggregations:
+                  type: array
+                  items:
+                    type: string
+                  example: [level, source]
+                page:
+                  type: integer
+                  default: 1
+                page_size:
+                  type: integer
+                  default: 20
+      responses:
+        '200':
+          description: Search results
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  hits:
+                    type: object
+                    properties:
+                      total:
+                        type: integer
+                      results:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/LogEntry'
+                  aggregations:
+                    type: object
+                    additionalProperties: true
+
+  # ==================== Alerts ====================
+  /api/alerts/:
+    get:
+      tags:
+        - Alerts
+      summary: List alerts
+      description: Retrieve list of configured alerts
+      parameters:
+        - $ref: '#/components/parameters/PageParam'
+        - $ref: '#/components/parameters/PageSizeParam'
+        - name: status
+          in: query
+          schema:
+            type: string
+            enum: [active, resolved, acknowledged]
+      responses:
+        '200':
+          description: List of alerts
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    type: integer
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Alert'
+
+    post:
+      tags:
+        - Alerts
+      summary: Create alert
+      description: Create a new alert rule
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AlertCreate'
+      responses:
+        '201':
+          description: Alert created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Alert'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+
+  /api/alerts/{id}/:
+    get:
+      tags:
+        - Alerts
+      summary: Get alert details
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Alert details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AlertDetailed'
+
+    put:
+      tags:
+        - Alerts
+      summary: Update alert
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AlertCreate'
+      responses:
+        '200':
+          description: Alert updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Alert'
+
+    delete:
+      tags:
+        - Alerts
+      summary: Delete alert
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Alert deleted
+
+  /api/alerts/{id}/acknowledge/:
+    post:
+      tags:
+        - Alerts
+      summary: Acknowledge alert
+      description: Mark an alert as acknowledged
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Alert acknowledged
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Alert'
+
+  /api/alerts/{id}/resolve/:
+    post:
+      tags:
+        - Alerts
+      summary: Resolve alert
+      description: Mark an alert as resolved
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Alert resolved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Alert'
+
+  # ==================== Analytics ====================
+  /api/analytics/stats/:
+    get:
+      tags:
+        - Analytics
+      summary: Get dashboard statistics
+      description: Retrieve overall statistics for dashboard
+      responses:
+        '200':
+          description: Dashboard statistics
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DashboardStats'
+
+  /api/analytics/trends/:
+    get:
+      tags:
+        - Analytics
+      summary: Get log trends
+      description: Retrieve log volume and error trends over time
+      parameters:
+        - name: period
+          in: query
+          description: Time period
+          schema:
+            type: string
+            enum: [hour, day, week, month]
+            default: day
+        - name: interval
+          in: query
+          description: Data point interval
+          schema:
+            type: string
+            enum: [minute, hour, day]
+            default: hour
+      responses:
+        '200':
+          description: Trend data
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  period:
+                    type: string
+                  data_points:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        timestamp:
+                          type: string
+                          format: date-time
+                        total_logs:
+                          type: integer
+                        error_count:
+                          type: integer
+                        warning_count:
+                          type: integer
+
+  /api/analytics/log-levels/:
+    get:
+      tags:
+        - Analytics
+      summary: Get log level distribution
+      description: Retrieve distribution of log levels
+      parameters:
+        - name: start_date
+          in: query
+          schema:
+            type: string
+            format: date-time
+        - name: end_date
+          in: query
+          schema:
+            type: string
+            format: date-time
+      responses:
+        '200':
+          description: Log level distribution
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  distribution:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        level:
+                          type: string
+                        count:
+                          type: integer
+                        percentage:
+                          type: number
+
+  /api/analytics/top-errors/:
+    get:
+      tags:
+        - Analytics
+      summary: Get top error messages
+      description: Retrieve most common error messages
+      parameters:
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 10
+            maximum: 100
+      responses:
+        '200':
+          description: Top errors
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    error_message:
+                      type: string
+                    count:
+                      type: integer
+                    first_seen:
+                      type: string
+                      format: date-time
+                    last_seen:
+                      type: string
+                      format: date-time
+
+  /api/analytics/source-distribution/:
+    get:
+      tags:
+        - Analytics
+      summary: Get log source distribution
+      description: Retrieve distribution of logs by source
+      responses:
+        '200':
+          description: Source distribution
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    source:
+                      type: string
+                    count:
+                      type: integer
+                    percentage:
+                      type: number
+
+  # ==================== User Profile ====================
+  /api/users/me/:
+    get:
+      tags:
+        - User Profile
+      summary: Get current user profile
+      responses:
+        '200':
+          description: User profile
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserProfile'
+
+    put:
+      tags:
+        - User Profile
+      summary: Update user profile
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                first_name:
+                  type: string
+                last_name:
+                  type: string
+                bio:
+                  type: string
+                notification_preferences:
+                  type: object
+                  properties:
+                    email_alerts:
+                      type: boolean
+                    push_notifications:
+                      type: boolean
+                    alert_threshold:
+                      type: string
+                      enum: [all, critical, none]
+      responses:
+        '200':
+          description: Profile updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserProfile'
+
+  /api/users/me/avatar/:
+    post:
+      tags:
+        - User Profile
+      summary: Upload profile avatar
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                avatar:
+                  type: string
+                  format: binary
+      responses:
+        '200':
+          description: Avatar uploaded
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  avatar_url:
+                    type: string
+
+  /api/users/me/change-password/:
+    post:
+      tags:
+        - User Profile
+      summary: Change password
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - old_password
+                - new_password
+              properties:
+                old_password:
+                  type: string
+                  format: password
+                new_password:
+                  type: string
+                  format: password
+      responses:
+        '200':
+          description: Password changed
+        '400':
+          $ref: '#/components/responses/BadRequest'
+
+  # ==================== Health & Metrics ====================
+  /api/health/:
+    get:
+      tags:
+        - Health & Metrics
+      summary: Health check
+      description: Check if API is healthy
+      security: []
+      responses:
+        '200':
+          description: Service is healthy
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: healthy
+                  timestamp:
+                    type: string
+                    format: date-time
+                  version:
+                    type: string
+                    example: 1.0.0
+        '503':
+          description: Service unavailable
+
+  /api/health/ready/:
+    get:
+      tags:
+        - Health & Metrics
+      summary: Readiness check
+      description: Check if service is ready to receive traffic
+      security: []
+      responses:
+        '200':
+          description: Service is ready
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ready:
+                    type: boolean
+                  checks:
+                    type: object
+                    properties:
+                      database:
+                        type: boolean
+                      redis:
+                        type: boolean
+                      elasticsearch:
+                        type: boolean
+
+  /api/metrics/:
+    get:
+      tags:
+        - Health & Metrics
+      summary: Prometheus metrics
+      description: Prometheus-compatible metrics endpoint
+      security: []
+      responses:
+        '200':
+          description: Prometheus metrics
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: |
+                  # HELP http_requests_total Total HTTP requests
+                  # TYPE http_requests_total counter
+                  http_requests_total{method="GET",endpoint="/api/logs/"} 1234
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: JWT token obtained from /api/auth/login/
+
+  parameters:
+    PageParam:
+      name: page
+      in: query
+      description: Page number
+      schema:
+        type: integer
+        minimum: 1
+        default: 1
+
+    PageSizeParam:
+      name: page_size
+      in: query
+      description: Number of items per page
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 100
+        default: 20
+
+  schemas:
+    # ==================== Authentication Schemas ====================
+    TokenPair:
+      type: object
+      properties:
+        access:
+          type: string
+          description: JWT access token (valid for 1 hour)
+          example: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9...
+        refresh:
+          type: string
+          description: JWT refresh token (valid for 7 days)
+          example: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9...
+
+    # ==================== Log Management Schemas ====================
+    LogFile:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 123
+        filename:
+          type: string
+          example: app-2024-12-30.log
+        size:
+          type: integer
+          description: File size in bytes
+          example: 1048576
+        status:
+          type: string
+          enum: [pending, processing, completed, failed]
+          example: completed
+        uploaded_at:
+          type: string
+          format: date-time
+          example: 2024-12-30T10:30:00Z
+        processed_at:
+          type: string
+          format: date-time
+          nullable: true
+          example: 2024-12-30T10:32:15Z
+        description:
+          type: string
+          nullable: true
+          example: Production server logs
+        tags:
+          type: array
+          items:
+            type: string
+          example: [production, web-server]
+        log_count:
+          type: integer
+          description: Number of parsed log entries
+          example: 5420
+        error_count:
+          type: integer
+          example: 12
+        warning_count:
+          type: integer
+          example: 45
+
+    LogFileDetailed:
+      allOf:
+        - $ref: '#/components/schemas/LogFile'
+        - type: object
+          properties:
+            user:
+              type: object
+              properties:
+                id:
+                  type: integer
+                username:
+                  type: string
+                email:
+                  type: string
+            level_distribution:
+              type: object
+              properties:
+                DEBUG:
+                  type: integer
+                INFO:
+                  type: integer
+                WARNING:
+                  type: integer
+                ERROR:
+                  type: integer
+                CRITICAL:
+                  type: integer
+            time_range:
+              type: object
+              properties:
+                start:
+                  type: string
+                  format: date-time
+                end:
+                  type: string
+                  format: date-time
+            processing_time:
+              type: number
+              description: Processing time in seconds
+              example: 2.45
+
+    LogEntry:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Elasticsearch document ID
+          example: abc123xyz
+        timestamp:
+          type: string
+          format: date-time
+          example: 2024-12-30T10:30:45Z
+        level:
+          type: string
+          enum: [DEBUG, INFO, WARNING, ERROR, CRITICAL]
+          example: ERROR
+        message:
+          type: string
+          example: Database connection failed
+        source:
+          type: string
+          description: Log source/origin
+          example: web-server-01
+        file:
+          type: string
+          description: Source file
+          example: /var/log/app.log
+        line:
+          type: integer
+          description: Line number
+          example: 1234
+        function:
+          type: string
+          description: Function name
+          example: connect_database
+        extra_data:
+          type: object
+          description: Additional structured data
+          additionalProperties: true
+          example:
+            user_id: 42
+            request_id: req-123
+            ip_address: 192.168.1.1
+
+    # ==================== Alert Schemas ====================
+    Alert:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: High Error Rate
+        description:
+          type: string
+          example: Alert when error rate exceeds 5%
+        condition:
+          type: object
+          properties:
+            type:
+              type: string
+              enum: [threshold, pattern, anomaly]
+            parameters:
+              type: object
+              additionalProperties: true
+        severity:
+          type: string
+          enum: [low, medium, high, critical]
+          example: high
+        status:
+          type: string
+          enum: [active, resolved, acknowledged]
+          example: active
+        triggered_at:
+          type: string
+          format: date-time
+          nullable: true
+        triggered_count:
+          type: integer
+          example: 3
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+
+    AlertCreate:
+      type: object
+      required:
+        - name
+        - condition
+        - severity
+      properties:
+        name:
+          type: string
+          minLength: 1
+          maxLength: 200
+        description:
+          type: string
+        condition:
+          type: object
+          required:
+            - type
+            - parameters
+          properties:
+            type:
+              type: string
+              enum: [threshold, pattern, anomaly]
+            parameters:
+              type: object
+              description: Condition-specific parameters
+              example:
+                metric: error_rate
+                threshold: 5
+                window: 5m
+        severity:
+          type: string
+          enum: [low, medium, high, critical]
+        notification_channels:
+          type: array
+          items:
+            type: string
+            enum: [email, webhook, slack]
+          example: [email, slack]
+        enabled:
+          type: boolean
+          default: true
+
+    AlertDetailed:
+      allOf:
+        - $ref: '#/components/schemas/Alert'
+        - type: object
+          properties:
+            trigger_history:
+              type: array
+              items:
+                type: object
+                properties:
+                  triggered_at:
+                    type: string
+                    format: date-time
+                  value:
+                    type: number
+                  resolved_at:
+                    type: string
+                    format: date-time
+                    nullable: true
+
+    # ==================== Analytics Schemas ====================
+    DashboardStats:
+      type: object
+      properties:
+        total_logs:
+          type: integer
+          example: 1543210
+        total_errors:
+          type: integer
+          example: 1234
+        total_warnings:
+          type: integer
+          example: 5678
+        total_log_files:
+          type: integer
+          example: 150
+        active_alerts:
+          type: integer
+          example: 3
+        logs_today:
+          type: integer
+          example: 45123
+        error_rate:
+          type: number
+          description: Error percentage
+          example: 0.08
+        storage_used:
+          type: integer
+          description: Storage used in bytes
+          example: 5368709120
+        last_updated:
+          type: string
+          format: date-time
+
+    # ==================== User Schemas ====================
+    UserProfile:
+      type: object
+      properties:
+        id:
+          type: integer
+        username:
+          type: string
+        email:
+          type: string
+          format: email
+        first_name:
+          type: string
+        last_name:
+          type: string
+        bio:
+          type: string
+          nullable: true
+        avatar_url:
+          type: string
+          format: uri
+          nullable: true
+        date_joined:
+          type: string
+          format: date-time
+        last_login:
+          type: string
+          format: date-time
+        notification_preferences:
+          type: object
+          properties:
+            email_alerts:
+              type: boolean
+            push_notifications:
+              type: boolean
+            alert_threshold:
+              type: string
+              enum: [all, critical, none]
+        subscription:
+          type: object
+          properties:
+            plan:
+              type: string
+              enum: [free, basic, premium, enterprise]
+            expires_at:
+              type: string
+              format: date-time
+              nullable: true
+
+    # ==================== Error Schemas ====================
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Error message
+          example: Invalid request parameters
+        details:
+          type: object
+          description: Detailed error information
+          additionalProperties: true
+        code:
+          type: string
+          description: Error code
+          example: VALIDATION_ERROR
+
+  responses:
+    BadRequest:
+      description: Bad request - invalid input
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            error: Validation failed
+            details:
+              username: This field is required
+              email: Enter a valid email address
+
+    Unauthorized:
+      description: Unauthorized - authentication required or token invalid
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            error: Authentication credentials were not provided
+            code: UNAUTHORIZED
+
+    Forbidden:
+      description: Forbidden - insufficient permissions
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            error: You do not have permission to perform this action
+            code: PERMISSION_DENIED
+
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            error: Log file not found
+            code: NOT_FOUND
+
+    RateLimitExceeded:
+      description: Rate limit exceeded
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            error: Rate limit exceeded
+            details:
+              retry_after: 3600
+            code: RATE_LIMIT_EXCEEDED
