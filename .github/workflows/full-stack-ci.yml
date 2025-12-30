@@ -1,0 +1,275 @@
+name: Full Stack CI/CD
+
+on:
+  pull_request:
+    branches: [main, develop]
+  push:
+    branches: [main, develop]
+  workflow_dispatch:
+
+env:
+  DOCKER_BUILDKIT: 1
+  COMPOSE_DOCKER_CLI_BUILD: 1
+
+jobs:
+  changes:
+    name: Detect Changes
+    runs-on: ubuntu-latest
+    outputs:
+      backend: ${{ steps.changes.outputs.backend }}
+      frontend: ${{ steps.changes.outputs.frontend }}
+      docker: ${{ steps.changes.outputs.docker }}
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Detect file changes
+        uses: dorny/paths-filter@v3
+        id: changes
+        with:
+          filters: |
+            backend:
+              - 'backend/**'
+              - 'docker-compose.yml'
+              - '.github/workflows/**'
+            frontend:
+              - 'frontend/**'
+              - 'docker-compose.yml'
+              - '.github/workflows/**'
+            docker:
+              - 'docker-compose.yml'
+              - 'backend/Dockerfile'
+              - 'frontend/Dockerfile'
+              - 'nginx/**'
+
+  backend-ci:
+    name: Backend CI
+    needs: changes
+    if: ${{ needs.changes.outputs.backend == 'true' }}
+    uses: ./.github/workflows/backend-ci.yml
+
+  frontend-ci:
+    name: Frontend CI
+    needs: changes
+    if: ${{ needs.changes.outputs.frontend == 'true' }}
+    uses: ./.github/workflows/frontend-ci.yml
+
+  integration-test:
+    name: Integration Tests
+    runs-on: ubuntu-latest
+    needs: [changes]
+    if: ${{ needs.changes.outputs.backend == 'true' || needs.changes.outputs.frontend == 'true' }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Cache Docker layers
+        uses: actions/cache@v4
+        with:
+          path: /tmp/.buildx-cache
+          key: ${{ runner.os }}-buildx-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-buildx-
+
+      - name: Create .env file
+        run: |
+          cp .env.example .env
+          sed -i 's/your-secret-key-here/test-secret-key/g' .env
+          sed -i 's/yourpassword/testpass/g' .env
+
+      - name: Start services
+        run: |
+          docker-compose up -d postgres mongodb redis elasticsearch
+          sleep 30
+
+      - name: Check service health
+        run: |
+          docker-compose ps
+          docker-compose logs postgres
+          docker-compose logs mongodb
+          docker-compose logs redis
+          docker-compose logs elasticsearch
+
+      - name: Run database migrations
+        run: |
+          docker-compose run --rm backend python manage.py migrate --noinput
+
+      - name: Start backend and frontend
+        run: |
+          docker-compose up -d backend frontend
+          sleep 20
+
+      - name: Run integration tests
+        run: |
+          docker-compose run --rm backend pytest tests/integration/ -v
+
+      - name: Check application health
+        run: |
+          curl -f http://localhost:8000/health/ || exit 1
+          curl -f http://localhost:3000/ || exit 1
+
+      - name: Collect logs on failure
+        if: failure()
+        run: |
+          docker-compose logs backend > backend.log
+          docker-compose logs frontend > frontend.log
+          docker-compose logs
+
+      - name: Upload logs
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: integration-test-logs
+          path: |
+            backend.log
+            frontend.log
+
+      - name: Cleanup
+        if: always()
+        run: docker-compose down -v
+
+  e2e-test:
+    name: End-to-End Tests
+    runs-on: ubuntu-latest
+    needs: [backend-ci, frontend-ci]
+    if: |
+      always() &&
+      (needs.backend-ci.result == 'success' || needs.backend-ci.result == 'skipped') &&
+      (needs.frontend-ci.result == 'success' || needs.frontend-ci.result == 'skipped')
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Create .env file
+        run: |
+          cp .env.example .env
+          sed -i 's/your-secret-key-here/test-secret-key/g' .env
+
+      - name: Start full stack
+        run: |
+          docker-compose up -d
+          sleep 60
+
+      - name: Wait for services to be healthy
+        run: |
+          timeout 300 bash -c 'until curl -f http://localhost:8000/health/; do sleep 5; done'
+          timeout 300 bash -c 'until curl -f http://localhost:3000/; do sleep 5; done'
+
+      - name: Install Playwright
+        working-directory: ./frontend
+        run: |
+          npm ci
+          npx playwright install --with-deps
+
+      - name: Run E2E tests
+        working-directory: ./frontend
+        env:
+          PLAYWRIGHT_BASE_URL: http://localhost:3000
+          API_URL: http://localhost:8000
+        run: npx playwright test
+
+      - name: Upload Playwright report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: playwright-report
+          path: frontend/playwright-report/
+
+      - name: Cleanup
+        if: always()
+        run: docker-compose down -v
+
+  docker-compose-validate:
+    name: Validate Docker Compose
+    runs-on: ubuntu-latest
+    needs: changes
+    if: ${{ needs.changes.outputs.docker == 'true' }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Validate docker-compose.yml
+        run: docker-compose config
+
+      - name: Check Docker Compose version
+        run: docker-compose version
+
+  deployment-preview:
+    name: Create Deployment Preview
+    runs-on: ubuntu-latest
+    needs: [backend-ci, frontend-ci]
+    if: |
+      github.event_name == 'pull_request' &&
+      (needs.backend-ci.result == 'success' || needs.backend-ci.result == 'skipped') &&
+      (needs.frontend-ci.result == 'success' || needs.frontend-ci.result == 'skipped')
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Comment deployment info
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: `## 🚀 Deployment Preview
+              
+              Build artifacts are ready for this PR.
+              
+              **Backend:** Built successfully
+              **Frontend:** Built successfully
+              
+              To deploy this PR:
+              \`\`\`bash
+              docker-compose pull
+              docker-compose up -d
+              \`\`\`
+              
+              **Commit:** ${context.sha}
+              **Author:** @${context.payload.pull_request.user.login}
+              `
+            })
+
+  summary:
+    name: Full Stack CI Summary
+    runs-on: ubuntu-latest
+    needs: [backend-ci, frontend-ci, integration-test, e2e-test, docker-compose-validate]
+    if: always()
+
+    steps:
+      - name: Check all job results
+        run: |
+          echo "Backend CI: ${{ needs.backend-ci.result }}"
+          echo "Frontend CI: ${{ needs.frontend-ci.result }}"
+          echo "Integration Tests: ${{ needs.integration-test.result }}"
+          echo "E2E Tests: ${{ needs.e2e-test.result }}"
+          echo "Docker Compose Validate: ${{ needs.docker-compose-validate.result }}"
+          
+          # Check if any required job failed
+          if [[ "${{ needs.backend-ci.result }}" == "failure" ]] || \
+             [[ "${{ needs.frontend-ci.result }}" == "failure" ]] || \
+             [[ "${{ needs.integration-test.result }}" == "failure" ]] || \
+             [[ "${{ needs.e2e-test.result }}" == "failure" ]]; then
+            echo "❌ Full Stack CI failed"
+            exit 1
+          else
+            echo "✅ Full Stack CI passed"
+          fi
