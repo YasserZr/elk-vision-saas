@@ -1,0 +1,109 @@
+# Blackbox Exporter Configuration
+# Probes for HTTP, TCP, DNS, and ICMP checks
+
+modules:
+  # HTTP probe - expect 2xx status
+  http_2xx:
+    prober: http
+    timeout: 15s
+    http:
+      valid_http_versions: ["HTTP/1.1", "HTTP/2.0"]
+      valid_status_codes: [200, 201, 202, 204]
+      method: GET
+      no_follow_redirects: false
+      fail_if_ssl: false
+      fail_if_not_ssl: false
+      tls_config:
+        insecure_skip_verify: true
+      preferred_ip_protocol: "ip4"
+
+  # HTTP probe for POST endpoints
+  http_post_2xx:
+    prober: http
+    timeout: 15s
+    http:
+      valid_http_versions: ["HTTP/1.1", "HTTP/2.0"]
+      valid_status_codes: [200, 201, 202, 204]
+      method: POST
+      headers:
+        Content-Type: application/json
+      body: '{}'
+      preferred_ip_protocol: "ip4"
+
+  # HTTP probe with SSL verification
+  http_2xx_ssl:
+    prober: http
+    timeout: 15s
+    http:
+      valid_http_versions: ["HTTP/1.1", "HTTP/2.0"]
+      valid_status_codes: [200, 201, 202, 204]
+      method: GET
+      fail_if_ssl: false
+      fail_if_not_ssl: true
+      tls_config:
+        insecure_skip_verify: false
+
+  # HTTP probe for API health check
+  http_api_health:
+    prober: http
+    timeout: 10s
+    http:
+      valid_http_versions: ["HTTP/1.1", "HTTP/2.0"]
+      valid_status_codes: [200]
+      method: GET
+      fail_if_body_not_matches_regexp:
+        - "healthy|ok|success"
+
+  # TCP connection probe
+  tcp_connect:
+    prober: tcp
+    timeout: 10s
+
+  # TCP with TLS
+  tcp_tls:
+    prober: tcp
+    timeout: 10s
+    tcp:
+      tls: true
+      tls_config:
+        insecure_skip_verify: true
+
+  # DNS probe
+  dns:
+    prober: dns
+    timeout: 10s
+    dns:
+      query_name: "google.com"
+      query_type: "A"
+      valid_rcodes:
+        - NOERROR
+
+  # DNS probe for specific domain
+  dns_domain:
+    prober: dns
+    timeout: 10s
+    dns:
+      query_type: "A"
+      valid_rcodes:
+        - NOERROR
+
+  # ICMP ping probe
+  icmp:
+    prober: icmp
+    timeout: 10s
+    icmp:
+      preferred_ip_protocol: "ip4"
+
+  # WebSocket connection probe
+  websocket:
+    prober: http
+    timeout: 10s
+    http:
+      valid_http_versions: ["HTTP/1.1"]
+      method: GET
+      headers:
+        Connection: Upgrade
+        Upgrade: websocket
+        Sec-WebSocket-Key: dGhlIHNhbXBsZSBub25jZQ==
+        Sec-WebSocket-Version: "13"
+      valid_status_codes: [101]

@@ -1,0 +1,70 @@
+{{ define "slack.default.title" -}}
+[{{ .Status | toUpper }}{{ if eq .Status "firing" }}:{{ .Alerts.Firing | len }}{{ end }}] {{ .GroupLabels.alertname }}
+{{- end }}
+
+{{ define "slack.default.text" -}}
+{{ range .Alerts }}
+*Alert:* {{ .Labels.alertname }}{{ if .Labels.severity }} - `{{ .Labels.severity }}`{{ end }}
+*Summary:* {{ .Annotations.summary }}
+*Description:* {{ .Annotations.description }}
+*Source:* {{ .GeneratorURL }}
+{{ if .Labels.instance }}*Instance:* {{ .Labels.instance }}{{ end }}
+{{ if .Labels.job }}*Job:* {{ .Labels.job }}{{ end }}
+*Started:* {{ .StartsAt.Format "2006-01-02 15:04:05 MST" }}
+{{ if .EndsAt }}*Ended:* {{ .EndsAt.Format "2006-01-02 15:04:05 MST" }}{{ end }}
+---
+{{ end }}
+{{- end }}
+
+{{ define "email.default.subject" -}}
+[{{ .Status | toUpper }}] {{ .GroupLabels.alertname }} - ELK Vision SaaS
+{{- end }}
+
+{{ define "email.default.html" -}}
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 0; padding: 20px; background-color: #f5f5f5; }
+    .container { max-width: 600px; margin: 0 auto; background-color: white; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+    .header { padding: 20px; color: white; }
+    .header.firing { background-color: #e74c3c; }
+    .header.resolved { background-color: #27ae60; }
+    .content { padding: 20px; }
+    .alert { border-left: 4px solid #e74c3c; padding: 10px 15px; margin: 10px 0; background-color: #fafafa; }
+    .alert.warning { border-color: #f39c12; }
+    .alert.resolved { border-color: #27ae60; }
+    .label { display: inline-block; padding: 2px 8px; border-radius: 3px; font-size: 12px; margin: 2px; }
+    .label-severity-critical { background-color: #e74c3c; color: white; }
+    .label-severity-warning { background-color: #f39c12; color: white; }
+    .footer { padding: 15px 20px; background-color: #f8f9fa; font-size: 12px; color: #666; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header {{ .Status }}">
+      <h2>{{ if eq .Status "firing" }}🚨{{ else }}✅{{ end }} {{ .Status | toUpper }}: {{ .GroupLabels.alertname }}</h2>
+    </div>
+    <div class="content">
+      {{ range .Alerts }}
+      <div class="alert {{ .Labels.severity }}">
+        <h3>{{ .Labels.alertname }}</h3>
+        <p><strong>Summary:</strong> {{ .Annotations.summary }}</p>
+        <p><strong>Description:</strong> {{ .Annotations.description }}</p>
+        <p>
+          <span class="label label-severity-{{ .Labels.severity }}">{{ .Labels.severity }}</span>
+          {{ if .Labels.job }}<span class="label">{{ .Labels.job }}</span>{{ end }}
+          {{ if .Labels.instance }}<span class="label">{{ .Labels.instance }}</span>{{ end }}
+        </p>
+        <p><small>Started: {{ .StartsAt.Format "2006-01-02 15:04:05 MST" }}</small></p>
+      </div>
+      {{ end }}
+    </div>
+    <div class="footer">
+      <p>This alert was sent by ELK Vision SaaS Alertmanager</p>
+      <p><a href="{{ .ExternalURL }}">View in Alertmanager</a></p>
+    </div>
+  </div>
+</body>
+</html>
+{{- end }}

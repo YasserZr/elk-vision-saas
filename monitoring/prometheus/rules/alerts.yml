@@ -1,0 +1,322 @@
+# Prometheus Alerting Rules for ELK Vision SaaS
+# ================================================
+
+groups:
+  # ===========================================
+  # Infrastructure Alerts
+  # ===========================================
+  - name: infrastructure
+    interval: 30s
+    rules:
+      # High CPU usage
+      - alert: HighCPUUsage
+        expr: 100 - (avg by(instance) (rate(node_cpu_seconds_total{mode="idle"}[5m])) * 100) > 80
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High CPU usage detected"
+          description: "CPU usage is above 80% for more than 5 minutes on {{ $labels.instance }}. Current value: {{ $value | printf \"%.2f\" }}%"
+
+      - alert: CriticalCPUUsage
+        expr: 100 - (avg by(instance) (rate(node_cpu_seconds_total{mode="idle"}[5m])) * 100) > 95
+        for: 2m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Critical CPU usage detected"
+          description: "CPU usage is above 95% for more than 2 minutes on {{ $labels.instance }}. Current value: {{ $value | printf \"%.2f\" }}%"
+
+      # Memory usage
+      - alert: HighMemoryUsage
+        expr: (1 - (node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes)) * 100 > 85
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High memory usage detected"
+          description: "Memory usage is above 85% on {{ $labels.instance }}. Current value: {{ $value | printf \"%.2f\" }}%"
+
+      - alert: CriticalMemoryUsage
+        expr: (1 - (node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes)) * 100 > 95
+        for: 2m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Critical memory usage detected"
+          description: "Memory usage is above 95% on {{ $labels.instance }}. Current value: {{ $value | printf \"%.2f\" }}%"
+
+      # Disk usage
+      - alert: HighDiskUsage
+        expr: (1 - (node_filesystem_avail_bytes{fstype!~"tmpfs|overlay"} / node_filesystem_size_bytes{fstype!~"tmpfs|overlay"})) * 100 > 80
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High disk usage detected"
+          description: "Disk usage is above 80% on {{ $labels.instance }} ({{ $labels.mountpoint }}). Current value: {{ $value | printf \"%.2f\" }}%"
+
+      - alert: CriticalDiskUsage
+        expr: (1 - (node_filesystem_avail_bytes{fstype!~"tmpfs|overlay"} / node_filesystem_size_bytes{fstype!~"tmpfs|overlay"})) * 100 > 90
+        for: 2m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Critical disk usage detected"
+          description: "Disk usage is above 90% on {{ $labels.instance }} ({{ $labels.mountpoint }}). Current value: {{ $value | printf \"%.2f\" }}%"
+
+  # ===========================================
+  # Container Alerts
+  # ===========================================
+  - name: containers
+    interval: 30s
+    rules:
+      # Container down
+      - alert: ContainerDown
+        expr: absent(container_last_seen{name=~"elk_.*"})
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Container is down"
+          description: "Container {{ $labels.name }} is not running"
+
+      # Container high CPU
+      - alert: ContainerHighCPU
+        expr: (rate(container_cpu_usage_seconds_total{name=~"elk_.*"}[5m]) * 100) > 80
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Container high CPU usage"
+          description: "Container {{ $labels.name }} CPU usage is above 80%. Current value: {{ $value | printf \"%.2f\" }}%"
+
+      # Container high memory
+      - alert: ContainerHighMemory
+        expr: (container_memory_usage_bytes{name=~"elk_.*"} / container_spec_memory_limit_bytes{name=~"elk_.*"}) * 100 > 85
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Container high memory usage"
+          description: "Container {{ $labels.name }} memory usage is above 85%. Current value: {{ $value | printf \"%.2f\" }}%"
+
+      # Container restart
+      - alert: ContainerRestarted
+        expr: increase(container_restart_count{name=~"elk_.*"}[15m]) > 0
+        for: 0m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Container restarted"
+          description: "Container {{ $labels.name }} has restarted {{ $value }} times in the last 15 minutes"
+
+  # ===========================================
+  # Application Alerts (Django Backend)
+  # ===========================================
+  - name: application
+    interval: 30s
+    rules:
+      # Backend down
+      - alert: BackendDown
+        expr: probe_success{job="blackbox-http",instance=~".*backend.*"} == 0
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Backend service is down"
+          description: "Django backend is not responding to health checks"
+
+      # High response time
+      - alert: HighResponseTime
+        expr: histogram_quantile(0.95, sum(rate(django_http_requests_latency_seconds_bucket[5m])) by (le)) > 2
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High API response time"
+          description: "95th percentile response time is above 2 seconds. Current value: {{ $value | printf \"%.2f\" }}s"
+
+      # High error rate
+      - alert: HighErrorRate
+        expr: sum(rate(django_http_responses_total_by_status_total{status=~"5.."}[5m])) / sum(rate(django_http_responses_total_by_status_total[5m])) * 100 > 5
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High error rate detected"
+          description: "Error rate is above 5%. Current value: {{ $value | printf \"%.2f\" }}%"
+
+      - alert: CriticalErrorRate
+        expr: sum(rate(django_http_responses_total_by_status_total{status=~"5.."}[5m])) / sum(rate(django_http_responses_total_by_status_total[5m])) * 100 > 10
+        for: 2m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Critical error rate detected"
+          description: "Error rate is above 10%. Current value: {{ $value | printf \"%.2f\" }}%"
+
+      # Celery queue size
+      - alert: CeleryQueueBacklog
+        expr: celery_queue_length > 100
+        for: 10m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Celery queue backlog"
+          description: "Celery queue has more than 100 pending tasks. Current: {{ $value }}"
+
+  # ===========================================
+  # Database Alerts
+  # ===========================================
+  - name: databases
+    interval: 30s
+    rules:
+      # PostgreSQL down
+      - alert: PostgreSQLDown
+        expr: pg_up == 0
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "PostgreSQL is down"
+          description: "PostgreSQL database is not responding"
+
+      # PostgreSQL high connections
+      - alert: PostgreSQLHighConnections
+        expr: sum(pg_stat_activity_count) / pg_settings_max_connections * 100 > 80
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High PostgreSQL connections"
+          description: "PostgreSQL connection usage is above 80%. Current: {{ $value | printf \"%.2f\" }}%"
+
+      # PostgreSQL replication lag
+      - alert: PostgreSQLReplicationLag
+        expr: pg_replication_lag > 60
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "PostgreSQL replication lag"
+          description: "Replication lag is above 60 seconds. Current: {{ $value | printf \"%.0f\" }}s"
+
+      # MongoDB down
+      - alert: MongoDBDown
+        expr: mongodb_up == 0
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "MongoDB is down"
+          description: "MongoDB database is not responding"
+
+      # MongoDB high connections
+      - alert: MongoDBHighConnections
+        expr: mongodb_ss_connections{conn_type="current"} / mongodb_ss_connections{conn_type="available"} * 100 > 80
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High MongoDB connections"
+          description: "MongoDB connection usage is above 80%. Current: {{ $value | printf \"%.2f\" }}%"
+
+      # Redis down
+      - alert: RedisDown
+        expr: redis_up == 0
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Redis is down"
+          description: "Redis is not responding"
+
+      # Redis high memory
+      - alert: RedisHighMemory
+        expr: redis_memory_used_bytes / redis_memory_max_bytes * 100 > 85
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Redis high memory usage"
+          description: "Redis memory usage is above 85%. Current: {{ $value | printf \"%.2f\" }}%"
+
+      # Redis rejected connections
+      - alert: RedisRejectedConnections
+        expr: increase(redis_rejected_connections_total[1h]) > 0
+        for: 0m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Redis rejected connections"
+          description: "Redis has rejected {{ $value }} connections in the last hour"
+
+  # ===========================================
+  # Elasticsearch Alerts
+  # ===========================================
+  - name: elasticsearch
+    interval: 30s
+    rules:
+      # Elasticsearch cluster health
+      - alert: ElasticsearchClusterYellow
+        expr: elasticsearch_cluster_health_status{color="yellow"} == 1
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Elasticsearch cluster is yellow"
+          description: "Elasticsearch cluster health is yellow - some replicas are not allocated"
+
+      - alert: ElasticsearchClusterRed
+        expr: elasticsearch_cluster_health_status{color="red"} == 1
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Elasticsearch cluster is red"
+          description: "Elasticsearch cluster health is red - some primary shards are not allocated"
+
+      # Elasticsearch heap usage
+      - alert: ElasticsearchHighHeapUsage
+        expr: elasticsearch_jvm_memory_used_bytes{area="heap"} / elasticsearch_jvm_memory_max_bytes{area="heap"} * 100 > 85
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Elasticsearch high heap usage"
+          description: "Elasticsearch heap usage is above 85%. Current: {{ $value | printf \"%.2f\" }}%"
+
+      # Elasticsearch disk usage
+      - alert: ElasticsearchHighDiskUsage
+        expr: (1 - elasticsearch_filesystem_data_available_bytes / elasticsearch_filesystem_data_size_bytes) * 100 > 80
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Elasticsearch high disk usage"
+          description: "Elasticsearch disk usage is above 80%. Current: {{ $value | printf \"%.2f\" }}%"
+
+  # ===========================================
+  # SSL Certificate Alerts
+  # ===========================================
+  - name: ssl
+    interval: 1h
+    rules:
+      - alert: SSLCertificateExpiringSoon
+        expr: probe_ssl_earliest_cert_expiry - time() < 86400 * 30
+        for: 1h
+        labels:
+          severity: warning
+        annotations:
+          summary: "SSL certificate expiring soon"
+          description: "SSL certificate for {{ $labels.instance }} expires in {{ $value | humanizeDuration }}"
+
+      - alert: SSLCertificateExpiring
+        expr: probe_ssl_earliest_cert_expiry - time() < 86400 * 7
+        for: 1h
+        labels:
+          severity: critical
+        annotations:
+          summary: "SSL certificate expiring very soon"
+          description: "SSL certificate for {{ $labels.instance }} expires in {{ $value | humanizeDuration }}"

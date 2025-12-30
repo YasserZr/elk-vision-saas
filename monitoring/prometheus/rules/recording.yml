@@ -1,0 +1,170 @@
+# Prometheus Recording Rules for ELK Vision SaaS
+# ==============================================
+# Pre-computed metrics for better dashboard performance
+
+groups:
+  # ===========================================
+  # Node/Host Metrics
+  # ===========================================
+  - name: node_metrics
+    interval: 30s
+    rules:
+      # CPU usage percentage
+      - record: node:cpu_usage_percent
+        expr: 100 - (avg by(instance) (rate(node_cpu_seconds_total{mode="idle"}[5m])) * 100)
+
+      # Memory usage percentage
+      - record: node:memory_usage_percent
+        expr: (1 - (node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes)) * 100
+
+      # Disk usage percentage
+      - record: node:disk_usage_percent
+        expr: (1 - (node_filesystem_avail_bytes{fstype!~"tmpfs|overlay"} / node_filesystem_size_bytes{fstype!~"tmpfs|overlay"})) * 100
+
+      # Network received bytes rate
+      - record: node:network_receive_bytes_rate
+        expr: sum by(instance) (rate(node_network_receive_bytes_total{device!~"lo|veth.*"}[5m]))
+
+      # Network transmitted bytes rate
+      - record: node:network_transmit_bytes_rate
+        expr: sum by(instance) (rate(node_network_transmit_bytes_total{device!~"lo|veth.*"}[5m]))
+
+  # ===========================================
+  # Container Metrics
+  # ===========================================
+  - name: container_metrics
+    interval: 30s
+    rules:
+      # Container CPU usage
+      - record: container:cpu_usage_percent
+        expr: sum by(name) (rate(container_cpu_usage_seconds_total{name=~"elk_.*"}[5m])) * 100
+
+      # Container memory usage percentage
+      - record: container:memory_usage_percent
+        expr: container_memory_usage_bytes{name=~"elk_.*"} / container_spec_memory_limit_bytes{name=~"elk_.*"} * 100
+
+      # Container network receive rate
+      - record: container:network_receive_bytes_rate
+        expr: sum by(name) (rate(container_network_receive_bytes_total{name=~"elk_.*"}[5m]))
+
+      # Container network transmit rate
+      - record: container:network_transmit_bytes_rate
+        expr: sum by(name) (rate(container_network_transmit_bytes_total{name=~"elk_.*"}[5m]))
+
+  # ===========================================
+  # Application Metrics (Django)
+  # ===========================================
+  - name: django_metrics
+    interval: 30s
+    rules:
+      # Request rate
+      - record: django:request_rate
+        expr: sum(rate(django_http_requests_total[5m]))
+
+      # Request rate by endpoint
+      - record: django:request_rate_by_view
+        expr: sum by(view) (rate(django_http_requests_total[5m]))
+
+      # Error rate percentage
+      - record: django:error_rate_percent
+        expr: |
+          sum(rate(django_http_responses_total_by_status_total{status=~"5.."}[5m])) 
+          / sum(rate(django_http_responses_total_by_status_total[5m])) * 100
+
+      # 95th percentile latency
+      - record: django:latency_p95
+        expr: histogram_quantile(0.95, sum(rate(django_http_requests_latency_seconds_bucket[5m])) by (le))
+
+      # 99th percentile latency
+      - record: django:latency_p99
+        expr: histogram_quantile(0.99, sum(rate(django_http_requests_latency_seconds_bucket[5m])) by (le))
+
+      # Average latency
+      - record: django:latency_avg
+        expr: |
+          sum(rate(django_http_requests_latency_seconds_sum[5m])) 
+          / sum(rate(django_http_requests_latency_seconds_count[5m]))
+
+  # ===========================================
+  # Database Metrics
+  # ===========================================
+  - name: database_metrics
+    interval: 30s
+    rules:
+      # PostgreSQL active connections
+      - record: postgres:active_connections
+        expr: sum(pg_stat_activity_count{state="active"})
+
+      # PostgreSQL connection usage percentage
+      - record: postgres:connection_usage_percent
+        expr: sum(pg_stat_activity_count) / pg_settings_max_connections * 100
+
+      # PostgreSQL transactions per second
+      - record: postgres:transactions_per_second
+        expr: sum(rate(pg_stat_database_xact_commit[5m]) + rate(pg_stat_database_xact_rollback[5m]))
+
+      # MongoDB operations per second
+      - record: mongodb:operations_per_second
+        expr: sum(rate(mongodb_ss_opcounters[5m]))
+
+      # MongoDB connections
+      - record: mongodb:current_connections
+        expr: mongodb_ss_connections{conn_type="current"}
+
+      # Redis commands per second
+      - record: redis:commands_per_second
+        expr: sum(rate(redis_commands_processed_total[5m]))
+
+      # Redis memory usage percentage
+      - record: redis:memory_usage_percent
+        expr: redis_memory_used_bytes / redis_memory_max_bytes * 100
+
+      # Redis hit rate
+      - record: redis:hit_rate_percent
+        expr: |
+          rate(redis_keyspace_hits_total[5m]) 
+          / (rate(redis_keyspace_hits_total[5m]) + rate(redis_keyspace_misses_total[5m])) * 100
+
+  # ===========================================
+  # Elasticsearch Metrics
+  # ===========================================
+  - name: elasticsearch_metrics
+    interval: 30s
+    rules:
+      # Elasticsearch indexing rate
+      - record: elasticsearch:indexing_rate
+        expr: sum(rate(elasticsearch_indices_indexing_index_total[5m]))
+
+      # Elasticsearch search rate
+      - record: elasticsearch:search_rate
+        expr: sum(rate(elasticsearch_indices_search_query_total[5m]))
+
+      # Elasticsearch heap usage percentage
+      - record: elasticsearch:heap_usage_percent
+        expr: elasticsearch_jvm_memory_used_bytes{area="heap"} / elasticsearch_jvm_memory_max_bytes{area="heap"} * 100
+
+      # Elasticsearch disk usage percentage
+      - record: elasticsearch:disk_usage_percent
+        expr: (1 - elasticsearch_filesystem_data_available_bytes / elasticsearch_filesystem_data_size_bytes) * 100
+
+  # ===========================================
+  # Business Metrics
+  # ===========================================
+  - name: business_metrics
+    interval: 1m
+    rules:
+      # Log ingestion rate
+      - record: business:log_ingestion_rate
+        expr: sum(rate(logstash_events_in_total[5m]))
+
+      # Log processing rate
+      - record: business:log_processing_rate
+        expr: sum(rate(logstash_events_filtered_total[5m]))
+
+      # Active users (WebSocket connections)
+      - record: business:active_websocket_connections
+        expr: sum(django_websocket_connections_active)
+
+      # Alerts triggered per hour
+      - record: business:alerts_per_hour
+        expr: sum(increase(django_alerts_triggered_total[1h]))

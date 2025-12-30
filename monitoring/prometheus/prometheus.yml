@@ -1,0 +1,153 @@
+# Prometheus Configuration for ELK Vision SaaS
+# =============================================
+
+global:
+  scrape_interval: 15s          # How frequently to scrape targets
+  evaluation_interval: 15s       # How frequently to evaluate rules
+  scrape_timeout: 10s           # Scrape timeout
+
+  # Attach labels to any time series or alerts when communicating with external systems
+  external_labels:
+    monitor: 'elk-vision-monitor'
+    environment: 'production'
+
+# Alertmanager configuration
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets:
+            - alertmanager:9093
+      scheme: http
+      timeout: 10s
+
+# Rule files
+rule_files:
+  - "/etc/prometheus/rules/*.yml"
+
+# Scrape configurations
+scrape_configs:
+  # ===========================================
+  # Prometheus self-monitoring
+  # ===========================================
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['localhost:9090']
+    metrics_path: /metrics
+
+  # ===========================================
+  # Node Exporter - Host system metrics
+  # ===========================================
+  - job_name: 'node-exporter'
+    static_configs:
+      - targets: ['node-exporter:9100']
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: instance
+        replacement: 'elk-vision-host'
+
+  # ===========================================
+  # cAdvisor - Container metrics
+  # ===========================================
+  - job_name: 'cadvisor'
+    static_configs:
+      - targets: ['cadvisor:8080']
+    metrics_path: /metrics
+
+  # ===========================================
+  # Django Backend Application
+  # ===========================================
+  - job_name: 'django-backend'
+    static_configs:
+      - targets: ['backend:8000']
+    metrics_path: /metrics
+    scrape_interval: 30s
+
+  # ===========================================
+  # PostgreSQL Exporter
+  # ===========================================
+  - job_name: 'postgres'
+    static_configs:
+      - targets: ['postgres-exporter:9187']
+
+  # ===========================================
+  # MongoDB Exporter
+  # ===========================================
+  - job_name: 'mongodb'
+    static_configs:
+      - targets: ['mongodb-exporter:9216']
+
+  # ===========================================
+  # Redis Exporter
+  # ===========================================
+  - job_name: 'redis'
+    static_configs:
+      - targets: ['redis-exporter:9121']
+
+  # ===========================================
+  # Elasticsearch Exporter
+  # ===========================================
+  - job_name: 'elasticsearch'
+    static_configs:
+      - targets: ['elasticsearch-exporter:9114']
+
+  # ===========================================
+  # Nginx Exporter
+  # ===========================================
+  - job_name: 'nginx'
+    static_configs:
+      - targets: ['nginx-exporter:9113']
+
+  # ===========================================
+  # Celery/Flower metrics
+  # ===========================================
+  - job_name: 'celery-flower'
+    static_configs:
+      - targets: ['flower:5555']
+    metrics_path: /metrics
+
+  # ===========================================
+  # Logstash
+  # ===========================================
+  - job_name: 'logstash'
+    static_configs:
+      - targets: ['logstash:9600']
+    metrics_path: /_node/stats
+
+  # ===========================================
+  # Blackbox Exporter - HTTP probes
+  # ===========================================
+  - job_name: 'blackbox-http'
+    metrics_path: /probe
+    params:
+      module: [http_2xx]
+    static_configs:
+      - targets:
+          - http://backend:8000/api/health/
+          - http://frontend:3000/
+          - http://elasticsearch:9200/_cluster/health
+          - http://kibana:5601/api/status
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: __param_target
+      - source_labels: [__param_target]
+        target_label: instance
+      - target_label: __address__
+        replacement: blackbox-exporter:9115
+
+  # ===========================================
+  # DNS Probe
+  # ===========================================
+  - job_name: 'blackbox-dns'
+    metrics_path: /probe
+    params:
+      module: [dns]
+    static_configs:
+      - targets:
+          - 8.8.8.8
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: __param_target
+      - source_labels: [__param_target]
+        target_label: instance
+      - target_label: __address__
+        replacement: blackbox-exporter:9115

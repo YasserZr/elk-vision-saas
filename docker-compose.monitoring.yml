@@ -1,0 +1,272 @@
+# Docker Compose override for monitoring stack
+# ============================================
+# Add this to your main docker-compose.yml or use:
+# docker-compose -f docker-compose.yml -f docker-compose.monitoring.yml up -d
+
+version: '3.9'
+
+volumes:
+  prometheus_data:
+    driver: local
+  grafana_data:
+    driver: local
+  alertmanager_data:
+    driver: local
+
+networks:
+  monitoring_network:
+    driver: bridge
+
+services:
+  # ============================================
+  # Prometheus - Metrics Collection
+  # ============================================
+  prometheus:
+    image: prom/prometheus:v2.47.0
+    container_name: elk_prometheus
+    restart: unless-stopped
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--storage.tsdb.retention.time=30d'
+      - '--storage.tsdb.retention.size=10GB'
+      - '--web.console.libraries=/usr/share/prometheus/console_libraries'
+      - '--web.console.templates=/usr/share/prometheus/consoles'
+      - '--web.enable-lifecycle'
+      - '--web.enable-admin-api'
+    volumes:
+      - ./monitoring/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - ./monitoring/prometheus/rules:/etc/prometheus/rules:ro
+      - prometheus_data:/prometheus
+    networks:
+      - monitoring_network
+      - backend_network
+      - database_network
+    ports:
+      - "9090:9090"
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://localhost:9090/-/healthy"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # ============================================
+  # Grafana - Visualization & Dashboards
+  # ============================================
+  grafana:
+    image: grafana/grafana:10.2.0
+    container_name: elk_grafana
+    restart: unless-stopped
+    environment:
+      - GF_SECURITY_ADMIN_USER=${GRAFANA_ADMIN_USER:-admin}
+      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_ADMIN_PASSWORD:-admin123}
+      - GF_SECURITY_SECRET_KEY=${GRAFANA_SECRET_KEY:-your-secret-key-here}
+      - GF_USERS_ALLOW_SIGN_UP=false
+      - GF_SERVER_ROOT_URL=http://localhost:3001/grafana/
+      - GF_SERVER_SERVE_FROM_SUB_PATH=true
+      - GF_INSTALL_PLUGINS=grafana-clock-panel,grafana-piechart-panel,redis-datasource,yesoreyeram-infinity-datasource
+      - GF_SMTP_HOST=${SMTP_HOST:-smtp.gmail.com:587}
+      - GF_SMTP_USER=${SMTP_USER:-}
+      - GF_SMTP_PASSWORD=${SMTP_PASSWORD:-}
+      - ELASTICSEARCH_PASSWORD=${ELASTICSEARCH_PASSWORD:-changeme}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-postgres123}
+      - REDIS_PASSWORD=${REDIS_PASSWORD:-redis123}
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./monitoring/grafana/grafana.ini:/etc/grafana/grafana.ini:ro
+      - ./monitoring/grafana/provisioning:/etc/grafana/provisioning:ro
+      - ./monitoring/grafana/dashboards:/var/lib/grafana/dashboards:ro
+    networks:
+      - monitoring_network
+      - backend_network
+    ports:
+      - "3001:3001"
+    depends_on:
+      - prometheus
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://localhost:3001/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # ============================================
+  # Alertmanager - Alert Management
+  # ============================================
+  alertmanager:
+    image: prom/alertmanager:v0.26.0
+    container_name: elk_alertmanager
+    restart: unless-stopped
+    command:
+      - '--config.file=/etc/alertmanager/alertmanager.yml'
+      - '--storage.path=/alertmanager'
+      - '--web.external-url=http://localhost:9093'
+      - '--cluster.advertise-address=0.0.0.0:9093'
+    environment:
+      - SMTP_USERNAME=${SMTP_USER:-}
+      - SMTP_PASSWORD=${SMTP_PASSWORD:-}
+      - SLACK_WEBHOOK_URL=${SLACK_WEBHOOK_URL:-}
+    volumes:
+      - ./monitoring/alertmanager/alertmanager.yml:/etc/alertmanager/alertmanager.yml:ro
+      - ./monitoring/alertmanager/templates:/etc/alertmanager/templates:ro
+      - alertmanager_data:/alertmanager
+    networks:
+      - monitoring_network
+    ports:
+      - "9093:9093"
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://localhost:9093/-/healthy"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # ============================================
+  # Node Exporter - Host Metrics
+  # ============================================
+  node-exporter:
+    image: prom/node-exporter:v1.6.1
+    container_name: elk_node_exporter
+    restart: unless-stopped
+    command:
+      - '--path.procfs=/host/proc'
+      - '--path.sysfs=/host/sys'
+      - '--path.rootfs=/rootfs'
+      - '--collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/)'
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+    networks:
+      - monitoring_network
+    ports:
+      - "9100:9100"
+    pid: host
+
+  # ============================================
+  # cAdvisor - Container Metrics
+  # ============================================
+  cadvisor:
+    image: gcr.io/cadvisor/cadvisor:v0.47.2
+    container_name: elk_cadvisor
+    restart: unless-stopped
+    privileged: true
+    devices:
+      - /dev/kmsg:/dev/kmsg
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:ro
+      - /sys:/sys:ro
+      - /var/lib/docker:/var/lib/docker:ro
+      - /cgroup:/cgroup:ro
+    networks:
+      - monitoring_network
+    ports:
+      - "8080:8080"
+
+  # ============================================
+  # PostgreSQL Exporter
+  # ============================================
+  postgres-exporter:
+    image: prometheuscommunity/postgres-exporter:v0.15.0
+    container_name: elk_postgres_exporter
+    restart: unless-stopped
+    environment:
+      DATA_SOURCE_NAME: "postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-postgres123}@postgres:5432/${POSTGRES_DB:-elk_vision}?sslmode=disable"
+    networks:
+      - monitoring_network
+      - database_network
+    ports:
+      - "9187:9187"
+    depends_on:
+      - postgres
+
+  # ============================================
+  # MongoDB Exporter
+  # ============================================
+  mongodb-exporter:
+    image: percona/mongodb_exporter:0.40.0
+    container_name: elk_mongodb_exporter
+    restart: unless-stopped
+    command:
+      - '--mongodb.uri=mongodb://${MONGO_USER:-admin}:${MONGO_PASSWORD:-password}@mongodb:27017/'
+      - '--discovering-mode'
+      - '--compatible-mode'
+    networks:
+      - monitoring_network
+      - database_network
+    ports:
+      - "9216:9216"
+    depends_on:
+      - mongodb
+
+  # ============================================
+  # Redis Exporter
+  # ============================================
+  redis-exporter:
+    image: oliver006/redis_exporter:v1.55.0
+    container_name: elk_redis_exporter
+    restart: unless-stopped
+    environment:
+      REDIS_ADDR: redis://redis:6379
+      REDIS_PASSWORD: ${REDIS_PASSWORD:-redis123}
+    networks:
+      - monitoring_network
+      - database_network
+    ports:
+      - "9121:9121"
+    depends_on:
+      - redis
+
+  # ============================================
+  # Elasticsearch Exporter
+  # ============================================
+  elasticsearch-exporter:
+    image: quay.io/prometheuscommunity/elasticsearch-exporter:v1.6.0
+    container_name: elk_elasticsearch_exporter
+    restart: unless-stopped
+    command:
+      - '--es.uri=http://elastic:${ELASTICSEARCH_PASSWORD:-changeme}@elasticsearch:9200'
+      - '--es.all'
+      - '--es.indices'
+      - '--es.shards'
+    networks:
+      - monitoring_network
+      - elk_network
+    ports:
+      - "9114:9114"
+    depends_on:
+      - elasticsearch
+
+  # ============================================
+  # Nginx Exporter
+  # ============================================
+  nginx-exporter:
+    image: nginx/nginx-prometheus-exporter:0.11.0
+    container_name: elk_nginx_exporter
+    restart: unless-stopped
+    command:
+      - '-nginx.scrape-uri=http://nginx:8080/stub_status'
+    networks:
+      - monitoring_network
+      - frontend_network
+    ports:
+      - "9113:9113"
+    depends_on:
+      - nginx
+
+  # ============================================
+  # Blackbox Exporter - HTTP/TCP/DNS Probes
+  # ============================================
+  blackbox-exporter:
+    image: prom/blackbox-exporter:v0.24.0
+    container_name: elk_blackbox_exporter
+    restart: unless-stopped
+    command:
+      - '--config.file=/etc/blackbox/blackbox.yml'
+    volumes:
+      - ./monitoring/prometheus/blackbox.yml:/etc/blackbox/blackbox.yml:ro
+    networks:
+      - monitoring_network
+      - backend_network
+      - frontend_network
+    ports:
+      - "9115:9115"

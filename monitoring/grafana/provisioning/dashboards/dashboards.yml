@@ -1,0 +1,42 @@
+# Grafana Dashboard Provisioning
+apiVersion: 1
+
+providers:
+  - name: 'ELK Vision Dashboards'
+    orgId: 1
+    folder: 'ELK Vision SaaS'
+    folderUid: 'elk-vision'
+    type: file
+    disableDeletion: false
+    updateIntervalSeconds: 30
+    allowUiUpdates: true
+    options:
+      path: /var/lib/grafana/dashboards
+      foldersFromFilesStructure: true
+
+  - name: 'Infrastructure'
+    orgId: 1
+    folder: 'Infrastructure'
+    folderUid: 'infrastructure'
+    type: file
+    disableDeletion: false
+    options:
+      path: /var/lib/grafana/dashboards/infrastructure
+
+  - name: 'Databases'
+    orgId: 1
+    folder: 'Databases'
+    folderUid: 'databases'
+    type: file
+    disableDeletion: false
+    options:
+      path: /var/lib/grafana/dashboards/databases
+
+  - name: 'Application'
+    orgId: 1
+    folder: 'Application'
+    folderUid: 'application'
+    type: file
+    disableDeletion: false
+    options:
+      path: /var/lib/grafana/dashboards/application
