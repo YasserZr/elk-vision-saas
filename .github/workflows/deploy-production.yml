@@ -102,7 +102,6 @@ jobs:
     needs: build-and-push
     environment:
       name: ${{ github.event.inputs.environment || 'production' }}
-      url: https://${{ secrets.PRODUCTION_DOMAIN }}
 
     steps:
       - name: Checkout code

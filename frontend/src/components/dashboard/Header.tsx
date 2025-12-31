@@ -68,50 +68,6 @@ export default function Header({ onMenuClick }: HeaderProps) {
           {/* Real-time Notifications */}
           <NotificationCenter position="top-right" />
 
-            {/* Notifications dropdown */}
-            {isNotificationsOpen && (
-              <div className="absolute right-0 mt-2 w-80 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 py-2 animate-in fade-in slide-in-from-top-2 duration-200">
-                <div className="px-4 py-2 border-b border-gray-200 dark:border-gray-700">
-                  <h3 className="text-sm font-semibold text-gray-900 dark:text-white">
-                    Notifications
-                  </h3>
-                </div>
-                <div className="max-h-64 overflow-y-auto">
-                  {notifications.map((notification) => (
-                    <button
-                      key={notification.id}
-                      className={`w-full text-left px-4 py-3 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors ${
-                        !notification.read ? 'bg-blue-50/50 dark:bg-blue-900/10' : ''
-                      }`}
-                    >
-                      <div className="flex items-start gap-3">
-                        {!notification.read && (
-                          <span className="w-2 h-2 mt-1.5 bg-blue-500 rounded-full flex-shrink-0" />
-                        )}
-                        <div className={!notification.read ? '' : 'ml-5'}>
-                          <p className="text-sm font-medium text-gray-900 dark:text-white">
-                            {notification.title}
-                          </p>
-                          <p className="text-sm text-gray-500 dark:text-gray-400">
-                            {notification.message}
-                          </p>
-                          <p className="text-xs text-gray-400 dark:text-gray-500 mt-1">
-                            {notification.time}
-                          </p>
-                        </div>
-                      </div>
-                    </button>
-                  ))}
-                </div>
-                <div className="px-4 py-2 border-t border-gray-200 dark:border-gray-700">
-                  <button className="text-sm text-blue-600 hover:text-blue-700 dark:text-blue-400 font-medium">
-                    View all notifications
-                  </button>
-                </div>
-              </div>
-            )}
-          </div>
-
           {/* Profile dropdown */}
           <div className="relative" ref={profileRef}>
             <button
