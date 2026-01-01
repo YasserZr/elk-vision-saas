@@ -349,6 +349,57 @@ export const logsApi = {
     const response = await apiClient.delete(`/v1/logs/${uploadId}/`);
     return response.data;
   },
+
+  /**
+   * Get search history
+   */
+  getSearchHistory: async (limit: number = 10): Promise<ApiResponse<{
+    history: Array<{
+      search_id: string;
+      query: string;
+      filters: Record<string, unknown>;
+      results_count: number;
+      created_at: string;
+    }>;
+    count: number;
+  }>> => {
+    const response = await apiClient.get('/v1/logs/search/history/', { params: { limit } });
+    return response.data;
+  },
+
+  /**
+   * Save search to history
+   */
+  saveSearchHistory: async (data: {
+    query: string;
+    filters?: Record<string, unknown>;
+    results_count?: number;
+  }): Promise<ApiResponse<{
+    search_id: string;
+    query: string;
+    filters: Record<string, unknown>;
+    results_count: number;
+    created_at: string;
+  }>> => {
+    const response = await apiClient.post('/v1/logs/search/history/', data);
+    return response.data;
+  },
+
+  /**
+   * Delete search history entry
+   */
+  deleteSearchHistory: async (searchId: string): Promise<ApiResponse<{ message: string }>> => {
+    const response = await apiClient.delete(`/v1/logs/search/history/${searchId}/`);
+    return response.data;
+  },
+
+  /**
+   * Clear all search history
+   */
+  clearSearchHistory: async (): Promise<ApiResponse<{ message: string }>> => {
+    const response = await apiClient.delete('/v1/logs/search/history/');
+    return response.data;
+  },
 };
 
 // =============================================================================

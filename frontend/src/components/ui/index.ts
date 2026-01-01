@@ -30,3 +30,6 @@ export type { SpinnerProps, LoadingOverlayProps, SkeletonProps } from './Spinner
 
 export { default as Modal, ConfirmDialog } from './Modal';
 export type { ModalProps, ConfirmDialogProps } from './Modal';
+
+export { default as DatePicker } from './DatePicker';
+export type { DatePickerProps } from './DatePicker';

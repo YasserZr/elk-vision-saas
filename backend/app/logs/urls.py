@@ -9,6 +9,10 @@ from .views_metadata import (
     LogMetadataRecentView,
     LogMetadataStatsView,
 )
+from .views_search_history import (
+    SearchHistoryDetailView,
+    SearchHistoryListView,
+)
 
 urlpatterns = [
     # Existing routes
@@ -24,21 +28,30 @@ urlpatterns = [
         views.LogstashMonitorView.as_view(),
         name="logstash-monitor",
     ),
+    # Search history routes
+    path("search/history/", SearchHistoryListView.as_view(), name="search-history-list"),
+    path(
+        "search/history/<str:search_id>/",
+        SearchHistoryDetailView.as_view(),
+        name="search-history-detail",
+    ),
     # MongoDB metadata routes
     path("metadata/", LogMetadataListView.as_view(), name="log-metadata-list"),
+    # Static routes MUST come before dynamic <str:upload_id> route
+    path("metadata/stats/", LogMetadataStatsView.as_view(), name="log-metadata-stats"),
     path(
-        "metadata/<str:upload_id>/",
-        LogMetadataDetailView.as_view(),
-        name="log-metadata-detail",
+        "metadata/recent/", LogMetadataRecentView.as_view(), name="log-metadata-recent"
     ),
     path(
         "metadata/task/<str:task_id>/",
         LogMetadataByTaskView.as_view(),
         name="log-metadata-by-task",
     ),
-    path("metadata/stats/", LogMetadataStatsView.as_view(), name="log-metadata-stats"),
+    # Dynamic route must be LAST to avoid matching "stats", "recent", "task" as upload_id
     path(
-        "metadata/recent/", LogMetadataRecentView.as_view(), name="log-metadata-recent"
+        "metadata/<str:upload_id>/",
+        LogMetadataDetailView.as_view(),
+        name="log-metadata-detail",
     ),
     # Admin routes
     path(

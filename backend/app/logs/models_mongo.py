@@ -182,6 +182,8 @@ class LogMetadata:
         log_count: Optional[int] = None,
         processing_time: Optional[float] = None,
         errors: Optional[List[str]] = None,
+        ingestion_method: Optional[str] = None,
+        indexed_at: Optional[datetime] = None,
     ) -> bool:
         """
         Update metadata status
@@ -192,6 +194,8 @@ class LogMetadata:
             log_count: Number of logs processed
             processing_time: Processing time in seconds
             errors: List of error messages
+            ingestion_method: Method used for ingestion (logstash, elasticsearch)
+            indexed_at: Timestamp when indexed
 
         Returns:
             bool: True if updated
@@ -209,7 +213,12 @@ class LogMetadata:
         if errors:
             updates["errors"] = errors
 
-        if status == "success":
+        if ingestion_method is not None:
+            updates["ingestion_method"] = ingestion_method
+
+        if indexed_at is not None:
+            updates["indexed_at"] = indexed_at
+        elif status == "completed" or status == "success":
             updates["indexed_at"] = datetime.utcnow()
 
         result = collection.update_one({"upload_id": upload_id}, {"$set": updates})
@@ -225,16 +234,17 @@ class LogMetadata:
         return result.deleted_count > 0
 
     @staticmethod
-    def get_statistics(tenant_id: str, days: int = 30) -> dict:
+    def get_statistics(tenant_id: str, days: int = 30, user_id: Optional[int] = None) -> dict:
         """
         Get upload statistics for tenant
 
         Args:
             tenant_id: Tenant ID
             days: Number of days to analyze
+            user_id: Optional user ID to filter by specific user
 
         Returns:
-            dict: Statistics
+            dict: Statistics including by_status, by_source, by_environment
         """
         collection = get_collection(COLLECTION_LOG_METADATA)
 
@@ -242,8 +252,13 @@ class LogMetadata:
 
         cutoff_date = datetime.utcnow() - timedelta(days=days)
 
-        pipeline = [
-            {"$match": {"tenant_id": tenant_id, "created_at": {"$gte": cutoff_date}}},
+        match_query = {"tenant_id": tenant_id, "created_at": {"$gte": cutoff_date}}
+        if user_id is not None:
+            match_query["user_id"] = user_id
+
+        # Get status aggregation
+        pipeline_status = [
+            {"$match": match_query},
             {
                 "$group": {
                     "_id": "$status",
@@ -255,17 +270,51 @@ class LogMetadata:
             },
         ]
 
-        results = list(collection.aggregate(pipeline))
+        results_status = list(collection.aggregate(pipeline_status))
+
+        # Get source aggregation
+        pipeline_source = [
+            {"$match": match_query},
+            {
+                "$group": {
+                    "_id": "$source",
+                    "count": {"$sum": "$log_count"},
+                }
+            },
+        ]
+
+        results_source = list(collection.aggregate(pipeline_source))
+
+        # Get environment aggregation
+        pipeline_env = [
+            {"$match": match_query},
+            {
+                "$group": {
+                    "_id": "$environment",
+                    "count": {"$sum": "$log_count"},
+                }
+            },
+        ]
+
+        results_env = list(collection.aggregate(pipeline_env))
 
         stats = {
             "period_days": days,
-            "total_uploads": sum(r["count"] for r in results),
-            "total_logs": sum(r["total_logs"] for r in results),
-            "total_size_bytes": sum(r["total_size"] for r in results),
+            "total_uploads": sum(r["count"] for r in results_status),
+            "total_logs": sum(r["total_logs"] for r in results_status),
+            "total_size_bytes": sum(r["total_size"] for r in results_status),
             "by_status": {},
+            "by_source": {},
+            "by_environment": {},
+            "by_level": {
+                "error": 0,
+                "warning": 0,
+                "info": 0,
+                "debug": 0,
+            },
         }
 
-        for result in results:
+        for result in results_status:
             status = result["_id"]
             stats["by_status"][status] = {
                 "count": result["count"],
@@ -273,13 +322,22 @@ class LogMetadata:
                 "avg_processing_time": result["avg_processing_time"],
             }
 
+        for result in results_source:
+            source = result["_id"] or "unknown"
+            stats["by_source"][source] = result["count"]
+
+        for result in results_env:
+            env = result["_id"] or "unknown"
+            stats["by_environment"][env] = result["count"]
+
         return stats
 
     @staticmethod
-    def get_recent_uploads(tenant_id: str, limit: int = 10) -> List["LogMetadata"]:
-        """Get most recent uploads for tenant"""
+    def get_recent_uploads(tenant_id: str, limit: int = 10, user_id: Optional[int] = None) -> List["LogMetadata"]:
+        """Get most recent uploads for tenant, optionally filtered by user"""
+        filters = {"user_id": user_id} if user_id is not None else None
         return LogMetadata.get_by_tenant(
-            tenant_id, skip=0, limit=limit, sort_by="created_at", sort_order=-1
+            tenant_id, filters=filters, skip=0, limit=limit, sort_by="created_at", sort_order=-1
         )
 
 

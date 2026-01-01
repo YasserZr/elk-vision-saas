@@ -62,6 +62,21 @@ class RegisterView(generics.CreateAPIView):
         if serializer.is_valid():
             user = serializer.save()
             logger.info(f"New user registered: {user.username}")
+            
+            # Create MongoDB UserProfile for the new user
+            try:
+                from app.users.models_mongo import UserProfile
+                profile = UserProfile.create(
+                    user_id=user.id,
+                    username=user.username,
+                    email=user.email,
+                    tenant_id='default'  # Default tenant for new users
+                )
+                logger.info(f"Created UserProfile for user {user.username} with tenant_id: default")
+            except Exception as e:
+                logger.error(f"Failed to create UserProfile for {user.username}: {e}")
+                # Don't fail registration if profile creation fails
+            
             return Response(
                 {
                     "user": UserSerializer(user).data,

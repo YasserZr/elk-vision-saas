@@ -12,6 +12,12 @@ export function useNotifications(onNotification?: (notification: Notification) =
   const [isConnected, setIsConnected] = useState(false);
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const wsRef = useRef<WebSocketService | null>(null);
+  const callbackRef = useRef(onNotification);
+
+  // Update callback ref when it changes
+  useEffect(() => {
+    callbackRef.current = onNotification;
+  }, [onNotification]);
 
   useEffect(() => {
     // Create WebSocket service
@@ -19,8 +25,8 @@ export function useNotifications(onNotification?: (notification: Notification) =
       // Add to notifications array
       setNotifications((prev) => [notification, ...prev].slice(0, 50)); // Keep last 50
 
-      // Call external callback
-      onNotification?.(notification);
+      // Call external callback using ref
+      callbackRef.current?.(notification);
     });
 
     // Set up connection status tracking
@@ -44,7 +50,7 @@ export function useNotifications(onNotification?: (notification: Notification) =
     return () => {
       wsRef.current?.disconnect();
     };
-  }, [onNotification]);
+  }, []); // Empty dependency array - only run once on mount
 
   const clearNotifications = useCallback(() => {
     setNotifications([]);
@@ -69,6 +75,12 @@ export function useLogStream(onLog?: (log: any) => void) {
   const [isConnected, setIsConnected] = useState(false);
   const [logs, setLogs] = useState<any[]>([]);
   const wsRef = useRef<WebSocketService | null>(null);
+  const callbackRef = useRef(onLog);
+
+  // Update callback ref when it changes
+  useEffect(() => {
+    callbackRef.current = onLog;
+  }, [onLog]);
 
   useEffect(() => {
     // Create WebSocket service
@@ -77,8 +89,8 @@ export function useLogStream(onLog?: (log: any) => void) {
         // Add to logs array
         setLogs((prev) => [notification.data, ...prev].slice(0, 100)); // Keep last 100
 
-        // Call external callback
-        onLog?.(notification.data);
+        // Call external callback using ref
+        callbackRef.current?.(notification.data);
       } else if (notification.type === 'log_batch' && notification.data) {
         // Handle batch logs
         setLogs((prev) => [...notification.data, ...prev].slice(0, 100));
@@ -106,7 +118,7 @@ export function useLogStream(onLog?: (log: any) => void) {
     return () => {
       wsRef.current?.disconnect();
     };
-  }, [onLog]);
+  }, []); // Empty dependency array - only run once on mount
 
   const clearLogs = useCallback(() => {
     setLogs([]);

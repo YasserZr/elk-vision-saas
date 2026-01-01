@@ -9,8 +9,8 @@ from app.users.views import CustomTokenObtainPairView
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    # Health Check (No versioning)
-    path("", include("app.health.urls")),
+    # Health Check
+    path("api/", include("app.health.urls")),
     # JWT Authentication
     path("api/auth/login/", CustomTokenObtainPairView.as_view(), name="token_obtain_pair"),
     path("api/auth/refresh/", TokenRefreshView.as_view(), name="token_refresh"),

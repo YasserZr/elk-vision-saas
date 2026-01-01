@@ -1,11 +1,15 @@
 import logging
+import uuid
+from datetime import datetime
 
 from celery import shared_task
 from django.conf import settings
 from elasticsearch import Elasticsearch
 
 from .logstash_forwarder import get_logstash_forwarder
+from .models_mongo import LogMetadata
 from .parsers import LogParser
+from api.websocket_utils import send_upload_status
 
 logger = logging.getLogger(__name__)
 
@@ -24,7 +28,30 @@ def process_and_ingest_logs(self, content: str, format_type: str, metadata: dict
         dict: Processing results
     """
     task_id = self.request.id
+    upload_id = metadata.get('upload_id') or str(uuid.uuid4())
+    user_id = metadata.get('user_id', 0)
+    
     logger.info(f"Task {task_id}: Starting log processing for format {format_type}")
+
+    # Create MongoDB metadata record
+    try:
+        log_metadata = LogMetadata.create(
+            upload_id=upload_id,
+            task_id=task_id,
+            tenant_id=metadata.get('tenant_id', 'default'),
+            user_id=user_id,
+            source=metadata.get('source', 'manual_upload'),
+            environment=metadata.get('environment', 'production'),
+            service_name=metadata.get('service_name', 'unknown'),
+            file_name=metadata.get('file_name', 'unknown'),
+            file_size=metadata.get('file_size', 0),
+            format_type=format_type,
+            tags=metadata.get('tags', []),
+        )
+        logger.info(f"Task {task_id}: Created MongoDB metadata for upload {upload_id}")
+    except Exception as e:
+        logger.error(f"Task {task_id}: Failed to create MongoDB metadata: {e}")
+        # Continue processing even if metadata creation fails
 
     try:
         # Parse logs
@@ -33,6 +60,17 @@ def process_and_ingest_logs(self, content: str, format_type: str, metadata: dict
 
         if total_entries == 0:
             logger.warning(f"Task {task_id}: No entries parsed from log file")
+            # Update metadata status
+            try:
+                LogMetadata.update_status(
+                    upload_id=upload_id,
+                    status='failed',
+                    log_count=0,
+                    errors=['No log entries found in file']
+                )
+            except Exception as e:
+                logger.error(f"Failed to update metadata: {e}")
+            
             return {
                 "status": "warning",
                 "message": "No log entries found",
@@ -52,11 +90,74 @@ def process_and_ingest_logs(self, content: str, format_type: str, metadata: dict
             # Direct Elasticsearch ingestion
             result = ingest_to_elasticsearch(task_id, parsed_entries, metadata)
 
+        # Update MongoDB metadata with results
+        try:
+            status = 'completed' if result.get('status') == 'success' else 'failed'
+            errors = [result.get('message')] if status == 'failed' else []
+            
+            LogMetadata.update_status(
+                upload_id=upload_id,
+                status=status,
+                log_count=result.get('indexed_entries', 0),
+                ingestion_method=result.get('ingestion_method', 'unknown'),
+                errors=errors,
+                indexed_at=datetime.utcnow() if status == 'completed' else None
+            )
+            
+            # Send WebSocket notification for completion
+            try:
+                send_upload_status(
+                    user_id=user_id,
+                    upload_data={
+                        'task_id': task_id,
+                        'upload_id': upload_id,
+                        'filename': metadata.get('file_name', 'unknown'),
+                        'status': status,
+                        'progress': 100,
+                        'total_entries': result.get('total_entries', 0),
+                        'indexed_entries': result.get('indexed_entries', 0),
+                        'failed_entries': result.get('failed_entries', 0),
+                        'message': result.get('message', 'Upload completed')
+                    }
+                )
+            except Exception as ws_error:
+                logger.warning(f"Failed to send WebSocket notification: {ws_error}")
+                
+            logger.info(f"Task {task_id}: Updated MongoDB metadata - Status: {status}")
+        except Exception as e:
+            logger.error(f"Task {task_id}: Failed to update MongoDB metadata: {e}")
+
         logger.info(f"Task {task_id}: Completed - {result}")
         return result
 
     except Exception as exc:
         logger.error(f"Task {task_id}: Processing error: {exc}")
+
+        # Update metadata with error
+        try:
+            LogMetadata.update_status(
+                upload_id=upload_id,
+                status='failed',
+                errors=[str(exc)]
+            )
+            
+            # Send WebSocket notification for failure
+            try:
+                send_upload_status(
+                    user_id=user_id,
+                    upload_data={
+                        'task_id': task_id,
+                        'upload_id': upload_id,
+                        'filename': metadata.get('file_name', 'unknown'),
+                        'status': 'failed',
+                        'progress': 0,
+                        'message': f'Upload failed: {str(exc)}'
+                    }
+                )
+            except Exception as ws_error:
+                logger.warning(f"Failed to send WebSocket notification: {ws_error}")
+        except Exception as e:
+            logger.error(f"Failed to update metadata with error: {e}")
 
         # Retry on failure
         if self.request.retries < self.max_retries:
@@ -72,6 +173,7 @@ def process_and_ingest_logs(self, content: str, format_type: str, metadata: dict
             "indexed_entries": 0,
             "failed_entries": 0,
         }
+
 
 
 def forward_to_logstash(task_id: str, entries: list, metadata: dict) -> dict:

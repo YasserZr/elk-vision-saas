@@ -389,7 +389,7 @@ export default function AnalyticsDashboardPage() {
           data={logs}
           loading={isLoading}
           searchPlaceholder="Search logs by message, source, or environment..."
-          pageSize={20}
+          pageSize={50}
           exportable
           rowKey="_id"
           onRowClick={(log) => console.log('Selected log:', log)}

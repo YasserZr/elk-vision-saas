@@ -1,4 +1,5 @@
 import logging
+import uuid
 
 from django.conf import settings
 from rest_framework import status
@@ -7,6 +8,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from api.websocket_utils import send_upload_status
 from .logstash_forwarder import get_logstash_forwarder
 from .parsers import LogParser, estimate_log_count
 from .serializers import LogFileUploadSerializer, LogUploadResponseSerializer
@@ -61,7 +63,10 @@ class LogUploadView(APIView):
             estimated_count = estimate_log_count(file_content, format_type)
 
             # Prepare metadata
+            upload_id = str(uuid.uuid4())
             metadata = {
+                "upload_id": upload_id,
+                "user_id": request.user.id,
                 "source": validated_data.get("source", "manual_upload"),
                 "environment": validated_data.get("environment", "production"),
                 "service_name": validated_data.get("service_name", "unknown"),
@@ -69,6 +74,7 @@ class LogUploadView(APIView):
                 "tenant_id": self._get_tenant_id(request.user),
                 "uploaded_by": request.user.username,
                 "file_name": uploaded_file.name,
+                "file_size": uploaded_file.size,
             }
 
             # Submit async task for processing
@@ -94,6 +100,23 @@ class LogUploadView(APIView):
 
             response_serializer = LogUploadResponseSerializer(data=response_data)
             response_serializer.is_valid(raise_exception=True)
+
+            # Send WebSocket notification for upload status
+            try:
+                send_upload_status(
+                    user_id=request.user.id,
+                    upload_data={
+                        'task_id': task.id,
+                        'filename': uploaded_file.name,
+                        'status': 'processing',
+                        'progress': 0,
+                        'estimated_entries': estimated_count,
+                        'file_size': uploaded_file.size,
+                        'message': 'File uploaded successfully and queued for processing'
+                    }
+                )
+            except Exception as ws_error:
+                logger.warning(f"Failed to send WebSocket notification: {ws_error}")
 
             return Response(response_serializer.data, status=status.HTTP_202_ACCEPTED)
 
@@ -219,6 +242,119 @@ class LogSearchView(APIView):
 
             if service:
                 must_clauses.append({"term": {"service_name": service}})
+
+            search_body = {
+                "query": {
+                    "bool": {
+                        "must": must_clauses,
+                        "filter": [
+                            {
+                                "range": {
+                                    "@timestamp": {"gte": time_from, "lte": time_to}
+                                }
+                            }
+                        ],
+                    }
+                },
+                "sort": [{"@timestamp": {"order": "desc"}}],
+                "size": size,
+                "from": (page - 1) * size,
+            }
+
+            # Execute search
+            result = es.search(index=f"logs-{tenant_id}-*", body=search_body)
+
+            # Format results
+            hits = result["hits"]["hits"]
+            logs = [hit["_source"] for hit in hits]
+
+            return Response(
+                {
+                    "query": query,
+                    "results": logs,
+                    "total": result["hits"]["total"]["value"],
+                    "page": page,
+                    "size": size,
+                    "took": result["took"],
+                }
+            )
+
+        except Exception as e:
+            logger.error(f"Search error: {e}", exc_info=True)
+            return Response(
+                {
+                    "error": "Search failed",
+                    "message": str(e),
+                    "results": [],
+                    "total": 0,
+                },
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            )
+
+    def post(self, request):
+        """
+        Search logs with JSON body parameters
+        
+        Request body:
+        - q: Search query
+        - from: Start time
+        - to: End time
+        - level: Log level filter
+        - service: Service name filter
+        - source: Log source filter
+        - environment: Environment filter
+        - size: Number of results (default 100)
+        - page: Page number
+        """
+        from datetime import datetime, timedelta
+
+        from elasticsearch import Elasticsearch
+
+        query = request.data.get("q", "")
+        log_level = request.data.get("level", "")
+        service = request.data.get("service", "")
+        source = request.data.get("source", "")
+        environment = request.data.get("environment", "")
+        size = int(request.data.get("size", 100))
+        page = int(request.data.get("page", 1))
+
+        # Time range
+        time_to = request.data.get("to", datetime.utcnow().isoformat())
+        time_from = request.data.get(
+            "from", (datetime.utcnow() - timedelta(days=7)).isoformat()
+        )
+
+        try:
+            es_config = settings.ELASTICSEARCH_DSL["default"]
+            es = Elasticsearch(
+                hosts=es_config["hosts"], http_auth=es_config.get("http_auth")
+            )
+
+            # Build query
+            tenant_id = self._get_tenant_id(request.user)
+            must_clauses = [{"term": {"tenant_id": tenant_id}}]
+
+            if query:
+                must_clauses.append(
+                    {
+                        "multi_match": {
+                            "query": query,
+                            "fields": ["message", "raw_log", "original"],
+                        }
+                    }
+                )
+
+            if log_level:
+                must_clauses.append({"term": {"level": log_level.upper()}})
+
+            if service:
+                must_clauses.append({"term": {"service_name": service}})
+                
+            if source:
+                must_clauses.append({"term": {"source": source}})
+                
+            if environment:
+                must_clauses.append({"term": {"environment": environment}})
 
             search_body = {
                 "query": {

@@ -236,8 +236,27 @@ export class WebSocketService {
  */
 export function createNotificationService(onMessage: (notification: Notification) => void): WebSocketService {
   const wsProtocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-  const wsHost = process.env.NEXT_PUBLIC_WS_URL || `${wsProtocol}//${window.location.host}`;
+  
+  // Get base WebSocket URL from environment or derive from API URL
+  let wsHost: string;
+  if (process.env.NEXT_PUBLIC_WS_URL) {
+    wsHost = process.env.NEXT_PUBLIC_WS_URL;
+  } else if (process.env.NEXT_PUBLIC_API_URL) {
+    // Convert HTTP API URL to WebSocket URL
+    // Handle both http://localhost:8000/api and http://localhost:8000 formats
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL
+      .replace('/api', '')
+      .replace('/ws', '')  // Remove /ws if present
+      .replace('http://', '')
+      .replace('https://', '');
+    wsHost = `${wsProtocol}//${apiUrl}`;
+  } else {
+    // Default to backend port
+    wsHost = `${wsProtocol}//localhost:8000`;
+  }
+  
   const wsUrl = `${wsHost}/ws/notifications/`;
+  console.log('WebSocket URL:', wsUrl); // Debug log
 
   return new WebSocketService({
     url: wsUrl,
@@ -253,7 +272,25 @@ export function createNotificationService(onMessage: (notification: Notification
  */
 export function createLogStreamService(onMessage: (notification: Notification) => void): WebSocketService {
   const wsProtocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-  const wsHost = process.env.NEXT_PUBLIC_WS_URL || `${wsProtocol}//${window.location.host}`;
+  
+  // Get base WebSocket URL from environment or derive from API URL
+  let wsHost: string;
+  if (process.env.NEXT_PUBLIC_WS_URL) {
+    wsHost = process.env.NEXT_PUBLIC_WS_URL;
+  } else if (process.env.NEXT_PUBLIC_API_URL) {
+    // Convert HTTP API URL to WebSocket URL
+    // Handle both http://localhost:8000/api and http://localhost:8000 formats
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL
+      .replace('/api', '')
+      .replace('/ws', '')  // Remove /ws if present
+      .replace('http://', '')
+      .replace('https://', '');
+    wsHost = `${wsProtocol}//${apiUrl}`;
+  } else {
+    // Default to backend port
+    wsHost = `${wsProtocol}//localhost:8000`;
+  }
+  
   const wsUrl = `${wsHost}/ws/logs/stream/`;
 
   return new WebSocketService({

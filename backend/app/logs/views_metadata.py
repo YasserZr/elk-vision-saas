@@ -18,7 +18,7 @@ logger = logging.getLogger(__name__)
 
 class LogMetadataListView(APIView):
     """
-    List log metadata for current user's tenant
+    List log metadata for current user (user-specific uploads only)
     """
 
     permission_classes = [IsAuthenticated]
@@ -48,8 +48,8 @@ class LogMetadataListView(APIView):
             size = min(int(request.query_params.get("size", 20)), 100)
             skip = (page - 1) * size
 
-            # Build filters
-            filters = {}
+            # Build filters (user-specific)
+            filters = {"user_id": request.user.id}
             if request.query_params.get("status"):
                 filters["status"] = request.query_params["status"]
             if request.query_params.get("source"):
@@ -59,7 +59,7 @@ class LogMetadataListView(APIView):
             if request.query_params.get("service_name"):
                 filters["service_name"] = request.query_params["service_name"]
 
-            # Get metadata
+            # Get metadata (filtered by user)
             metadata_list = LogMetadata.get_by_tenant(
                 tenant_id=profile.tenant_id, filters=filters, skip=skip, limit=size
             )
@@ -184,7 +184,7 @@ class LogMetadataDetailView(APIView):
 
 class LogMetadataStatsView(APIView):
     """
-    Get upload statistics for current user's tenant
+    Get upload statistics for current user (user-specific only)
     """
 
     permission_classes = [IsAuthenticated]
@@ -206,14 +206,14 @@ class LogMetadataStatsView(APIView):
 
             days = int(request.query_params.get("days", 30))
 
-            # Try cache
-            cache_key = f"log_stats:{profile.tenant_id}:{days}"
+            # Try cache (user-specific)
+            cache_key = f"log_stats:{profile.tenant_id}:{request.user.id}:{days}"
             cached = QueryCache.get(cache_key)
             if cached:
                 return Response(cached, status=status.HTTP_200_OK)
 
-            # Get statistics
-            stats = LogMetadata.get_statistics(profile.tenant_id, days=days)
+            # Get statistics (user-specific)
+            stats = LogMetadata.get_statistics(profile.tenant_id, days=days, user_id=request.user.id)
 
             # Cache for 5 minutes
             QueryCache.set(cache_key, stats, ttl=300)
@@ -230,7 +230,7 @@ class LogMetadataStatsView(APIView):
 
 class LogMetadataRecentView(APIView):
     """
-    Get recent log uploads
+    Get recent log uploads for current user (user-specific only)
     """
 
     permission_classes = [IsAuthenticated]
@@ -252,8 +252,8 @@ class LogMetadataRecentView(APIView):
 
             limit = min(int(request.query_params.get("limit", 10)), 50)
 
-            # Get recent uploads
-            recent = LogMetadata.get_recent_uploads(profile.tenant_id, limit=limit)
+            # Get recent uploads (user-specific)
+            recent = LogMetadata.get_recent_uploads(profile.tenant_id, limit=limit, user_id=request.user.id)
 
             results = [m.to_dict() for m in recent]
 

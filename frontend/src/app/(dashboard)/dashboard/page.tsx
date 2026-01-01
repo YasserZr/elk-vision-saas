@@ -1,9 +1,12 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import Link from 'next/link';
 import { useAuth } from '@/contexts/AuthContext';
 import { logsApi, healthApi } from '@/lib/api';
+import { useNotifications } from '@/hooks/useWebSocket';
+import { Notification } from '@/lib/websocket';
+import { ChartContainer, DonutChart, Sparkline } from '@/components/dashboard/Charts';
 
 interface DashboardStats {
   total_logs: number;
@@ -117,29 +120,49 @@ export default function DashboardPage() {
   const [health, setHealth] = useState<SystemHealth | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const [statsRes, healthRes] = await Promise.allSettled([
-          logsApi.getStats(),
-          healthApi.check(),
-        ]);
+  const fetchData = useCallback(async () => {
+    try {
+      const [statsRes, healthRes] = await Promise.allSettled([
+        logsApi.getStats(),
+        healthApi.check(),
+      ]);
 
-        if (statsRes.status === 'fulfilled') {
-          setStats(statsRes.value as unknown as DashboardStats);
-        }
-        if (healthRes.status === 'fulfilled') {
-          setHealth(healthRes.value as unknown as SystemHealth);
-        }
-      } catch (error) {
-        console.error('Failed to fetch dashboard data:', error);
-      } finally {
-        setIsLoading(false);
+      if (statsRes.status === 'fulfilled') {
+        setStats(statsRes.value as unknown as DashboardStats);
       }
-    };
-
-    fetchData();
+      if (healthRes.status === 'fulfilled') {
+        setHealth(healthRes.value as unknown as SystemHealth);
+      }
+    } catch (error) {
+      console.error('Failed to fetch dashboard data:', error);
+    } finally {
+      setIsLoading(false);
+    }
   }, []);
+
+  // Listen for upload notifications and refresh dashboard
+  useNotifications((notification: Notification) => {
+    if (notification.type === 'upload_status') {
+      const uploadData = notification.data;
+      
+      // Show notification based on status
+      if (uploadData?.status === 'completed') {
+        console.log('Upload completed:', uploadData);
+        // Refresh dashboard data
+        fetchData();
+      } else if (uploadData?.status === 'processing') {
+        console.log('Upload processing:', uploadData);
+      }
+    } else if (notification.type === 'new_log' || notification.type === 'log_batch') {
+      // Refresh when new logs are ingested
+      console.log('New logs detected, refreshing dashboard');
+      fetchData();
+    }
+  });
+
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
 
   const formatNumber = (num: number): string => {
     if (num >= 1000000) return `${(num / 1000000).toFixed(1)}M`;
@@ -261,7 +284,7 @@ export default function DashboardPage() {
         {/* Quick Actions */}
         <div className="bg-white dark:bg-gray-900 rounded-xl shadow-sm border border-gray-200 dark:border-gray-800 p-6 lg:col-span-2">
           <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Quick Actions</h3>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             <QuickAction
               href="/dashboard/upload"
               icon={
@@ -271,6 +294,16 @@ export default function DashboardPage() {
               }
               title="Upload Logs"
               description="Import new log files for analysis"
+            />
+            <QuickAction
+              href="/dashboard/search"
+              icon={
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+              }
+              title="Search Logs"
+              description="Find specific log entries"
             />
             <QuickAction
               href="/dashboard/analytics"
@@ -305,6 +338,51 @@ export default function DashboardPage() {
             />
           </div>
         </div>
+      </div>
+
+      {/* Summary Charts Row */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* Log Level Distribution Chart */}
+        <ChartContainer title="Log Level Distribution" description="Breakdown by severity">
+          {stats?.by_level && Object.keys(stats.by_level).length > 0 ? (
+            <DonutChart
+              data={[
+                { label: 'Debug', value: stats.by_level.debug || 0, color: '#6b7280' },
+                { label: 'Info', value: stats.by_level.info || 0, color: '#3b82f6' },
+                { label: 'Warning', value: stats.by_level.warning || 0, color: '#f59e0b' },
+                { label: 'Error', value: stats.by_level.error || 0, color: '#ef4444' },
+                { label: 'Critical', value: stats.by_level.critical || 0, color: '#991b1b' },
+              ].filter(d => d.value > 0)}
+              centerLabel="Total"
+            />
+          ) : (
+            <div className="flex items-center justify-center h-40 text-gray-400">
+              No log level data available
+            </div>
+          )}
+        </ChartContainer>
+
+        {/* Timeline Chart */}
+        <ChartContainer title="Log Activity Timeline" description="Logs over time">
+          {stats?.timeline && stats.timeline.length > 0 ? (
+            <div className="space-y-4">
+              <Sparkline
+                data={stats.timeline.map(d => d.count)}
+                color="#3b82f6"
+                height={100}
+                showArea={true}
+              />
+              <div className="flex justify-between text-xs text-gray-500 dark:text-gray-400">
+                <span>{stats.timeline[0]?.date}</span>
+                <span>{stats.timeline[stats.timeline.length - 1]?.date}</span>
+              </div>
+            </div>
+          ) : (
+            <div className="flex items-center justify-center h-40 text-gray-400">
+              No timeline data available
+            </div>
+          )}
+        </ChartContainer>
       </div>
 
       {/* Log Sources Distribution */}
