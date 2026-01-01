@@ -3,6 +3,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { NotificationCenter } from '@/components/notifications';
+import ThemeToggle from '@/components/ui/ThemeToggle';
 
 interface HeaderProps {
   onMenuClick: () => void;
@@ -32,7 +33,7 @@ export default function Header({ onMenuClick }: HeaderProps) {
         <div className="flex items-center gap-4">
           <button
             onClick={onMenuClick}
-            className="lg:hidden p-2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
+            className="lg:hidden p-2 text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
             aria-label="Open menu"
           >
             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -45,10 +46,10 @@ export default function Header({ onMenuClick }: HeaderProps) {
             <input
               type="search"
               placeholder="Search logs..."
-              className="w-64 lg:w-80 pl-10 pr-4 py-2 text-sm bg-gray-100 dark:bg-gray-800 border border-transparent rounded-lg focus:outline-none focus:bg-white dark:focus:bg-gray-700 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors"
+              className="w-64 lg:w-80 pl-10 pr-4 py-2 text-sm text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 bg-gray-100 dark:bg-gray-800 border border-transparent rounded-lg focus:outline-none focus:bg-white dark:focus:bg-gray-700 focus:border-blue-500 dark:focus:border-blue-400 focus:ring-1 focus:ring-blue-500 dark:focus:ring-blue-400 transition-colors"
             />
             <svg
-              className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400"
+              className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 dark:text-gray-500"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -65,6 +66,9 @@ export default function Header({ onMenuClick }: HeaderProps) {
 
         {/* Right side */}
         <div className="flex items-center gap-2">
+          {/* Theme Toggle */}
+          <ThemeToggle />
+          
           {/* Real-time Notifications */}
           <NotificationCenter position="top-right" />
 
@@ -80,7 +84,7 @@ export default function Header({ onMenuClick }: HeaderProps) {
                 {user?.first_name?.[0] || user?.email?.[0]?.toUpperCase() || 'U'}
               </div>
               <svg
-                className={`w-4 h-4 text-gray-500 transition-transform ${isProfileOpen ? 'rotate-180' : ''}`}
+                className={`w-4 h-4 text-gray-500 dark:text-gray-400 transition-transform ${isProfileOpen ? 'rotate-180' : ''}`}
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"

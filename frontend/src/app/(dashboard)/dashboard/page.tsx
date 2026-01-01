@@ -39,21 +39,21 @@ function StatCard({
   color?: 'blue' | 'green' | 'yellow' | 'red' | 'purple';
 }) {
   const colorClasses = {
-    blue: 'bg-blue-500',
-    green: 'bg-green-500',
-    yellow: 'bg-yellow-500',
-    red: 'bg-red-500',
-    purple: 'bg-purple-500',
+    blue: 'bg-blue-500 dark:bg-blue-600',
+    green: 'bg-green-500 dark:bg-green-600',
+    yellow: 'bg-yellow-500 dark:bg-yellow-600',
+    red: 'bg-red-500 dark:bg-red-600',
+    purple: 'bg-purple-500 dark:bg-purple-600',
   };
 
   return (
-    <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+    <div className="bg-white dark:bg-gray-900 rounded-xl shadow-sm border border-gray-200 dark:border-gray-800 p-6">
       <div className="flex items-center justify-between">
         <div>
-          <p className="text-sm text-gray-500 font-medium">{title}</p>
-          <p className="text-3xl font-bold text-gray-900 mt-1">{value}</p>
+          <p className="text-sm text-gray-600 dark:text-gray-400 font-medium">{title}</p>
+          <p className="text-3xl font-bold text-gray-900 dark:text-white mt-1">{value}</p>
           {trend && (
-            <p className={`text-sm mt-2 ${trend.value >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+            <p className={`text-sm mt-2 ${trend.value >= 0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}`}>
               {trend.value >= 0 ? '↑' : '↓'} {Math.abs(trend.value)}% {trend.label}
             </p>
           )}
@@ -74,12 +74,12 @@ function ServiceStatus({ name, status, latency }: { name: string; status: string
   };
 
   return (
-    <div className="flex items-center justify-between py-3 border-b border-gray-100 last:border-0">
+    <div className="flex items-center justify-between py-3 border-b border-gray-100 dark:border-gray-800 last:border-0">
       <div className="flex items-center gap-3">
         <div className={`w-2.5 h-2.5 rounded-full ${statusColors[status as keyof typeof statusColors] || 'bg-gray-400'}`} />
-        <span className="font-medium text-gray-700">{name}</span>
+        <span className="font-medium text-gray-700 dark:text-gray-300">{name}</span>
       </div>
-      <span className="text-sm text-gray-500">{latency}ms</span>
+      <span className="text-sm text-gray-500 dark:text-gray-400">{latency}ms</span>
     </div>
   );
 }
@@ -98,14 +98,14 @@ function QuickAction({
   return (
     <Link
       href={href}
-      className="flex items-start gap-4 p-4 bg-gray-50 hover:bg-gray-100 rounded-lg transition-colors"
+      className="flex items-start gap-4 p-4 bg-gray-50 dark:bg-gray-800/50 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
     >
-      <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center text-blue-600 flex-shrink-0">
+      <div className="w-10 h-10 bg-blue-100 dark:bg-blue-900/30 rounded-lg flex items-center justify-center text-blue-600 dark:text-blue-400 flex-shrink-0">
         {icon}
       </div>
       <div>
-        <h4 className="font-medium text-gray-900">{title}</h4>
-        <p className="text-sm text-gray-500 mt-1">{description}</p>
+        <h4 className="font-medium text-gray-900 dark:text-white">{title}</h4>
+        <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">{description}</p>
       </div>
     </Link>
   );
@@ -150,7 +150,7 @@ export default function DashboardPage() {
   if (isLoading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 dark:border-blue-400"></div>
       </div>
     );
   }
@@ -160,16 +160,16 @@ export default function DashboardPage() {
       {/* Welcome Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
             Welcome back, {user?.first_name || 'User'}!
           </h1>
-          <p className="text-gray-500 mt-1">
+          <p className="text-gray-600 dark:text-gray-400 mt-1">
             Here&apos;s what&apos;s happening with your logs today.
           </p>
         </div>
         <Link
           href="/dashboard/upload"
-          className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+          className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 dark:bg-blue-600 dark:hover:bg-blue-700 text-white rounded-lg transition-colors"
         >
           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
@@ -227,16 +227,16 @@ export default function DashboardPage() {
       {/* Main Content Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* System Health */}
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+        <div className="bg-white dark:bg-gray-900 rounded-xl shadow-sm border border-gray-200 dark:border-gray-800 p-6">
           <div className="flex items-center justify-between mb-4">
-            <h3 className="text-lg font-semibold text-gray-900">System Health</h3>
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white">System Health</h3>
             <span
               className={`px-3 py-1 rounded-full text-xs font-medium ${
                 health?.status === 'healthy'
-                  ? 'bg-green-100 text-green-700'
+                  ? 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400'
                   : health?.status === 'degraded'
-                  ? 'bg-yellow-100 text-yellow-700'
-                  : 'bg-red-100 text-red-700'
+                  ? 'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-400'
+                  : 'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400'
               }`}
             >
               {health?.status || 'Unknown'}
@@ -253,14 +253,14 @@ export default function DashboardPage() {
                 />
               ))
             ) : (
-              <p className="text-gray-500 text-sm">Unable to fetch health status</p>
+              <p className="text-gray-500 dark:text-gray-400 text-sm">Unable to fetch health status</p>
             )}
           </div>
         </div>
 
         {/* Quick Actions */}
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 lg:col-span-2">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">Quick Actions</h3>
+        <div className="bg-white dark:bg-gray-900 rounded-xl shadow-sm border border-gray-200 dark:border-gray-800 p-6 lg:col-span-2">
+          <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Quick Actions</h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <QuickAction
               href="/dashboard/upload"
@@ -308,24 +308,24 @@ export default function DashboardPage() {
       </div>
 
       {/* Log Sources Distribution */}
-      <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">Log Sources</h3>
+      <div className="bg-white dark:bg-gray-900 rounded-xl shadow-sm border border-gray-200 dark:border-gray-800 p-6">
+        <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Log Sources</h3>
         {stats?.by_source && Object.keys(stats.by_source).length > 0 ? (
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
             {Object.entries(stats.by_source).map(([source, count]) => (
               <div
                 key={source}
-                className="text-center p-4 bg-gray-50 rounded-lg"
+                className="text-center p-4 bg-gray-50 dark:bg-gray-800/50 rounded-lg"
               >
-                <p className="text-2xl font-bold text-gray-900">{formatNumber(count)}</p>
-                <p className="text-sm text-gray-500 mt-1 capitalize">{source}</p>
+                <p className="text-2xl font-bold text-gray-900 dark:text-white">{formatNumber(count)}</p>
+                <p className="text-sm text-gray-600 dark:text-gray-400 mt-1 capitalize">{source}</p>
               </div>
             ))}
           </div>
         ) : (
           <div className="text-center py-8">
             <svg
-              className="w-12 h-12 text-gray-300 mx-auto mb-4"
+              className="w-12 h-12 text-gray-300 dark:text-gray-700 mx-auto mb-4"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -337,10 +337,10 @@ export default function DashboardPage() {
                 d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
               />
             </svg>
-            <p className="text-gray-500">No log data available yet</p>
+            <p className="text-gray-500 dark:text-gray-400">No log data available yet</p>
             <Link
               href="/dashboard/upload"
-              className="text-blue-600 hover:text-blue-700 font-medium mt-2 inline-block"
+              className="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 font-medium mt-2 inline-block"
             >
               Upload your first logs →
             </Link>

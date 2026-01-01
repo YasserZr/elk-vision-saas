@@ -186,8 +186,8 @@ export default function SettingsPage() {
     <div className="space-y-6">
       {/* Header */}
       <div>
-        <h1 className="text-2xl font-bold text-gray-900">Settings</h1>
-        <p className="text-gray-500 mt-1">Manage your account settings and preferences</p>
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Settings</h1>
+        <p className="text-gray-500 dark:text-gray-400 mt-1">Manage your account settings and preferences</p>
       </div>
 
       {/* Message Toast */}
@@ -204,15 +204,15 @@ export default function SettingsPage() {
       <div className="flex flex-col lg:flex-row gap-6">
         {/* Sidebar Tabs */}
         <div className="lg:w-64 flex-shrink-0">
-          <nav className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+          <nav className="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 overflow-hidden">
             {tabs.map((tab) => (
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id as typeof activeTab)}
                 className={`w-full flex items-center gap-3 px-4 py-3 text-left transition-colors ${
                   activeTab === tab.id
-                    ? 'bg-blue-50 text-blue-700 border-l-4 border-blue-600'
-                    : 'text-gray-600 hover:bg-gray-50 border-l-4 border-transparent'
+                    ? 'bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-400 border-l-4 border-blue-600'
+                    : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 border-l-4 border-transparent'
                 }`}
               >
                 <span>{tab.icon}</span>
@@ -223,9 +223,9 @@ export default function SettingsPage() {
 
           {/* Quota Info */}
           {quota && (
-            <div className="mt-4 bg-white rounded-xl border border-gray-200 p-4">
-              <h3 className="text-sm font-medium text-gray-700 mb-2">API Quota</h3>
-              <div className="w-full bg-gray-100 rounded-full h-2 mb-2">
+            <div className="mt-4 bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 p-4">
+              <h3 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">API Quota</h3>
+              <div className="w-full bg-gray-100 dark:bg-gray-800 rounded-full h-2 mb-2">
                 <div
                   className={`h-2 rounded-full ${
                     quota.percentage_used > 80 ? 'bg-red-500' : 'bg-blue-600'
@@ -233,7 +233,7 @@ export default function SettingsPage() {
                   style={{ width: `${Math.min(quota.percentage_used, 100)}%` }}
                 />
               </div>
-              <p className="text-xs text-gray-500">
+              <p className="text-xs text-gray-500 dark:text-gray-400">
                 {quota.used.toLocaleString()} / {quota.limit.toLocaleString()} requests
               </p>
               <p className="text-xs text-gray-400 mt-1">
@@ -245,55 +245,55 @@ export default function SettingsPage() {
 
         {/* Content */}
         <div className="flex-1">
-          <div className="bg-white rounded-xl border border-gray-200 p-6">
+          <div className="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 p-6">
             {/* Profile Tab */}
             {activeTab === 'profile' && (
               <div className="space-y-6">
-                <h2 className="text-lg font-semibold text-gray-900">Profile Information</h2>
+                <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Profile Information</h2>
                 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                       First Name
                     </label>
                     <input
                       type="text"
                       value={profileForm.first_name}
                       onChange={(e) => setProfileForm({ ...profileForm, first_name: e.target.value })}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="w-full px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                       Last Name
                     </label>
                     <input
                       type="text"
                       value={profileForm.last_name}
                       onChange={(e) => setProfileForm({ ...profileForm, last_name: e.target.value })}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="w-full px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                       Email
                     </label>
                     <input
                       type="email"
                       value={user?.email || ''}
                       disabled
-                      className="w-full px-3 py-2 border border-gray-200 rounded-lg bg-gray-50 text-gray-500"
+                      className="w-full px-3 py-2 border border-gray-200 dark:border-gray-700 rounded-lg bg-gray-50 dark:bg-gray-800/50 text-gray-500 dark:text-gray-400"
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                       Organization
                     </label>
                     <input
                       type="text"
                       value={profileForm.organization}
                       onChange={(e) => setProfileForm({ ...profileForm, organization: e.target.value })}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="w-full px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
                   </div>
                 </div>
@@ -311,40 +311,40 @@ export default function SettingsPage() {
             {/* Security Tab */}
             {activeTab === 'security' && (
               <div className="space-y-6">
-                <h2 className="text-lg font-semibold text-gray-900">Change Password</h2>
+                <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Change Password</h2>
                 
                 <div className="space-y-4 max-w-md">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                       Current Password
                     </label>
                     <input
                       type="password"
                       value={passwordForm.currentPassword}
                       onChange={(e) => setPasswordForm({ ...passwordForm, currentPassword: e.target.value })}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="w-full px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                       New Password
                     </label>
                     <input
                       type="password"
                       value={passwordForm.newPassword}
                       onChange={(e) => setPasswordForm({ ...passwordForm, newPassword: e.target.value })}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="w-full px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                       Confirm New Password
                     </label>
                     <input
                       type="password"
                       value={passwordForm.confirmPassword}
                       onChange={(e) => setPasswordForm({ ...passwordForm, confirmPassword: e.target.value })}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="w-full px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
                   </div>
                 </div>
@@ -362,8 +362,8 @@ export default function SettingsPage() {
             {/* API Keys Tab */}
             {activeTab === 'api' && (
               <div className="space-y-6">
-                <h2 className="text-lg font-semibold text-gray-900">API Keys</h2>
-                <p className="text-sm text-gray-500">
+                <h2 className="text-lg font-semibold text-gray-900 dark:text-white">API Keys</h2>
+                <p className="text-sm text-gray-500 dark:text-gray-400">
                   Manage API keys for programmatic access to the platform.
                 </p>
 
@@ -374,7 +374,7 @@ export default function SettingsPage() {
                     value={newKeyName}
                     onChange={(e) => setNewKeyName(e.target.value)}
                     placeholder="API key name"
-                    className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
                   />
                   <button
                     onClick={handleCreateApiKey}
@@ -406,13 +406,13 @@ export default function SettingsPage() {
                 )}
 
                 {/* Existing Keys */}
-                <div className="divide-y divide-gray-200 border border-gray-200 rounded-lg">
+                <div className="divide-y divide-gray-200 dark:divide-gray-800 border border-gray-200 dark:border-gray-800 rounded-lg">
                   {apiKeys.length > 0 ? (
                     apiKeys.map((key) => (
                       <div key={key.id} className="p-4 flex items-center justify-between">
                         <div>
-                          <p className="font-medium text-gray-900">{key.name}</p>
-                          <p className="text-sm text-gray-500">
+                          <p className="font-medium text-gray-900 dark:text-white">{key.name}</p>
+                          <p className="text-sm text-gray-500 dark:text-gray-400">
                             Created: {new Date(key.created_at).toLocaleDateString()}
                             {key.last_used_at && ` • Last used: ${new Date(key.last_used_at).toLocaleDateString()}`}
                           </p>
@@ -428,7 +428,7 @@ export default function SettingsPage() {
                       </div>
                     ))
                   ) : (
-                    <div className="p-8 text-center text-gray-500">
+                    <div className="p-8 text-center text-gray-500 dark:text-gray-400">
                       No API keys yet. Create one to get started.
                     </div>
                   )}
@@ -439,17 +439,17 @@ export default function SettingsPage() {
             {/* Preferences Tab */}
             {activeTab === 'preferences' && (
               <div className="space-y-6">
-                <h2 className="text-lg font-semibold text-gray-900">Preferences</h2>
+                <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Preferences</h2>
                 
                 <div className="space-y-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                       Timezone
                     </label>
                     <select
                       value={profileForm.timezone}
                       onChange={(e) => setProfileForm({ ...profileForm, timezone: e.target.value })}
-                      className="w-full max-w-md px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="w-full max-w-md px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
                     >
                       <option value="UTC">UTC</option>
                       <option value="America/New_York">Eastern Time (ET)</option>
@@ -463,18 +463,18 @@ export default function SettingsPage() {
                   </div>
 
                   <div className="space-y-3">
-                    <h3 className="text-sm font-medium text-gray-700">Notifications</h3>
+                    <h3 className="text-sm font-medium text-gray-700 dark:text-gray-300">Notifications</h3>
                     <label className="flex items-center gap-3">
-                      <input type="checkbox" defaultChecked className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500" />
-                      <span className="text-sm text-gray-600">Email notifications for alerts</span>
+                      <input type="checkbox" defaultChecked className="w-4 h-4 text-blue-600 border-gray-300 dark:border-gray-700 rounded focus:ring-blue-500" />
+                      <span className="text-sm text-gray-600 dark:text-gray-400">Email notifications for alerts</span>
                     </label>
                     <label className="flex items-center gap-3">
-                      <input type="checkbox" defaultChecked className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500" />
-                      <span className="text-sm text-gray-600">Weekly summary reports</span>
+                      <input type="checkbox" defaultChecked className="w-4 h-4 text-blue-600 border-gray-300 dark:border-gray-700 rounded focus:ring-blue-500" />
+                      <span className="text-sm text-gray-600 dark:text-gray-400">Weekly summary reports</span>
                     </label>
                     <label className="flex items-center gap-3">
-                      <input type="checkbox" className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500" />
-                      <span className="text-sm text-gray-600">Marketing emails</span>
+                      <input type="checkbox" className="w-4 h-4 text-blue-600 border-gray-300 dark:border-gray-700 rounded focus:ring-blue-500" />
+                      <span className="text-sm text-gray-600 dark:text-gray-400">Marketing emails</span>
                     </label>
                   </div>
                 </div>

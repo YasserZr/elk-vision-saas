@@ -144,8 +144,8 @@ export default function AlertsPage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Alerts</h1>
-          <p className="text-gray-500 mt-1">
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Alerts</h1>
+          <p className="text-gray-500 dark:text-gray-400 mt-1">
             Configure alert rules to monitor your logs
           </p>
         </div>
@@ -164,17 +164,17 @@ export default function AlertsPage() {
       {showForm && (
         <div className="fixed inset-0 z-50 overflow-y-auto">
           <div className="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:p-0">
-            <div className="fixed inset-0 transition-opacity bg-gray-500 bg-opacity-75" onClick={handleCancel} />
+            <div className="fixed inset-0 transition-opacity bg-gray-500 dark:bg-gray-900 bg-opacity-75 dark:bg-opacity-75" onClick={handleCancel} />
             
-            <div className="relative bg-white rounded-xl shadow-xl max-w-2xl w-full mx-auto p-6 z-10">
-              <h2 className="text-xl font-semibold text-gray-900 mb-6">
+            <div className="relative bg-white dark:bg-gray-900 rounded-xl shadow-xl max-w-2xl w-full mx-auto p-6 z-10">
+              <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-6">
                 {editingAlert ? 'Edit Alert' : 'Create New Alert'}
               </h2>
 
               <form onSubmit={handleSubmit} className="space-y-5">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="md:col-span-2">
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                       Alert Name
                     </label>
                     <input
@@ -182,26 +182,26 @@ export default function AlertsPage() {
                       value={formData.name}
                       onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                       required
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="w-full px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
                       placeholder="e.g., High Error Rate Alert"
                     />
                   </div>
 
                   <div className="md:col-span-2">
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                       Description
                     </label>
                     <textarea
                       value={formData.description}
                       onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                       rows={2}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="w-full px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
                       placeholder="Describe what this alert monitors..."
                     />
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                       Field
                     </label>
                     <select
@@ -212,7 +212,7 @@ export default function AlertsPage() {
                           condition: { ...formData.condition, field: e.target.value },
                         })
                       }
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="w-full px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
                     >
                       <option value="level">Log Level</option>
                       <option value="message">Message</option>
@@ -222,7 +222,7 @@ export default function AlertsPage() {
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                       Operator
                     </label>
                     <select
@@ -233,7 +233,7 @@ export default function AlertsPage() {
                           condition: { ...formData.condition, operator: e.target.value },
                         })
                       }
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="w-full px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
                     >
                       <option value="equals">Equals</option>
                       <option value="contains">Contains</option>
@@ -243,7 +243,7 @@ export default function AlertsPage() {
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                       Value
                     </label>
                     <input
@@ -255,13 +255,13 @@ export default function AlertsPage() {
                           condition: { ...formData.condition, value: e.target.value },
                         })
                       }
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="w-full px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
                       placeholder="e.g., error, 100"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                       Time Window
                     </label>
                     <select
@@ -272,7 +272,7 @@ export default function AlertsPage() {
                           condition: { ...formData.condition, time_window: e.target.value },
                         })
                       }
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="w-full px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
                     >
                       <option value="1m">1 minute</option>
                       <option value="5m">5 minutes</option>
@@ -283,7 +283,7 @@ export default function AlertsPage() {
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                       Severity
                     </label>
                     <select
@@ -294,7 +294,7 @@ export default function AlertsPage() {
                           severity: e.target.value as AlertFormData['severity'],
                         })
                       }
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="w-full px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
                     >
                       <option value="low">Low</option>
                       <option value="medium">Medium</option>
@@ -304,7 +304,7 @@ export default function AlertsPage() {
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                       Notification Email
                     </label>
                     <input
@@ -321,7 +321,7 @@ export default function AlertsPage() {
                           ],
                         })
                       }
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="w-full px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
                       placeholder="alerts@example.com"
                     />
                   </div>
@@ -332,18 +332,18 @@ export default function AlertsPage() {
                         type="checkbox"
                         checked={formData.is_active}
                         onChange={(e) => setFormData({ ...formData, is_active: e.target.checked })}
-                        className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                        className="w-4 h-4 text-blue-600 border-gray-300 dark:border-gray-700 rounded focus:ring-blue-500"
                       />
-                      <span className="text-sm text-gray-700">Enable alert immediately</span>
+                      <span className="text-sm text-gray-700 dark:text-gray-300">Enable alert immediately</span>
                     </label>
                   </div>
                 </div>
 
-                <div className="flex justify-end gap-3 pt-4 border-t border-gray-200">
+                <div className="flex justify-end gap-3 pt-4 border-t border-gray-200 dark:border-gray-800">
                   <button
                     type="button"
                     onClick={handleCancel}
-                    className="px-4 py-2 text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors"
+                    className="px-4 py-2 text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-800 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
                   >
                     Cancel
                   </button>
@@ -362,17 +362,17 @@ export default function AlertsPage() {
       )}
 
       {/* Alerts List */}
-      <div className="bg-white rounded-xl border border-gray-200">
+      <div className="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800">
         {alerts.length > 0 ? (
-          <div className="divide-y divide-gray-200">
+          <div className="divide-y divide-gray-200 dark:divide-gray-800">
             {alerts.map((alert) => (
-              <div key={alert.id} className="p-4 hover:bg-gray-50">
+              <div key={alert.id} className="p-4 hover:bg-gray-50 dark:hover:bg-gray-800">
                 <div className="flex items-start justify-between">
                   <div className="flex items-start gap-4">
                     <button
                       onClick={() => handleToggle(alert.id)}
                       className={`mt-1 w-10 h-6 rounded-full transition-colors relative ${
-                        alert.is_active ? 'bg-blue-600' : 'bg-gray-300'
+                        alert.is_active ? 'bg-blue-600' : 'bg-gray-300 dark:bg-gray-700'
                       }`}
                     >
                       <span
@@ -383,12 +383,12 @@ export default function AlertsPage() {
                     </button>
                     <div>
                       <div className="flex items-center gap-2">
-                        <h3 className="font-medium text-gray-900">{alert.name}</h3>
+                        <h3 className="font-medium text-gray-900 dark:text-white">{alert.name}</h3>
                         <span className={`px-2 py-0.5 text-xs font-medium rounded ${severityColors[alert.severity]}`}>
                           {alert.severity}
                         </span>
                       </div>
-                      <p className="text-sm text-gray-500 mt-1">{alert.description}</p>
+                      <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">{alert.description}</p>
                       <div className="flex items-center gap-4 mt-2 text-xs text-gray-400">
                         <span>
                           Condition: {alert.condition.field} {alert.condition.operator} {alert.condition.value}
@@ -403,7 +403,7 @@ export default function AlertsPage() {
                   <div className="flex items-center gap-2">
                     <button
                       onClick={() => handleEdit(alert)}
-                      className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-colors"
+                      className="p-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
                     >
                       <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
@@ -411,7 +411,7 @@ export default function AlertsPage() {
                     </button>
                     <button
                       onClick={() => handleDelete(alert.id)}
-                      className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                      className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors"
                     >
                       <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
@@ -437,8 +437,8 @@ export default function AlertsPage() {
                 d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
               />
             </svg>
-            <h3 className="text-lg font-medium text-gray-900 mb-1">No alerts configured</h3>
-            <p className="text-gray-500 mb-4">
+            <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-1">No alerts configured</h3>
+            <p className="text-gray-500 dark:text-gray-400 mb-4">
               Create your first alert to start monitoring your logs
             </p>
             <button
