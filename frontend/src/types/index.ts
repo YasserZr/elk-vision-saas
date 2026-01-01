@@ -44,16 +44,17 @@ export interface ApiQuota {
 
 // Auth types
 export interface LoginCredentials {
-  email: string;
+  username: string;
   password: string;
 }
 
 export interface RegisterData {
+  username: string;
   email: string;
   password: string;
+  password2: string;
   first_name?: string;
   last_name?: string;
-  organization?: string;
 }
 
 export interface AuthTokens {

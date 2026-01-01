@@ -58,7 +58,13 @@ CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels_redis.core.RedisChannelLayer",
         "CONFIG": {
-            "hosts": [(config("REDIS_HOST", default="redis"), int(config("REDIS_PORT", default=6379)))],
+            "hosts": [
+                {
+                    "host": config("REDIS_HOST", default="redis"),
+                    "port": int(config("REDIS_PORT", default=6379)),
+                    "password": config("REDIS_PASSWORD", default=""),
+                }
+            ],
         },
     },
 }
@@ -126,11 +132,15 @@ USE_LOGSTASH = config(
 # Redis Configuration
 REDIS_HOST = config("REDIS_HOST", default="redis")
 REDIS_PORT = int(config("REDIS_PORT", default=6379))
+REDIS_PASSWORD = config("REDIS_PASSWORD", default="")
+
+# Build Redis URL with password if provided
+REDIS_URL = f"redis://:{REDIS_PASSWORD}@{REDIS_HOST}:{REDIS_PORT}" if REDIS_PASSWORD else f"redis://{REDIS_HOST}:{REDIS_PORT}"
 
 CACHES = {
     "default": {
         "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": f"redis://{REDIS_HOST}:{REDIS_PORT}/1",
+        "LOCATION": f"{REDIS_URL}/1",
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
         },
@@ -138,8 +148,8 @@ CACHES = {
 }
 
 # Celery Configuration
-CELERY_BROKER_URL = f"redis://{REDIS_HOST}:{REDIS_PORT}/0"
-CELERY_RESULT_BACKEND = f"redis://{REDIS_HOST}:{REDIS_PORT}/0"
+CELERY_BROKER_URL = f"{REDIS_URL}/0"
+CELERY_RESULT_BACKEND = f"{REDIS_URL}/0"
 CELERY_ACCEPT_CONTENT = ["json"]
 CELERY_TASK_SERIALIZER = "json"
 CELERY_RESULT_SERIALIZER = "json"

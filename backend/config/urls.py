@@ -4,14 +4,15 @@ URL configuration for ELK Vision SaaS project.
 
 from django.contrib import admin
 from django.urls import include, path
-from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
+from rest_framework_simplejwt.views import TokenRefreshView
+from app.users.views import CustomTokenObtainPairView
 
 urlpatterns = [
     path("admin/", admin.site.urls),
     # Health Check (No versioning)
     path("", include("app.health.urls")),
     # JWT Authentication
-    path("api/auth/login/", TokenObtainPairView.as_view(), name="token_obtain_pair"),
+    path("api/auth/login/", CustomTokenObtainPairView.as_view(), name="token_obtain_pair"),
     path("api/auth/refresh/", TokenRefreshView.as_view(), name="token_refresh"),
     # API v1 URLs
     path("api/v1/users/", include("app.users.urls")),

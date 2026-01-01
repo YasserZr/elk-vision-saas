@@ -10,7 +10,7 @@ export default function LoginPage() {
   const { login, isLoading } = useAuth();
   
   const [formData, setFormData] = useState({
-    email: '',
+    username: '',
     password: '',
   });
   const [error, setError] = useState<string | null>(null);
@@ -86,19 +86,19 @@ export default function LoginPage() {
 
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-300">
-                Email address
+              <label htmlFor="username" className="block text-sm font-medium text-gray-300">
+                Username
               </label>
               <input
-                id="email"
-                name="email"
-                type="email"
-                autoComplete="email"
+                id="username"
+                name="username"
+                type="text"
+                autoComplete="username"
                 required
-                value={formData.email}
+                value={formData.username}
                 onChange={handleChange}
                 className="mt-1 block w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
-                placeholder="you@example.com"
+                placeholder="yourusername"
               />
             </div>
 

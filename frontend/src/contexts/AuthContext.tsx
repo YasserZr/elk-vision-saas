@@ -82,7 +82,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setState((prev) => ({ ...prev, isLoading: true }));
     try {
       const response = await authApi.login(credentials);
+      console.log('Login response:', response);
       const data = response as unknown as { access: string; refresh: string; user: User };
+
+      if (!data.access || !data.refresh) {
+        throw new Error('Invalid login response - missing tokens');
+      }
 
       localStorage.setItem("access_token", data.access);
       localStorage.setItem("refresh_token", data.refresh);
@@ -95,9 +100,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         isLoading: false,
       });
       
+      console.log('Auth state updated, isAuthenticated:', true);
+      
       // Load profile in background
       loadUserData();
     } catch (error) {
+      console.error('Login failed:', error);
       setState((prev) => ({ ...prev, isLoading: false }));
       throw error;
     }
@@ -106,10 +114,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const register = async (data: RegisterData) => {
     setState((prev) => ({ ...prev, isLoading: true }));
     try {
+      console.log('Registering with data:', data);
       await authApi.register(data);
-      // After registration, login automatically
-      await login({ email: data.email, password: data.password });
-    } catch (error) {
+      // After registration, login automatically using username
+      await login({ username: data.username, password: data.password });
+    } catch (error: any) {
+      console.error('Registration error:', error.response?.data || error.message);
       setState((prev) => ({ ...prev, isLoading: false }));
       throw error;
     }

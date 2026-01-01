@@ -10,12 +10,12 @@ export default function RegisterPage() {
   const { register, isLoading } = useAuth();
   
   const [formData, setFormData] = useState({
+    username: '',
     email: '',
     password: '',
     confirmPassword: '',
     first_name: '',
     last_name: '',
-    organization: '',
   });
   const [error, setError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -52,7 +52,11 @@ export default function RegisterPage() {
     setError(null);
 
     try {
-      const { confirmPassword, ...registerData } = formData;
+      const { confirmPassword, ...rest } = formData;
+      const registerData = {
+        ...rest,
+        password2: confirmPassword,
+      };
       await register(registerData);
       router.push('/dashboard');
     } catch (err: unknown) {
@@ -161,17 +165,19 @@ export default function RegisterPage() {
             </div>
 
             <div>
-              <label htmlFor="organization" className="block text-sm font-medium text-gray-300">
-                Organization <span className="text-gray-500">(optional)</span>
+              <label htmlFor="username" className="block text-sm font-medium text-gray-300">
+                Username
               </label>
               <input
-                id="organization"
-                name="organization"
+                id="username"
+                name="username"
                 type="text"
-                value={formData.organization}
+                autoComplete="username"
+                required
+                value={formData.username}
                 onChange={handleChange}
                 className="mt-1 block w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
-                placeholder="Acme Inc."
+                placeholder="johndoe"
               />
             </div>
 

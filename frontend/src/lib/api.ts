@@ -97,7 +97,7 @@ export const authApi = {
    * Login with email and password
    */
   login: async (credentials: LoginCredentials): Promise<ApiResponse<AuthTokens & { user: User }>> => {
-    const response = await apiClient.post('/v1/auth/login/', credentials);
+    const response = await apiClient.post('/auth/login/', credentials);
     return response.data;
   },
 
@@ -105,7 +105,8 @@ export const authApi = {
    * Register a new user
    */
   register: async (data: RegisterData): Promise<ApiResponse<{ user: User; message: string }>> => {
-    const response = await apiClient.post('/v1/auth/register/', data);
+    console.log('Sending registration data:', data);
+    const response = await apiClient.post('/v1/users/register/', data);
     return response.data;
   },
 
@@ -165,7 +166,7 @@ export const profileApi = {
    * Get current user's profile
    */
   getProfile: async (): Promise<ApiResponse<UserProfile>> => {
-    const response = await apiClient.get('/v1/profile/');
+    const response = await apiClient.get('/v1/users/profile/');
     return response.data;
   },
 
@@ -173,7 +174,7 @@ export const profileApi = {
    * Update current user's profile
    */
   updateProfile: async (data: Partial<UserProfile>): Promise<ApiResponse<UserProfile>> => {
-    const response = await apiClient.patch('/v1/profile/', data);
+    const response = await apiClient.patch('/v1/users/profile/', data);
     return response.data;
   },
 
@@ -337,7 +338,7 @@ export const logsApi = {
     by_level: Record<string, number>;
     timeline: Array<{ date: string; count: number }>;
   }>> => {
-    const response = await apiClient.get('/v1/logs/stats/', { params });
+    const response = await apiClient.get('/v1/logs/metadata/stats/', { params });
     return response.data;
   },
 
@@ -506,7 +507,7 @@ export const healthApi = {
     };
     timestamp: string;
   }>> => {
-    const response = await apiClient.get('/v1/health/');
+    const response = await apiClient.get('/health/');
     return response.data;
   },
 
@@ -521,7 +522,7 @@ export const healthApi = {
     request_rate: number;
     error_rate: number;
   }>> => {
-    const response = await apiClient.get('/v1/health/metrics/');
+    const response = await apiClient.get('/health/metrics/');
     return response.data;
   },
 };

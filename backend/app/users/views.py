@@ -5,10 +5,28 @@ from rest_framework import generics, status
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework_simplejwt.views import TokenObtainPairView
 
 from .serializers import ChangePasswordSerializer, RegisterSerializer, UserSerializer
 
 logger = logging.getLogger(__name__)
+
+
+class CustomTokenObtainPairView(TokenObtainPairView):
+    """Custom login view that returns tokens + user data"""
+
+    def post(self, request, *args, **kwargs):
+        response = super().post(request, *args, **kwargs)
+        if response.status_code == 200:
+            # Get the user based on username from request
+            username = request.data.get('username')
+            try:
+                user = User.objects.get(username=username)
+                user_serializer = UserSerializer(user)
+                response.data['user'] = user_serializer.data
+            except User.DoesNotExist:
+                pass
+        return response
 
 
 class UserProfileView(APIView):
