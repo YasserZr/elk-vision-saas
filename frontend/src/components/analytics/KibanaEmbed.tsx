@@ -34,33 +34,8 @@ export function KibanaEmbed({
   const buildEmbedUrl = () => {
     if (!dashboardId) return null;
 
-    const params = new URLSearchParams({
-      embed: 'true',
-      _g: JSON.stringify({
-        time: timeRange || {
-          from: 'now-24h',
-          to: 'now',
-        },
-        refreshInterval: {
-          pause: !refreshInterval,
-          value: refreshInterval || 0,
-        },
-      }),
-    });
-
-    // Add filters
-    if (Object.keys(filters).length > 0) {
-      params.set(
-        '_a',
-        JSON.stringify({
-          filters: Object.entries(filters).map(([field, value]) => ({
-            query: { match_phrase: { [field]: value } },
-          })),
-        })
-      );
-    }
-
-    return `${kibanaUrl}/app/dashboards#/view/${dashboardId}?${params.toString()}`;
+    // Simple embed URL without complex parameters that cause rison errors
+    return `${kibanaUrl}/app/dashboards#/view/${dashboardId}?embed=true&_g=(time:(from:now-24h,to:now))`;
   };
 
   const embedUrl = buildEmbedUrl();
@@ -147,7 +122,7 @@ export function KibanaEmbed({
             setError('Failed to load Kibana dashboard');
           }}
           title={title}
-          sandbox="allow-scripts allow-same-origin allow-popups"
+          allowFullScreen
         />
       </div>
     </div>

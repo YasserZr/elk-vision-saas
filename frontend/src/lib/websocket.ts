@@ -13,7 +13,7 @@ function getAccessToken(): string | null {
   return null;
 }
 
-export type NotificationType = 'alert' | 'log_event' | 'system' | 'upload_status' | 'connection' | 'error' | 'new_log' | 'log_batch' | 'pong';
+export type NotificationType = 'alert' | 'log_event' | 'system' | 'upload_status' | 'connection' | 'error' | 'new_log' | 'log_batch' | 'pong' | 'metrics_update' | 'metrics_history';
 
 export interface Notification {
   type: NotificationType;
@@ -299,5 +299,40 @@ export function createLogStreamService(onMessage: (notification: Notification) =
     onConnect: () => console.log('Log stream connected'),
     onDisconnect: () => console.log('Log stream disconnected'),
     onError: (error) => console.error('Log stream error:', error),
+  });
+}
+
+/**
+ * Create WebSocket service for real-time metrics
+ */
+export function createMetricsService(onMessage: (notification: Notification) => void): WebSocketService {
+  const wsProtocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+  
+  // Get base WebSocket URL from environment or derive from API URL
+  let wsHost: string;
+  if (process.env.NEXT_PUBLIC_WS_URL) {
+    wsHost = process.env.NEXT_PUBLIC_WS_URL;
+  } else if (process.env.NEXT_PUBLIC_API_URL) {
+    // Convert HTTP API URL to WebSocket URL
+    // Handle both http://localhost:8000/api and http://localhost:8000 formats
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL
+      .replace('/api', '')
+      .replace('/ws', '')  // Remove /ws if present
+      .replace('http://', '')
+      .replace('https://', '');
+    wsHost = `${wsProtocol}//${apiUrl}`;
+  } else {
+    // Default to backend port
+    wsHost = `${wsProtocol}//localhost:8000`;
+  }
+  
+  const wsUrl = `${wsHost}/ws/metrics/`;
+
+  return new WebSocketService({
+    url: wsUrl,
+    onMessage,
+    onConnect: () => console.log('Metrics service connected'),
+    onDisconnect: () => console.log('Metrics service disconnected'),
+    onError: (error) => console.error('Metrics service error:', error),
   });
 }

@@ -1,0 +1,35 @@
+{
+  "index_patterns": ["logs-*"],
+  "priority": 500,
+  "template": {
+    "settings": {
+      "number_of_shards": 1,
+      "number_of_replicas": 1,
+      "index.lifecycle.name": "logs-policy",
+      "index.lifecycle.rollover_alias": "logs"
+    },
+    "mappings": {
+      "properties": {
+        "@timestamp": {"type": "date"},
+        "timestamp": {"type": "date"},
+        "level": {"type": "keyword"},
+        "message": {"type": "text"},
+        "raw_log": {"type": "text"},
+        "original": {"type": "text"},
+        "tenant_id": {"type": "keyword"},
+        "user_id": {"type": "keyword"},
+        "source": {"type": "keyword"},
+        "service_name": {"type": "keyword"},
+        "environment": {"type": "keyword"},
+        "host": {"type": "keyword"},
+        "process": {"type": "keyword"},
+        "task_id": {"type": "keyword"},
+        "upload_id": {"type": "keyword"},
+        "file_name": {"type": "keyword"},
+        "line_number": {"type": "long"},
+        "tags": {"type": "keyword"},
+        "log_pattern": {"type": "keyword"}
+      }
+    }
+  }
+}

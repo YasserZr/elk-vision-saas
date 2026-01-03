@@ -32,9 +32,14 @@ class SearchHistoryListView(APIView):
         try:
             profile = UserProfile.get_by_user_id(request.user.id)
             if not profile:
-                return Response(
-                    {"error": "Profile not found"}, status=status.HTTP_404_NOT_FOUND
+                # Auto-create profile for new user
+                profile = UserProfile.create(
+                    user_id=request.user.id,
+                    tenant_id="default",
+                    organization=getattr(request.user, 'username', 'default'),
+                    role="admin"
                 )
+                logger.info(f"Auto-created profile for user {request.user.id}")
 
             limit = min(int(request.query_params.get("limit", 10)), 50)
 
@@ -70,9 +75,14 @@ class SearchHistoryListView(APIView):
         try:
             profile = UserProfile.get_by_user_id(request.user.id)
             if not profile:
-                return Response(
-                    {"error": "Profile not found"}, status=status.HTTP_404_NOT_FOUND
+                # Auto-create profile for new user
+                profile = UserProfile.create(
+                    user_id=request.user.id,
+                    tenant_id="default",
+                    organization=getattr(request.user, 'username', 'default'),
+                    role="admin"
                 )
+                logger.info(f"Auto-created profile for user {request.user.id}")
 
             query = request.data.get("query", "")
             filters = request.data.get("filters", {})

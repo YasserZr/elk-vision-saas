@@ -31,6 +31,7 @@ INSTALLED_APPS = [
     "channels",
     "drf_spectacular",
     # Local apps
+    "api",  # Core API with WebSocket consumers and management commands
     "app.users",
     "app.logs",
     "app.dashboards",

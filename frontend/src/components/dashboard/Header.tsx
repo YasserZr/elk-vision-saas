@@ -7,9 +7,10 @@ import ThemeToggle from '@/components/ui/ThemeToggle';
 
 interface HeaderProps {
   onMenuClick: () => void;
+  onNavbarFlash?: () => void;
 }
 
-export default function Header({ onMenuClick }: HeaderProps) {
+export default function Header({ onMenuClick, onNavbarFlash }: HeaderProps) {
   const { user, logout } = useAuth();
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const profileRef = useRef<HTMLDivElement>(null);
@@ -70,7 +71,7 @@ export default function Header({ onMenuClick }: HeaderProps) {
           <ThemeToggle />
           
           {/* Real-time Notifications */}
-          <NotificationCenter position="top-right" />
+          <NotificationCenter position="top-right" onNavbarFlash={onNavbarFlash} />
 
           {/* Profile dropdown */}
           <div className="relative" ref={profileRef}>

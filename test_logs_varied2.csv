@@ -1,0 +1,1501 @@
+timestamp,level,message,service,environment,host,user_id
+2026-01-01T22:21:09.639562Z,ERROR,Database connection failed: connection refused,user-service,development,server-8,user_6878
+2026-01-01T22:22:07.239562Z,WARNING,High memory usage detected: 73%,api-gateway,production,server-3,user_2611
+2026-01-01T22:23:04.839562Z,ERROR,API request timeout: /api/v1/products,auth-service,staging,server-10,user_9929
+2026-01-01T22:24:02.439562Z,WARNING,Rate limit approaching for user user_8935,api-gateway,production,server-6,user_9600
+2026-01-01T22:25:00.039562Z,WARNING,Connection pool near capacity: 75%,payment-service,development,server-1,user_5270
+2026-01-01T22:25:57.639562Z,WARNING,Rate limit approaching for user user_8156,auth-service,staging,server-3,user_2718
+2026-01-01T22:26:55.239562Z,WARNING,Deprecated API endpoint called: /api/v1/orders,api-gateway,production,server-8,user_1209
+2026-01-01T22:27:52.839562Z,WARNING,Slow query detected: 1447ms,database-service,staging,server-9,user_5946
+2026-01-01T22:28:50.439562Z,WARNING,Rate limit approaching for user user_2144,database-service,production,server-2,user_7131
+2026-01-01T22:29:48.039562Z,WARNING,Deprecated API endpoint called: /api/v1/orders,payment-service,development,server-1,user_5450
+2026-01-01T22:30:45.639562Z,WARNING,Deprecated API endpoint called: /api/v1/orders,auth-service,development,server-8,user_8896
+2026-01-01T22:31:43.239562Z,WARNING,High memory usage detected: 82%,api-gateway,staging,server-8,user_4863
+2026-01-01T22:32:40.839562Z,WARNING,High memory usage detected: 72%,api-gateway,development,server-8,user_3651
+2026-01-01T22:33:38.439562Z,WARNING,Rate limit approaching for user user_1048,database-service,development,server-6,user_7398
+2026-01-01T22:34:36.039562Z,WARNING,High memory usage detected: 90%,notification-service,development,server-1,user_8745
+2026-01-01T22:35:33.639562Z,WARNING,High memory usage detected: 72%,notification-service,staging,server-1,user_1390
+2026-01-01T22:36:31.239562Z,WARNING,Deprecated API endpoint called: /api/v1/users,database-service,development,server-9,user_1757
+2026-01-01T22:37:28.839562Z,WARNING,Connection pool near capacity: 72%,auth-service,production,server-9,user_3377
+2026-01-01T22:38:26.439562Z,WARNING,Connection pool near capacity: 80%,user-service,development,server-9,user_5855
+2026-01-01T22:39:24.039562Z,WARNING,Connection pool near capacity: 70%,auth-service,staging,server-9,user_5955
+2026-01-01T22:40:21.639562Z,WARNING,Rate limit approaching for user user_3643,notification-service,production,server-5,user_1013
+2026-01-01T22:41:19.239562Z,WARNING,Rate limit approaching for user user_2617,database-service,development,server-5,user_4463
+2026-01-01T22:42:16.839562Z,WARNING,High memory usage detected: 92%,api-gateway,development,server-5,user_4556
+2026-01-01T22:43:14.439562Z,WARNING,Deprecated API endpoint called: /api/v1/products,database-service,development,server-8,user_8932
+2026-01-01T22:44:12.039562Z,WARNING,Connection pool near capacity: 94%,payment-service,production,server-6,user_8971
+2026-01-01T22:45:09.639562Z,WARNING,High memory usage detected: 91%,auth-service,staging,server-3,user_5193
+2026-01-01T22:46:07.239562Z,WARNING,Connection pool near capacity: 79%,notification-service,production,server-8,user_9250
+2026-01-01T22:47:04.839562Z,ERROR,Failed to process payment: connection refused,auth-service,development,server-3,user_1493
+2026-01-01T22:48:02.439562Z,WARNING,Slow query detected: 1713ms,user-service,production,server-1,user_7792
+2026-01-01T22:49:00.039562Z,WARNING,Deprecated API endpoint called: /api/v1/products,notification-service,development,server-9,user_7121
+2026-01-01T22:49:57.639562Z,WARNING,High memory usage detected: 88%,payment-service,production,server-1,user_3175
+2026-01-01T22:50:55.239562Z,WARNING,Deprecated API endpoint called: /api/v1/products,payment-service,staging,server-10,user_4767
+2026-01-01T22:51:52.839562Z,WARNING,High memory usage detected: 82%,notification-service,development,server-5,user_7236
+2026-01-01T22:52:50.439562Z,WARNING,Connection pool near capacity: 88%,database-service,staging,server-7,user_5731
+2026-01-01T22:53:48.039562Z,WARNING,Deprecated API endpoint called: /api/v1/orders,user-service,production,server-9,user_7538
+2026-01-01T22:54:45.639562Z,WARNING,Slow query detected: 2152ms,payment-service,staging,server-4,user_4806
+2026-01-01T22:55:43.239562Z,ERROR,API request timeout: /api/v1/products,database-service,development,server-4,user_8598
+2026-01-01T22:56:40.839562Z,WARNING,High memory usage detected: 80%,payment-service,development,server-10,user_5433
+2026-01-01T22:57:38.439562Z,WARNING,High memory usage detected: 71%,notification-service,staging,server-9,user_4370
+2026-01-01T22:58:36.039562Z,WARNING,Slow query detected: 3541ms,database-service,development,server-5,user_6796
+2026-01-01T22:59:33.639562Z,WARNING,High memory usage detected: 84%,user-service,development,server-4,user_2262
+2026-01-01T23:00:31.239562Z,WARNING,Connection pool near capacity: 82%,database-service,staging,server-4,user_3481
+2026-01-01T23:01:28.839562Z,WARNING,Rate limit approaching for user user_3135,auth-service,production,server-10,user_9049
+2026-01-01T23:02:26.439562Z,WARNING,Connection pool near capacity: 81%,payment-service,staging,server-10,user_3400
+2026-01-01T23:03:24.039562Z,WARNING,High memory usage detected: 91%,auth-service,staging,server-1,user_4325
+2026-01-01T23:04:21.639562Z,WARNING,Deprecated API endpoint called: /api/v1/orders,user-service,staging,server-2,user_9321
+2026-01-01T23:05:19.239562Z,ERROR,Failed to process payment: not found,user-service,production,server-8,user_3237
+2026-01-01T23:06:16.839562Z,WARNING,Connection pool near capacity: 90%,database-service,staging,server-1,user_9085
+2026-01-01T23:07:14.439562Z,WARNING,Slow query detected: 4044ms,user-service,staging,server-1,user_3734
+2026-01-01T23:08:12.039562Z,WARNING,Deprecated API endpoint called: /api/v1/users,payment-service,production,server-6,user_4456
+2026-01-01T23:09:09.639562Z,WARNING,Deprecated API endpoint called: /api/v1/products,database-service,staging,server-4,user_5475
+2026-01-01T23:10:07.239562Z,WARNING,Deprecated API endpoint called: /api/v1/products,payment-service,development,server-7,user_6392
+2026-01-01T23:11:04.839562Z,WARNING,High memory usage detected: 71%,auth-service,development,server-7,user_7895
+2026-01-01T23:12:02.439562Z,WARNING,Slow query detected: 803ms,api-gateway,staging,server-2,user_8361
+2026-01-01T23:13:00.039562Z,WARNING,Connection pool near capacity: 92%,user-service,development,server-5,user_9773
+2026-01-01T23:13:57.639562Z,WARNING,High memory usage detected: 84%,notification-service,production,server-4,user_3431
+2026-01-01T23:14:55.239562Z,WARNING,Slow query detected: 4343ms,user-service,staging,server-3,user_7619
+2026-01-01T23:15:52.839562Z,WARNING,Slow query detected: 1740ms,database-service,production,server-6,user_2866
+2026-01-01T23:16:50.439562Z,ERROR,API request timeout: /api/v1/orders,user-service,production,server-2,user_2081
+2026-01-01T23:17:48.039562Z,WARNING,Slow query detected: 803ms,user-service,production,server-8,user_4226
+2026-01-01T23:18:45.639562Z,WARNING,High memory usage detected: 73%,database-service,staging,server-10,user_7924
+2026-01-01T23:19:43.239562Z,WARNING,Connection pool near capacity: 72%,user-service,production,server-9,user_4839
+2026-01-01T23:20:40.839562Z,ERROR,API request timeout: /api/v1/users,auth-service,staging,server-10,user_5680
+2026-01-01T23:21:38.439562Z,WARNING,Deprecated API endpoint called: /api/v1/users,user-service,development,server-2,user_2551
+2026-01-01T23:22:36.039562Z,WARNING,Deprecated API endpoint called: /api/v1/products,auth-service,development,server-4,user_4660
+2026-01-01T23:23:33.639562Z,WARNING,Rate limit approaching for user user_9360,database-service,production,server-7,user_8111
+2026-01-01T23:24:31.239562Z,WARNING,Deprecated API endpoint called: /api/v1/orders,auth-service,production,server-4,user_7009
+2026-01-01T23:25:28.839562Z,WARNING,Rate limit approaching for user user_6054,payment-service,production,server-4,user_4170
+2026-01-01T23:26:26.439562Z,ERROR,Authentication failed for user user_9306,user-service,development,server-6,user_7123
+2026-01-01T23:27:24.039562Z,WARNING,Rate limit approaching for user user_1119,user-service,development,server-5,user_7773
+2026-01-01T23:28:21.639562Z,WARNING,Slow query detected: 805ms,notification-service,production,server-1,user_7064
+2026-01-01T23:29:19.239562Z,WARNING,Deprecated API endpoint called: /api/v1/orders,user-service,development,server-1,user_2476
+2026-01-01T23:30:16.839562Z,ERROR,Failed to send notification: not found,api-gateway,production,server-5,user_5182
+2026-01-01T23:31:14.439562Z,WARNING,Slow query detected: 1756ms,user-service,development,server-6,user_5972
+2026-01-01T23:32:12.039562Z,ERROR,Authentication failed for user user_7459,api-gateway,staging,server-7,user_2156
+2026-01-01T23:33:09.639562Z,WARNING,Deprecated API endpoint called: /api/v1/users,user-service,staging,server-10,user_3626
+2026-01-01T23:34:07.239562Z,WARNING,Slow query detected: 2270ms,database-service,development,server-7,user_8000
+2026-01-01T23:35:04.839562Z,WARNING,Rate limit approaching for user user_3121,auth-service,development,server-9,user_6862
+2026-01-01T23:36:02.439562Z,WARNING,Slow query detected: 4613ms,user-service,development,server-9,user_1205
+2026-01-01T23:37:00.039562Z,WARNING,Rate limit approaching for user user_4000,user-service,development,server-10,user_5993
+2026-01-01T23:37:57.639562Z,WARNING,Rate limit approaching for user user_1368,payment-service,staging,server-5,user_9283
+2026-01-01T23:38:55.239562Z,WARNING,Deprecated API endpoint called: /api/v1/products,database-service,development,server-7,user_5343
+2026-01-01T23:39:52.839562Z,ERROR,Failed to process payment: timeout,payment-service,development,server-3,user_1026
+2026-01-01T23:40:50.439562Z,WARNING,Slow query detected: 4734ms,payment-service,development,server-6,user_8572
+2026-01-01T23:41:48.039562Z,WARNING,Connection pool near capacity: 73%,user-service,development,server-7,user_8475
+2026-01-01T23:42:45.639562Z,WARNING,Slow query detected: 563ms,database-service,development,server-1,user_6494
+2026-01-01T23:43:43.239562Z,WARNING,High memory usage detected: 71%,database-service,development,server-3,user_9055
+2026-01-01T23:44:40.839562Z,WARNING,Connection pool near capacity: 92%,api-gateway,development,server-3,user_1066
+2026-01-01T23:45:38.439562Z,WARNING,Connection pool near capacity: 87%,api-gateway,production,server-2,user_8369
+2026-01-01T23:46:36.039562Z,WARNING,High memory usage detected: 78%,api-gateway,production,server-1,user_1662
+2026-01-01T23:47:33.639562Z,WARNING,Slow query detected: 2796ms,database-service,development,server-1,user_4558
+2026-01-01T23:48:31.239562Z,WARNING,High memory usage detected: 77%,auth-service,production,server-8,user_5303
+2026-01-01T23:49:28.839562Z,WARNING,High memory usage detected: 70%,notification-service,production,server-6,user_5148
+2026-01-01T23:50:26.439562Z,WARNING,Deprecated API endpoint called: /api/v1/orders,api-gateway,development,server-4,user_7922
+2026-01-01T23:51:24.039562Z,WARNING,High memory usage detected: 85%,user-service,development,server-7,user_8760
+2026-01-01T23:52:21.639562Z,WARNING,Connection pool near capacity: 70%,api-gateway,staging,server-3,user_6919
+2026-01-01T23:53:19.239562Z,WARNING,Connection pool near capacity: 89%,user-service,development,server-2,user_1574
+2026-01-01T23:54:16.839562Z,WARNING,High memory usage detected: 72%,database-service,staging,server-1,user_9286
+2026-01-01T23:55:14.439562Z,WARNING,Rate limit approaching for user user_2394,api-gateway,production,server-7,user_9177
+2026-01-01T23:56:12.039562Z,WARNING,Slow query detected: 893ms,user-service,staging,server-9,user_6871
+2026-01-01T23:57:09.639562Z,WARNING,Slow query detected: 4240ms,payment-service,staging,server-2,user_7722
+2026-01-01T23:58:07.239562Z,WARNING,Connection pool near capacity: 75%,payment-service,production,server-5,user_8505
+2026-01-01T23:59:04.839562Z,WARNING,Connection pool near capacity: 75%,database-service,staging,server-6,user_3687
+2026-01-02T00:00:02.439562Z,WARNING,Connection pool near capacity: 90%,user-service,production,server-10,user_6786
+2026-01-02T00:01:00.039562Z,ERROR,Authentication failed for user user_7074,database-service,staging,server-2,user_2187
+2026-01-02T00:01:57.639562Z,WARNING,High memory usage detected: 95%,notification-service,development,server-7,user_2612
+2026-01-02T00:02:55.239562Z,WARNING,Rate limit approaching for user user_3621,database-service,development,server-10,user_4923
+2026-01-02T00:03:52.839562Z,WARNING,Deprecated API endpoint called: /api/v1/orders,notification-service,staging,server-4,user_6658
+2026-01-02T00:04:50.439562Z,WARNING,Slow query detected: 707ms,database-service,development,server-9,user_9014
+2026-01-02T00:05:48.039562Z,WARNING,Slow query detected: 102ms,user-service,staging,server-1,user_9256
+2026-01-02T00:06:45.639562Z,WARNING,Slow query detected: 2908ms,auth-service,staging,server-7,user_2941
+2026-01-02T00:07:43.239562Z,WARNING,Rate limit approaching for user user_2611,auth-service,staging,server-4,user_6461
+2026-01-02T00:08:40.839562Z,WARNING,Slow query detected: 2696ms,database-service,development,server-1,user_8306
+2026-01-02T00:09:38.439562Z,WARNING,Deprecated API endpoint called: /api/v1/orders,api-gateway,production,server-3,user_2356
+2026-01-02T00:10:36.039562Z,WARNING,Slow query detected: 582ms,payment-service,production,server-1,user_3673
+2026-01-02T00:11:33.639562Z,ERROR,Authentication failed for user user_4715,payment-service,development,server-7,user_1002
+2026-01-02T00:12:31.239562Z,WARNING,High memory usage detected: 76%,api-gateway,production,server-6,user_5002
+2026-01-02T00:13:28.839562Z,WARNING,Rate limit approaching for user user_2904,database-service,production,server-4,user_5511
+2026-01-02T00:14:26.439562Z,WARNING,High memory usage detected: 82%,user-service,development,server-2,user_3376
+2026-01-02T00:15:24.039562Z,WARNING,Slow query detected: 299ms,auth-service,production,server-3,user_9540
+2026-01-02T00:16:21.639562Z,WARNING,Deprecated API endpoint called: /api/v1/users,payment-service,staging,server-8,user_9170
+2026-01-02T00:17:19.239562Z,WARNING,Rate limit approaching for user user_8665,database-service,production,server-7,user_5917
+2026-01-02T00:18:16.839562Z,WARNING,Rate limit approaching for user user_6730,api-gateway,development,server-9,user_7327
+2026-01-02T00:19:14.439562Z,WARNING,Connection pool near capacity: 92%,database-service,staging,server-6,user_2758
+2026-01-02T00:20:12.039562Z,WARNING,Rate limit approaching for user user_9005,api-gateway,staging,server-4,user_2904
+2026-01-02T00:21:09.639562Z,WARNING,Rate limit approaching for user user_7436,payment-service,staging,server-4,user_8912
+2026-01-02T00:22:07.239562Z,WARNING,Slow query detected: 1197ms,api-gateway,production,server-2,user_8439
+2026-01-02T00:23:04.839562Z,WARNING,Rate limit approaching for user user_9124,payment-service,production,server-6,user_9047
+2026-01-02T00:24:02.439562Z,WARNING,Deprecated API endpoint called: /api/v1/orders,user-service,production,server-4,user_9656
+2026-01-02T00:25:00.039562Z,WARNING,Deprecated API endpoint called: /api/v1/orders,payment-service,production,server-9,user_9941
+2026-01-02T00:25:57.639562Z,WARNING,Connection pool near capacity: 92%,payment-service,development,server-4,user_9448
+2026-01-02T00:26:55.239562Z,WARNING,Deprecated API endpoint called: /api/v1/orders,notification-service,production,server-8,user_4329
+2026-01-02T00:27:52.839562Z,WARNING,Slow query detected: 789ms,api-gateway,staging,server-9,user_1375
+2026-01-02T00:28:50.439562Z,WARNING,Slow query detected: 252ms,auth-service,development,server-6,user_9524
+2026-01-02T00:29:48.039562Z,WARNING,Deprecated API endpoint called: /api/v1/products,payment-service,production,server-3,user_2128
+2026-01-02T00:30:45.639562Z,WARNING,Deprecated API endpoint called: /api/v1/products,payment-service,development,server-8,user_2667
+2026-01-02T00:31:43.239562Z,WARNING,Rate limit approaching for user user_3336,auth-service,production,server-1,user_9447
+2026-01-02T00:32:40.839562Z,WARNING,High memory usage detected: 89%,api-gateway,production,server-4,user_4517
+2026-01-02T00:33:38.439562Z,WARNING,Deprecated API endpoint called: /api/v1/orders,auth-service,development,server-4,user_1647
+2026-01-02T00:34:36.039562Z,WARNING,Slow query detected: 2885ms,payment-service,production,server-1,user_3371
+2026-01-02T00:35:33.639562Z,WARNING,Rate limit approaching for user user_8682,database-service,staging,server-1,user_9814
+2026-01-02T00:36:31.239562Z,WARNING,Slow query detected: 2402ms,auth-service,development,server-3,user_1577
+2026-01-02T00:37:28.839562Z,WARNING,Deprecated API endpoint called: /api/v1/users,auth-service,development,server-9,user_1212
+2026-01-02T00:38:26.439562Z,WARNING,Rate limit approaching for user user_2194,user-service,production,server-3,user_9595
+2026-01-02T00:39:24.039562Z,WARNING,Slow query detected: 3885ms,notification-service,staging,server-1,user_5206
+2026-01-02T00:40:21.639562Z,WARNING,Deprecated API endpoint called: /api/v1/products,notification-service,development,server-10,user_3767
+2026-01-02T00:41:19.239562Z,WARNING,Slow query detected: 4112ms,user-service,staging,server-3,user_1591
+2026-01-02T00:42:16.839562Z,WARNING,Connection pool near capacity: 70%,api-gateway,development,server-8,user_5031
+2026-01-02T00:43:14.439562Z,WARNING,Connection pool near capacity: 76%,notification-service,development,server-2,user_8138
+2026-01-02T00:44:12.039562Z,WARNING,High memory usage detected: 71%,payment-service,development,server-2,user_4751
+2026-01-02T00:45:09.639562Z,WARNING,Connection pool near capacity: 71%,database-service,production,server-9,user_5205
+2026-01-02T00:46:07.239562Z,WARNING,High memory usage detected: 78%,database-service,staging,server-6,user_4991
+2026-01-02T00:47:04.839562Z,WARNING,High memory usage detected: 76%,payment-service,staging,server-6,user_6289
+2026-01-02T00:48:02.439562Z,WARNING,High memory usage detected: 73%,payment-service,staging,server-9,user_3160
+2026-01-02T00:49:00.039562Z,WARNING,Connection pool near capacity: 90%,payment-service,production,server-7,user_5270
+2026-01-02T00:49:57.639562Z,WARNING,High memory usage detected: 89%,api-gateway,staging,server-7,user_4412
+2026-01-02T00:50:55.239562Z,WARNING,Connection pool near capacity: 84%,user-service,development,server-1,user_7019
+2026-01-02T00:51:52.839562Z,WARNING,Deprecated API endpoint called: /api/v1/users,user-service,staging,server-10,user_8064
+2026-01-02T00:52:50.439562Z,WARNING,Rate limit approaching for user user_1782,database-service,development,server-3,user_5678
+2026-01-02T00:53:48.039562Z,WARNING,Slow query detected: 2160ms,database-service,production,server-10,user_9345
+2026-01-02T00:54:45.639562Z,WARNING,Rate limit approaching for user user_6408,auth-service,production,server-9,user_6458
+2026-01-02T00:55:43.239562Z,WARNING,Deprecated API endpoint called: /api/v1/orders,database-service,development,server-8,user_4135
+2026-01-02T00:56:40.839562Z,WARNING,High memory usage detected: 71%,api-gateway,production,server-9,user_1454
+2026-01-02T00:57:38.439562Z,WARNING,Connection pool near capacity: 88%,database-service,staging,server-2,user_8402
+2026-01-02T00:58:36.039562Z,WARNING,Deprecated API endpoint called: /api/v1/users,api-gateway,staging,server-5,user_5676
+2026-01-02T00:59:33.639562Z,ERROR,Authentication failed for user user_9637,user-service,staging,server-3,user_1995
+2026-01-02T01:00:31.239562Z,WARNING,Rate limit approaching for user user_4471,user-service,staging,server-9,user_8426
+2026-01-02T01:01:28.839562Z,WARNING,Deprecated API endpoint called: /api/v1/orders,user-service,staging,server-10,user_9355
+2026-01-02T01:02:26.439562Z,WARNING,Connection pool near capacity: 84%,user-service,production,server-7,user_8050
+2026-01-02T01:03:24.039562Z,WARNING,Connection pool near capacity: 92%,payment-service,staging,server-10,user_7643
+2026-01-02T01:04:21.639562Z,WARNING,Slow query detected: 4449ms,notification-service,development,server-10,user_4908
+2026-01-02T01:05:19.239562Z,WARNING,High memory usage detected: 82%,auth-service,staging,server-10,user_3271
+2026-01-02T01:06:16.839562Z,ERROR,Failed to process payment: invalid credentials,auth-service,staging,server-9,user_4085
+2026-01-02T01:07:14.439562Z,WARNING,Connection pool near capacity: 95%,notification-service,development,server-10,user_8951
+2026-01-02T01:08:12.039562Z,WARNING,Connection pool near capacity: 85%,database-service,development,server-8,user_3561
+2026-01-02T01:09:09.639562Z,WARNING,Connection pool near capacity: 94%,database-service,production,server-6,user_2924
+2026-01-02T01:10:07.239562Z,WARNING,High memory usage detected: 91%,api-gateway,staging,server-5,user_8936
+2026-01-02T01:11:04.839562Z,ERROR,Authentication failed for user user_8368,database-service,development,server-5,user_3977
+2026-01-02T01:12:02.439562Z,WARNING,Slow query detected: 119ms,payment-service,staging,server-9,user_4891
+2026-01-02T01:13:00.039562Z,WARNING,High memory usage detected: 94%,payment-service,production,server-4,user_3307
+2026-01-02T01:13:57.639562Z,WARNING,Deprecated API endpoint called: /api/v1/users,notification-service,staging,server-10,user_2593
+2026-01-02T01:14:55.239562Z,ERROR,Database connection failed: invalid credentials,payment-service,development,server-6,user_4877
+2026-01-02T01:15:52.839562Z,WARNING,Connection pool near capacity: 92%,notification-service,staging,server-6,user_1245
+2026-01-02T01:16:50.439562Z,WARNING,Connection pool near capacity: 91%,notification-service,staging,server-1,user_8778
+2026-01-02T01:17:48.039562Z,WARNING,Slow query detected: 4773ms,api-gateway,production,server-9,user_2534
+2026-01-02T01:18:45.639562Z,WARNING,Deprecated API endpoint called: /api/v1/orders,auth-service,production,server-3,user_9331
+2026-01-02T01:19:43.239562Z,WARNING,Connection pool near capacity: 78%,user-service,production,server-9,user_3103
+2026-01-02T01:20:40.839562Z,WARNING,High memory usage detected: 78%,payment-service,development,server-2,user_9451
+2026-01-02T01:21:38.439562Z,WARNING,Rate limit approaching for user user_8839,user-service,development,server-1,user_7160
+2026-01-02T01:22:36.039562Z,WARNING,Connection pool near capacity: 92%,auth-service,development,server-10,user_5521
+2026-01-02T01:23:33.639562Z,WARNING,Slow query detected: 3046ms,auth-service,staging,server-3,user_7548
+2026-01-02T01:24:31.239562Z,WARNING,High memory usage detected: 72%,user-service,development,server-1,user_1825
+2026-01-02T01:25:28.839562Z,WARNING,Deprecated API endpoint called: /api/v1/products,notification-service,production,server-1,user_9122
+2026-01-02T01:26:26.439562Z,WARNING,Deprecated API endpoint called: /api/v1/products,notification-service,staging,server-1,user_4569
+2026-01-02T01:27:24.039562Z,WARNING,Rate limit approaching for user user_4044,notification-service,staging,server-5,user_1228
+2026-01-02T01:28:21.639562Z,WARNING,Connection pool near capacity: 74%,notification-service,staging,server-10,user_4627
+2026-01-02T01:29:19.239562Z,WARNING,High memory usage detected: 90%,database-service,production,server-2,user_9840
+2026-01-02T01:30:16.839562Z,ERROR,API request timeout: /api/v1/orders,auth-service,development,server-1,user_1268
+2026-01-02T01:31:14.439562Z,WARNING,Connection pool near capacity: 88%,api-gateway,development,server-7,user_8270
+2026-01-02T01:32:12.039562Z,WARNING,High memory usage detected: 78%,api-gateway,production,server-7,user_1893
+2026-01-02T01:33:09.639562Z,ERROR,API request timeout: /api/v1/products,notification-service,production,server-4,user_5228
+2026-01-02T01:34:07.239562Z,WARNING,Deprecated API endpoint called: /api/v1/products,notification-service,development,server-3,user_6714
+2026-01-02T01:35:04.839562Z,WARNING,Connection pool near capacity: 78%,notification-service,staging,server-3,user_2817
+2026-01-02T01:36:02.439562Z,WARNING,Rate limit approaching for user user_9024,user-service,production,server-9,user_4766
+2026-01-02T01:37:00.039562Z,WARNING,Deprecated API endpoint called: /api/v1/users,notification-service,development,server-4,user_1105
+2026-01-02T01:37:57.639562Z,WARNING,Slow query detected: 1013ms,notification-service,development,server-4,user_6123
+2026-01-02T01:38:55.239562Z,WARNING,Slow query detected: 2224ms,payment-service,development,server-1,user_2749
+2026-01-02T01:39:52.839562Z,WARNING,High memory usage detected: 75%,payment-service,development,server-4,user_6388
+2026-01-02T01:40:50.439562Z,WARNING,Connection pool near capacity: 84%,auth-service,staging,server-10,user_1794
+2026-01-02T01:41:48.039562Z,WARNING,Rate limit approaching for user user_3746,notification-service,staging,server-5,user_2904
+2026-01-02T01:42:45.639562Z,WARNING,High memory usage detected: 91%,api-gateway,development,server-3,user_4122
+2026-01-02T01:43:43.239562Z,WARNING,Rate limit approaching for user user_1381,database-service,production,server-6,user_4003
+2026-01-02T01:44:40.839562Z,WARNING,Rate limit approaching for user user_2962,auth-service,staging,server-1,user_3068
+2026-01-02T01:45:38.439562Z,WARNING,Rate limit approaching for user user_2644,database-service,development,server-3,user_9404
+2026-01-02T01:46:36.039562Z,WARNING,Rate limit approaching for user user_3257,api-gateway,staging,server-2,user_8578
+2026-01-02T01:47:33.639562Z,WARNING,Deprecated API endpoint called: /api/v1/orders,api-gateway,production,server-7,user_1685
+2026-01-02T01:48:31.239562Z,WARNING,High memory usage detected: 81%,notification-service,staging,server-7,user_1816
+2026-01-02T01:49:28.839562Z,WARNING,Deprecated API endpoint called: /api/v1/users,notification-service,development,server-8,user_3369
+2026-01-02T01:50:26.439562Z,WARNING,Rate limit approaching for user user_8748,api-gateway,development,server-1,user_6326
+2026-01-02T01:51:24.039562Z,WARNING,Rate limit approaching for user user_7760,database-service,staging,server-1,user_6056
+2026-01-02T01:52:21.639562Z,WARNING,Slow query detected: 4246ms,api-gateway,development,server-10,user_3184
+2026-01-02T01:53:19.239562Z,WARNING,Rate limit approaching for user user_1259,payment-service,production,server-7,user_5110
+2026-01-02T01:54:16.839562Z,WARNING,Slow query detected: 140ms,notification-service,production,server-2,user_4765
+2026-01-02T01:55:14.439562Z,WARNING,Connection pool near capacity: 92%,user-service,staging,server-3,user_8525
+2026-01-02T01:56:12.039562Z,WARNING,Connection pool near capacity: 85%,database-service,production,server-1,user_4587
+2026-01-02T01:57:09.639562Z,ERROR,Failed to send notification: connection refused,auth-service,production,server-7,user_8278
+2026-01-02T01:58:07.239562Z,WARNING,Deprecated API endpoint called: /api/v1/products,auth-service,production,server-5,user_2448
+2026-01-02T01:59:04.839562Z,WARNING,High memory usage detected: 90%,payment-service,development,server-6,user_4093
+2026-01-02T02:00:02.439562Z,WARNING,Deprecated API endpoint called: /api/v1/users,auth-service,production,server-4,user_1764
+2026-01-02T02:01:00.039562Z,ERROR,API request timeout: /api/v1/users,database-service,staging,server-8,user_6078
+2026-01-02T02:01:57.639562Z,WARNING,Rate limit approaching for user user_3751,notification-service,production,server-9,user_6514
+2026-01-02T02:02:55.239562Z,ERROR,Database connection failed: invalid credentials,api-gateway,development,server-7,user_4417
+2026-01-02T02:03:52.839562Z,WARNING,Connection pool near capacity: 95%,api-gateway,staging,server-6,user_1063
+2026-01-02T02:04:50.439562Z,WARNING,Rate limit approaching for user user_2774,payment-service,development,server-7,user_2934
+2026-01-02T02:05:48.039562Z,WARNING,Rate limit approaching for user user_3396,database-service,development,server-5,user_4101
+2026-01-02T02:06:45.639562Z,WARNING,High memory usage detected: 77%,payment-service,staging,server-5,user_8636
+2026-01-02T02:07:43.239562Z,WARNING,Slow query detected: 2717ms,payment-service,development,server-8,user_4668
+2026-01-02T02:08:40.839562Z,WARNING,Slow query detected: 4023ms,api-gateway,staging,server-7,user_5677
+2026-01-02T02:09:38.439562Z,WARNING,High memory usage detected: 90%,database-service,staging,server-6,user_6933
+2026-01-02T02:10:36.039562Z,WARNING,Connection pool near capacity: 82%,user-service,production,server-3,user_1608
+2026-01-02T02:11:33.639562Z,WARNING,Rate limit approaching for user user_8138,database-service,staging,server-2,user_1123
+2026-01-02T02:12:31.239562Z,WARNING,Deprecated API endpoint called: /api/v1/users,user-service,development,server-9,user_7070
+2026-01-02T02:13:28.839562Z,WARNING,Connection pool near capacity: 95%,payment-service,staging,server-2,user_2559
+2026-01-02T02:14:26.439562Z,WARNING,Slow query detected: 2216ms,notification-service,staging,server-8,user_6117
+2026-01-02T02:15:24.039562Z,WARNING,Rate limit approaching for user user_2828,user-service,production,server-7,user_2552
+2026-01-02T02:16:21.639562Z,WARNING,Slow query detected: 3336ms,notification-service,production,server-4,user_5159
+2026-01-02T02:17:19.239562Z,WARNING,Deprecated API endpoint called: /api/v1/products,database-service,staging,server-8,user_6632
+2026-01-02T02:18:16.839562Z,ERROR,Failed to process payment: connection refused,auth-service,production,server-5,user_7700
+2026-01-02T02:19:14.439562Z,WARNING,Connection pool near capacity: 76%,api-gateway,production,server-9,user_7170
+2026-01-02T02:20:12.039562Z,WARNING,Rate limit approaching for user user_6217,api-gateway,production,server-6,user_3279
+2026-01-02T02:21:09.639562Z,WARNING,Slow query detected: 3831ms,auth-service,staging,server-2,user_5226
+2026-01-02T02:22:07.239562Z,WARNING,High memory usage detected: 76%,api-gateway,staging,server-7,user_5210
+2026-01-02T02:23:04.839562Z,WARNING,Rate limit approaching for user user_7620,user-service,production,server-5,user_9805
+2026-01-02T02:24:02.439562Z,WARNING,Deprecated API endpoint called: /api/v1/orders,user-service,development,server-7,user_8102
+2026-01-02T02:25:00.039562Z,WARNING,Connection pool near capacity: 73%,user-service,staging,server-3,user_5904
+2026-01-02T02:25:57.639562Z,WARNING,High memory usage detected: 90%,auth-service,development,server-10,user_4636
+2026-01-02T02:26:55.239562Z,WARNING,Deprecated API endpoint called: /api/v1/products,payment-service,development,server-6,user_2451
+2026-01-02T02:27:52.839562Z,WARNING,Rate limit approaching for user user_6230,payment-service,development,server-5,user_7015
+2026-01-02T02:28:50.439562Z,WARNING,Rate limit approaching for user user_6632,api-gateway,production,server-4,user_8087
+2026-01-02T02:29:48.039562Z,ERROR,Failed to process payment: timeout,api-gateway,development,server-10,user_9404
+2026-01-02T02:30:45.639562Z,WARNING,Slow query detected: 2270ms,payment-service,development,server-3,user_5191
+2026-01-02T02:31:43.239562Z,WARNING,Slow query detected: 3156ms,notification-service,development,server-5,user_7445
+2026-01-02T02:32:40.839562Z,WARNING,Slow query detected: 1293ms,payment-service,staging,server-6,user_9226
+2026-01-02T02:33:38.439562Z,WARNING,High memory usage detected: 78%,user-service,development,server-10,user_4584
+2026-01-02T02:34:36.039562Z,WARNING,Deprecated API endpoint called: /api/v1/products,notification-service,staging,server-6,user_7212
+2026-01-02T02:35:33.639562Z,WARNING,Rate limit approaching for user user_4191,payment-service,staging,server-3,user_1468
+2026-01-02T02:36:31.239562Z,WARNING,Connection pool near capacity: 81%,database-service,development,server-7,user_5906
+2026-01-02T02:37:28.839562Z,WARNING,Connection pool near capacity: 93%,payment-service,development,server-4,user_2784
+2026-01-02T02:38:26.439562Z,WARNING,Connection pool near capacity: 70%,auth-service,staging,server-6,user_5957
+2026-01-02T02:39:24.039562Z,WARNING,High memory usage detected: 85%,api-gateway,production,server-3,user_1655
+2026-01-02T02:40:21.639562Z,WARNING,Deprecated API endpoint called: /api/v1/orders,payment-service,development,server-7,user_2629
+2026-01-02T02:41:19.239562Z,ERROR,Authentication failed for user user_1726,database-service,staging,server-4,user_8299
+2026-01-02T02:42:16.839562Z,WARNING,High memory usage detected: 93%,auth-service,development,server-3,user_9041
+2026-01-02T02:43:14.439562Z,WARNING,Slow query detected: 2769ms,auth-service,development,server-3,user_3294
+2026-01-02T02:44:12.039562Z,ERROR,Authentication failed for user user_6735,api-gateway,production,server-7,user_8777
+2026-01-02T02:45:09.639562Z,WARNING,High memory usage detected: 87%,auth-service,staging,server-6,user_5589
+2026-01-02T02:46:07.239562Z,WARNING,Slow query detected: 4045ms,auth-service,development,server-2,user_7387
+2026-01-02T02:47:04.839562Z,WARNING,Deprecated API endpoint called: /api/v1/users,database-service,development,server-5,user_6920
+2026-01-02T02:48:02.439562Z,WARNING,Rate limit approaching for user user_2868,auth-service,staging,server-8,user_2397
+2026-01-02T02:49:00.039562Z,WARNING,Connection pool near capacity: 95%,auth-service,development,server-4,user_3274
+2026-01-02T02:49:57.639562Z,WARNING,Deprecated API endpoint called: /api/v1/orders,database-service,staging,server-4,user_3679
+2026-01-02T02:50:55.239562Z,WARNING,Slow query detected: 1441ms,database-service,production,server-5,user_5263
+2026-01-02T02:51:52.839562Z,ERROR,Authentication failed for user user_6968,notification-service,staging,server-7,user_5295
+2026-01-02T02:52:50.439562Z,ERROR,Failed to send notification: not found,payment-service,staging,server-10,user_1791
+2026-01-02T02:53:48.039562Z,WARNING,Connection pool near capacity: 86%,database-service,staging,server-6,user_2110
+2026-01-02T02:54:45.639562Z,WARNING,High memory usage detected: 88%,notification-service,production,server-8,user_3421
+2026-01-02T02:55:43.239562Z,WARNING,Connection pool near capacity: 91%,auth-service,production,server-10,user_4071
+2026-01-02T02:56:40.839562Z,WARNING,Connection pool near capacity: 91%,api-gateway,staging,server-9,user_7365
+2026-01-02T02:57:38.439562Z,WARNING,Rate limit approaching for user user_5171,payment-service,production,server-2,user_8743
+2026-01-02T02:58:36.039562Z,WARNING,High memory usage detected: 87%,payment-service,development,server-7,user_6561
+2026-01-02T02:59:33.639562Z,WARNING,Deprecated API endpoint called: /api/v1/products,database-service,staging,server-8,user_2902
+2026-01-02T03:00:31.239562Z,WARNING,Connection pool near capacity: 76%,auth-service,production,server-7,user_2536
+2026-01-02T03:01:28.839562Z,WARNING,Rate limit approaching for user user_1556,notification-service,production,server-10,user_6746
+2026-01-02T03:02:26.439562Z,WARNING,Rate limit approaching for user user_1494,auth-service,production,server-3,user_8787
+2026-01-02T03:03:24.039562Z,WARNING,High memory usage detected: 81%,user-service,production,server-4,user_4863
+2026-01-02T03:04:21.639562Z,ERROR,Database connection failed: not found,payment-service,staging,server-6,user_5505
+2026-01-02T03:05:19.239562Z,WARNING,Connection pool near capacity: 71%,payment-service,production,server-10,user_2558
+2026-01-02T03:06:16.839562Z,WARNING,Slow query detected: 3183ms,payment-service,development,server-4,user_6000
+2026-01-02T03:07:14.439562Z,WARNING,High memory usage detected: 85%,user-service,production,server-5,user_9540
+2026-01-02T03:08:12.039562Z,WARNING,Connection pool near capacity: 75%,api-gateway,development,server-3,user_9726
+2026-01-02T03:09:09.639562Z,ERROR,Database connection failed: timeout,api-gateway,development,server-6,user_5266
+2026-01-02T03:10:07.239562Z,WARNING,Deprecated API endpoint called: /api/v1/users,notification-service,staging,server-9,user_1617
+2026-01-02T03:11:04.839562Z,WARNING,High memory usage detected: 77%,api-gateway,development,server-9,user_6206
+2026-01-02T03:12:02.439562Z,WARNING,High memory usage detected: 72%,user-service,production,server-10,user_3030
+2026-01-02T03:13:00.039562Z,WARNING,Rate limit approaching for user user_4617,payment-service,staging,server-2,user_2318
+2026-01-02T03:13:57.639562Z,WARNING,Deprecated API endpoint called: /api/v1/products,auth-service,production,server-9,user_1908
+2026-01-02T03:14:55.239562Z,WARNING,High memory usage detected: 89%,api-gateway,development,server-6,user_7784
+2026-01-02T03:15:52.839562Z,WARNING,Connection pool near capacity: 78%,user-service,development,server-3,user_9639
+2026-01-02T03:16:50.439562Z,WARNING,Deprecated API endpoint called: /api/v1/orders,database-service,production,server-7,user_7733
+2026-01-02T03:17:48.039562Z,WARNING,Deprecated API endpoint called: /api/v1/products,payment-service,development,server-3,user_3045
+2026-01-02T03:18:45.639562Z,WARNING,Slow query detected: 1211ms,api-gateway,development,server-5,user_2356
+2026-01-02T03:19:43.239562Z,WARNING,Slow query detected: 3372ms,notification-service,development,server-4,user_5421
+2026-01-02T03:20:40.839562Z,ERROR,Failed to send notification: connection refused,database-service,staging,server-10,user_4295
+2026-01-02T03:21:38.439562Z,ERROR,Failed to send notification: not found,auth-service,staging,server-5,user_1805
+2026-01-02T03:22:36.039562Z,WARNING,Slow query detected: 3475ms,notification-service,staging,server-8,user_4238
+2026-01-02T03:23:33.639562Z,WARNING,Deprecated API endpoint called: /api/v1/orders,api-gateway,production,server-2,user_7748
+2026-01-02T03:24:31.239562Z,ERROR,API request timeout: /api/v1/orders,notification-service,staging,server-7,user_9603
+2026-01-02T03:25:28.839562Z,WARNING,Deprecated API endpoint called: /api/v1/users,payment-service,development,server-3,user_2591
+2026-01-02T03:26:26.439562Z,WARNING,Slow query detected: 326ms,database-service,staging,server-3,user_4437
+2026-01-02T03:27:24.039562Z,WARNING,Connection pool near capacity: 84%,api-gateway,staging,server-9,user_8242
+2026-01-02T03:28:21.639562Z,WARNING,Deprecated API endpoint called: /api/v1/users,auth-service,development,server-4,user_7192
+2026-01-02T03:29:19.239562Z,WARNING,Rate limit approaching for user user_2217,payment-service,staging,server-9,user_6371
+2026-01-02T03:30:16.839562Z,WARNING,Rate limit approaching for user user_1114,payment-service,staging,server-9,user_2145
+2026-01-02T03:31:14.439562Z,ERROR,Failed to send notification: timeout,user-service,staging,server-4,user_3296
+2026-01-02T03:32:12.039562Z,WARNING,Slow query detected: 2213ms,user-service,production,server-3,user_9601
+2026-01-02T03:33:09.639562Z,WARNING,High memory usage detected: 82%,api-gateway,production,server-6,user_2209
+2026-01-02T03:34:07.239562Z,WARNING,Deprecated API endpoint called: /api/v1/orders,user-service,production,server-7,user_1926
+2026-01-02T03:35:04.839562Z,WARNING,Connection pool near capacity: 82%,notification-service,staging,server-3,user_3426
+2026-01-02T03:36:02.439562Z,WARNING,Connection pool near capacity: 86%,database-service,production,server-7,user_9179
+2026-01-02T03:37:00.039562Z,WARNING,Deprecated API endpoint called: /api/v1/orders,api-gateway,production,server-9,user_2862
+2026-01-02T03:37:57.639562Z,WARNING,Connection pool near capacity: 86%,database-service,production,server-10,user_2330
+2026-01-02T03:38:55.239562Z,WARNING,High memory usage detected: 95%,payment-service,development,server-1,user_1847
+2026-01-02T03:39:52.839562Z,WARNING,High memory usage detected: 92%,api-gateway,development,server-3,user_1041
+2026-01-02T03:40:50.439562Z,WARNING,Rate limit approaching for user user_7405,payment-service,development,server-6,user_6991
+2026-01-02T03:41:48.039562Z,ERROR,Failed to process payment: not found,notification-service,production,server-3,user_5090
+2026-01-02T03:42:45.639562Z,WARNING,Rate limit approaching for user user_2517,payment-service,production,server-4,user_9107
+2026-01-02T03:43:43.239562Z,WARNING,Rate limit approaching for user user_5141,database-service,staging,server-6,user_5038
+2026-01-02T03:44:40.839562Z,WARNING,Deprecated API endpoint called: /api/v1/users,auth-service,staging,server-5,user_6140
+2026-01-02T03:45:38.439562Z,ERROR,Failed to process payment: connection refused,user-service,production,server-9,user_9912
+2026-01-02T03:46:36.039562Z,WARNING,Deprecated API endpoint called: /api/v1/orders,api-gateway,staging,server-2,user_6899
+2026-01-02T03:47:33.639562Z,WARNING,Connection pool near capacity: 84%,payment-service,development,server-10,user_4012
+2026-01-02T03:48:31.239562Z,WARNING,Rate limit approaching for user user_8858,payment-service,staging,server-2,user_3227
+2026-01-02T03:49:28.839562Z,WARNING,Deprecated API endpoint called: /api/v1/products,notification-service,development,server-8,user_3761
+2026-01-02T03:50:26.439562Z,WARNING,Deprecated API endpoint called: /api/v1/products,user-service,staging,server-4,user_8699
+2026-01-02T03:51:24.039562Z,WARNING,Deprecated API endpoint called: /api/v1/orders,payment-service,production,server-5,user_9701
+2026-01-02T03:52:21.639562Z,WARNING,Deprecated API endpoint called: /api/v1/orders,user-service,staging,server-6,user_7181
+2026-01-02T03:53:19.239562Z,WARNING,High memory usage detected: 86%,api-gateway,development,server-8,user_3914
+2026-01-02T03:54:16.839562Z,WARNING,Connection pool near capacity: 74%,api-gateway,production,server-3,user_9136
+2026-01-02T03:55:14.439562Z,WARNING,Slow query detected: 3584ms,payment-service,production,server-7,user_8979
+2026-01-02T03:56:12.039562Z,WARNING,High memory usage detected: 85%,auth-service,staging,server-2,user_4583
+2026-01-02T03:57:09.639562Z,WARNING,High memory usage detected: 88%,database-service,staging,server-6,user_5484
+2026-01-02T03:58:07.239562Z,WARNING,Slow query detected: 913ms,database-service,production,server-9,user_7719
+2026-01-02T03:59:04.839562Z,WARNING,Deprecated API endpoint called: /api/v1/orders,payment-service,production,server-9,user_5567
+2026-01-02T04:00:02.439562Z,WARNING,Rate limit approaching for user user_2641,api-gateway,development,server-9,user_3079
+2026-01-02T04:01:00.039562Z,WARNING,Slow query detected: 2922ms,database-service,production,server-3,user_5773
+2026-01-02T04:01:57.639562Z,WARNING,Connection pool near capacity: 90%,database-service,production,server-6,user_8891
+2026-01-02T04:02:55.239562Z,WARNING,Deprecated API endpoint called: /api/v1/products,auth-service,production,server-4,user_1439
+2026-01-02T04:03:52.839562Z,WARNING,Deprecated API endpoint called: /api/v1/orders,database-service,staging,server-4,user_2923
+2026-01-02T04:04:50.439562Z,WARNING,Connection pool near capacity: 89%,payment-service,production,server-4,user_1834
+2026-01-02T04:05:48.039562Z,WARNING,Rate limit approaching for user user_1136,payment-service,staging,server-2,user_9325
+2026-01-02T04:06:45.639562Z,WARNING,Deprecated API endpoint called: /api/v1/products,payment-service,development,server-1,user_9538
+2026-01-02T04:07:43.239562Z,ERROR,Failed to send notification: invalid credentials,api-gateway,development,server-3,user_4578
+2026-01-02T04:08:40.839562Z,WARNING,Rate limit approaching for user user_4917,auth-service,staging,server-7,user_2173
+2026-01-02T04:09:38.439562Z,WARNING,Deprecated API endpoint called: /api/v1/orders,payment-service,production,server-10,user_3091
+2026-01-02T04:10:36.039562Z,WARNING,High memory usage detected: 87%,payment-service,development,server-2,user_9070
+2026-01-02T04:11:33.639562Z,WARNING,High memory usage detected: 73%,notification-service,development,server-1,user_3148
+2026-01-02T04:12:31.239562Z,WARNING,Deprecated API endpoint called: /api/v1/products,user-service,staging,server-8,user_2718
+2026-01-02T04:13:28.839562Z,WARNING,Connection pool near capacity: 78%,user-service,staging,server-8,user_6581
+2026-01-02T04:14:26.439562Z,WARNING,Connection pool near capacity: 95%,auth-service,staging,server-4,user_5239
+2026-01-02T04:15:24.039562Z,WARNING,Deprecated API endpoint called: /api/v1/products,auth-service,staging,server-6,user_9829
+2026-01-02T04:16:21.639562Z,WARNING,Rate limit approaching for user user_4589,database-service,development,server-2,user_9731
+2026-01-02T04:17:19.239562Z,WARNING,Deprecated API endpoint called: /api/v1/orders,user-service,development,server-10,user_4982
+2026-01-02T04:18:16.839562Z,WARNING,Deprecated API endpoint called: /api/v1/users,notification-service,production,server-5,user_4003
+2026-01-02T04:19:14.439562Z,WARNING,Rate limit approaching for user user_4229,user-service,staging,server-5,user_1827
+2026-01-02T04:20:12.039562Z,WARNING,Rate limit approaching for user user_2693,notification-service,development,server-1,user_9995
+2026-01-02T04:21:09.639562Z,WARNING,Deprecated API endpoint called: /api/v1/users,api-gateway,development,server-10,user_7135
+2026-01-02T04:22:07.239562Z,ERROR,Authentication failed for user user_3328,notification-service,development,server-1,user_6914
+2026-01-02T04:23:04.839562Z,WARNING,Rate limit approaching for user user_8226,payment-service,production,server-8,user_9918
+2026-01-02T04:24:02.439562Z,WARNING,Slow query detected: 341ms,payment-service,staging,server-4,user_6778
+2026-01-02T04:25:00.039562Z,WARNING,Deprecated API endpoint called: /api/v1/users,api-gateway,development,server-1,user_8255
+2026-01-02T04:25:57.639562Z,WARNING,Deprecated API endpoint called: /api/v1/users,payment-service,development,server-10,user_7657
+2026-01-02T04:26:55.239562Z,WARNING,Slow query detected: 3682ms,api-gateway,staging,server-7,user_9283
+2026-01-02T04:27:52.839562Z,WARNING,Connection pool near capacity: 93%,payment-service,production,server-2,user_5119
+2026-01-02T04:28:50.439562Z,WARNING,Rate limit approaching for user user_3730,api-gateway,production,server-4,user_1429
+2026-01-02T04:29:48.039562Z,WARNING,Deprecated API endpoint called: /api/v1/orders,user-service,production,server-4,user_7439
+2026-01-02T04:30:45.639562Z,WARNING,Rate limit approaching for user user_7696,api-gateway,development,server-3,user_7469
+2026-01-02T04:31:43.239562Z,WARNING,Connection pool near capacity: 79%,user-service,staging,server-2,user_4801
+2026-01-02T04:32:40.839562Z,WARNING,Connection pool near capacity: 75%,database-service,development,server-9,user_9399
+2026-01-02T04:33:38.439562Z,WARNING,Slow query detected: 1506ms,database-service,staging,server-3,user_3856
+2026-01-02T04:34:36.039562Z,ERROR,Authentication failed for user user_9445,user-service,development,server-4,user_5542
+2026-01-02T04:35:33.639562Z,ERROR,Failed to send notification: timeout,notification-service,staging,server-7,user_6639
+2026-01-02T04:36:31.239562Z,WARNING,Connection pool near capacity: 89%,notification-service,production,server-9,user_3163
+2026-01-02T04:37:28.839562Z,WARNING,Connection pool near capacity: 70%,notification-service,development,server-6,user_1711
+2026-01-02T04:38:26.439562Z,WARNING,Connection pool near capacity: 78%,notification-service,development,server-2,user_8213
+2026-01-02T04:39:24.039562Z,WARNING,Deprecated API endpoint called: /api/v1/products,auth-service,development,server-4,user_5890
+2026-01-02T04:40:21.639562Z,WARNING,Deprecated API endpoint called: /api/v1/orders,user-service,staging,server-4,user_3046
+2026-01-02T04:41:19.239562Z,WARNING,Rate limit approaching for user user_8418,api-gateway,development,server-10,user_1653
+2026-01-02T04:42:16.839562Z,WARNING,Rate limit approaching for user user_9674,notification-service,development,server-6,user_3568
+2026-01-02T04:43:14.439562Z,WARNING,High memory usage detected: 95%,payment-service,development,server-2,user_4304
+2026-01-02T04:44:12.039562Z,WARNING,Slow query detected: 1193ms,payment-service,production,server-9,user_4457
+2026-01-02T04:45:09.639562Z,WARNING,Connection pool near capacity: 75%,database-service,production,server-4,user_4441
+2026-01-02T04:46:07.239562Z,WARNING,Connection pool near capacity: 81%,payment-service,development,server-1,user_8824
+2026-01-02T04:47:04.839562Z,WARNING,Slow query detected: 1615ms,user-service,staging,server-4,user_2897
+2026-01-02T04:48:02.439562Z,WARNING,Rate limit approaching for user user_5444,user-service,production,server-1,user_1764
+2026-01-02T04:49:00.039562Z,WARNING,Rate limit approaching for user user_7874,payment-service,production,server-10,user_9695
+2026-01-02T04:49:57.639562Z,WARNING,High memory usage detected: 77%,user-service,development,server-8,user_8172
+2026-01-02T04:50:55.239562Z,WARNING,Slow query detected: 2523ms,payment-service,development,server-10,user_7510
+2026-01-02T04:51:52.839562Z,WARNING,High memory usage detected: 83%,notification-service,staging,server-5,user_3343
+2026-01-02T04:52:50.439562Z,WARNING,Slow query detected: 2779ms,payment-service,production,server-3,user_3730
+2026-01-02T04:53:48.039562Z,ERROR,Database connection failed: timeout,payment-service,development,server-9,user_5172
+2026-01-02T04:54:45.639562Z,WARNING,High memory usage detected: 72%,payment-service,production,server-9,user_1154
+2026-01-02T04:55:43.239562Z,WARNING,Connection pool near capacity: 92%,api-gateway,production,server-6,user_2556
+2026-01-02T04:56:40.839562Z,WARNING,Rate limit approaching for user user_7895,notification-service,staging,server-9,user_6964
+2026-01-02T04:57:38.439562Z,ERROR,Authentication failed for user user_5756,database-service,staging,server-4,user_9733
+2026-01-02T04:58:36.039562Z,WARNING,High memory usage detected: 83%,api-gateway,staging,server-2,user_5733
+2026-01-02T04:59:33.639562Z,WARNING,Slow query detected: 1332ms,notification-service,production,server-6,user_3945
+2026-01-02T05:00:31.239562Z,WARNING,Slow query detected: 1097ms,api-gateway,development,server-7,user_1253
+2026-01-02T05:01:28.839562Z,WARNING,High memory usage detected: 81%,database-service,staging,server-9,user_6228
+2026-01-02T05:02:26.439562Z,WARNING,Rate limit approaching for user user_6265,user-service,production,server-5,user_2107
+2026-01-02T05:03:24.039562Z,WARNING,Rate limit approaching for user user_6253,notification-service,development,server-8,user_2051
+2026-01-02T05:04:21.639562Z,WARNING,Connection pool near capacity: 73%,user-service,staging,server-6,user_5443
+2026-01-02T05:05:19.239562Z,WARNING,Slow query detected: 2490ms,auth-service,staging,server-8,user_4046
+2026-01-02T05:06:16.839562Z,WARNING,Rate limit approaching for user user_6215,auth-service,production,server-3,user_6210
+2026-01-02T05:07:14.439562Z,WARNING,Slow query detected: 1192ms,payment-service,development,server-4,user_3298
+2026-01-02T05:08:12.039562Z,ERROR,Authentication failed for user user_2947,notification-service,development,server-7,user_1547
+2026-01-02T05:09:09.639562Z,WARNING,Deprecated API endpoint called: /api/v1/orders,api-gateway,staging,server-7,user_7183
+2026-01-02T05:10:07.239562Z,WARNING,Slow query detected: 509ms,notification-service,production,server-8,user_3512
+2026-01-02T05:11:04.839562Z,WARNING,Connection pool near capacity: 71%,auth-service,production,server-1,user_5797
+2026-01-02T05:12:02.439562Z,WARNING,High memory usage detected: 81%,database-service,production,server-6,user_2876
+2026-01-02T05:13:00.039562Z,WARNING,Slow query detected: 3373ms,user-service,production,server-6,user_5231
+2026-01-02T05:13:57.639562Z,WARNING,Slow query detected: 3038ms,notification-service,staging,server-9,user_6980
+2026-01-02T05:14:55.239562Z,WARNING,Connection pool near capacity: 74%,notification-service,production,server-7,user_5384
+2026-01-02T05:15:52.839562Z,WARNING,Rate limit approaching for user user_1060,auth-service,staging,server-9,user_4261
+2026-01-02T05:16:50.439562Z,WARNING,Rate limit approaching for user user_8465,user-service,staging,server-7,user_4282
+2026-01-02T05:17:48.039562Z,WARNING,Rate limit approaching for user user_6993,database-service,production,server-10,user_8332
+2026-01-02T05:18:45.639562Z,WARNING,High memory usage detected: 88%,user-service,development,server-5,user_8639
+2026-01-02T05:19:43.239562Z,WARNING,High memory usage detected: 83%,database-service,development,server-3,user_3368
+2026-01-02T05:20:40.839562Z,WARNING,Rate limit approaching for user user_8199,notification-service,staging,server-5,user_8645
+2026-01-02T05:21:38.439562Z,WARNING,Rate limit approaching for user user_7788,api-gateway,staging,server-3,user_1401
+2026-01-02T05:22:36.039562Z,WARNING,High memory usage detected: 89%,api-gateway,development,server-8,user_2595
+2026-01-02T05:23:33.639562Z,WARNING,Deprecated API endpoint called: /api/v1/products,auth-service,development,server-1,user_9572
+2026-01-02T05:24:31.239562Z,WARNING,High memory usage detected: 87%,notification-service,development,server-6,user_7502
+2026-01-02T05:25:28.839562Z,WARNING,Connection pool near capacity: 87%,payment-service,production,server-7,user_3734
+2026-01-02T05:26:26.439562Z,ERROR,Failed to process payment: timeout,payment-service,production,server-7,user_3193
+2026-01-02T05:27:24.039562Z,ERROR,Database connection failed: timeout,auth-service,production,server-4,user_9191
+2026-01-02T05:28:21.639562Z,WARNING,Rate limit approaching for user user_8047,auth-service,staging,server-6,user_6121
+2026-01-02T05:29:19.239562Z,ERROR,Failed to send notification: not found,database-service,production,server-9,user_6839
+2026-01-02T05:30:16.839562Z,WARNING,High memory usage detected: 76%,auth-service,production,server-4,user_2972
+2026-01-02T05:31:14.439562Z,WARNING,Connection pool near capacity: 90%,user-service,staging,server-8,user_9189
+2026-01-02T05:32:12.039562Z,WARNING,High memory usage detected: 85%,database-service,staging,server-9,user_9272
+2026-01-02T05:33:09.639562Z,WARNING,Rate limit approaching for user user_3535,api-gateway,production,server-7,user_1632
+2026-01-02T05:34:07.239562Z,WARNING,Deprecated API endpoint called: /api/v1/products,database-service,production,server-5,user_9873
+2026-01-02T05:35:04.839562Z,WARNING,Deprecated API endpoint called: /api/v1/products,notification-service,staging,server-10,user_1874
+2026-01-02T05:36:02.439562Z,WARNING,High memory usage detected: 78%,api-gateway,staging,server-7,user_1922
+2026-01-02T05:37:00.039562Z,WARNING,Deprecated API endpoint called: /api/v1/orders,database-service,production,server-9,user_5475
+2026-01-02T05:37:57.639562Z,WARNING,Slow query detected: 220ms,notification-service,development,server-9,user_3530
+2026-01-02T05:38:55.239562Z,WARNING,Deprecated API endpoint called: /api/v1/products,payment-service,development,server-7,user_1894
+2026-01-02T05:39:52.839562Z,WARNING,Rate limit approaching for user user_7868,user-service,development,server-8,user_2590
+2026-01-02T05:40:50.439562Z,WARNING,Slow query detected: 4283ms,payment-service,staging,server-10,user_2738
+2026-01-02T05:41:48.039562Z,WARNING,Rate limit approaching for user user_9392,payment-service,production,server-3,user_6598
+2026-01-02T05:42:45.639562Z,WARNING,High memory usage detected: 83%,api-gateway,development,server-8,user_2034
+2026-01-02T05:43:43.239562Z,WARNING,Rate limit approaching for user user_1513,api-gateway,development,server-4,user_8705
+2026-01-02T05:44:40.839562Z,WARNING,Slow query detected: 4722ms,auth-service,staging,server-7,user_6141
+2026-01-02T05:45:38.439562Z,WARNING,Deprecated API endpoint called: /api/v1/users,database-service,development,server-4,user_6453
+2026-01-02T05:46:36.039562Z,WARNING,Slow query detected: 804ms,auth-service,staging,server-9,user_1322
+2026-01-02T05:47:33.639562Z,WARNING,High memory usage detected: 94%,notification-service,development,server-8,user_2225
+2026-01-02T05:48:31.239562Z,WARNING,Deprecated API endpoint called: /api/v1/users,user-service,production,server-9,user_8437
+2026-01-02T05:49:28.839562Z,WARNING,Deprecated API endpoint called: /api/v1/products,notification-service,staging,server-10,user_1377
+2026-01-02T05:50:26.439562Z,WARNING,High memory usage detected: 71%,database-service,staging,server-2,user_1868
+2026-01-02T05:51:24.039562Z,WARNING,Slow query detected: 1509ms,user-service,development,server-4,user_8812
+2026-01-02T05:52:21.639562Z,WARNING,Rate limit approaching for user user_5546,user-service,staging,server-10,user_2269
+2026-01-02T05:53:19.239562Z,WARNING,Slow query detected: 1179ms,auth-service,staging,server-3,user_5298
+2026-01-02T05:54:16.839562Z,WARNING,High memory usage detected: 72%,notification-service,staging,server-6,user_1591
+2026-01-02T05:55:14.439562Z,WARNING,Rate limit approaching for user user_1474,database-service,staging,server-1,user_9830
+2026-01-02T05:56:12.039562Z,WARNING,Rate limit approaching for user user_1788,notification-service,production,server-9,user_2289
+2026-01-02T05:57:09.639562Z,WARNING,High memory usage detected: 89%,user-service,production,server-9,user_4267
+2026-01-02T05:58:07.239562Z,WARNING,Slow query detected: 2265ms,auth-service,development,server-7,user_6641
+2026-01-02T05:59:04.839562Z,WARNING,Slow query detected: 1373ms,api-gateway,production,server-6,user_5101
+2026-01-02T06:00:02.439562Z,WARNING,Rate limit approaching for user user_7576,user-service,production,server-4,user_7150
+2026-01-02T06:01:00.039562Z,WARNING,Rate limit approaching for user user_1529,auth-service,development,server-10,user_1904
+2026-01-02T06:01:57.639562Z,WARNING,Deprecated API endpoint called: /api/v1/users,database-service,development,server-10,user_5481
+2026-01-02T06:02:55.239562Z,WARNING,Slow query detected: 3145ms,database-service,development,server-10,user_2040
+2026-01-02T06:03:52.839562Z,WARNING,Slow query detected: 1493ms,auth-service,development,server-2,user_1114
+2026-01-02T06:04:50.439562Z,WARNING,Rate limit approaching for user user_5828,api-gateway,production,server-9,user_5778
+2026-01-02T06:05:48.039562Z,WARNING,Rate limit approaching for user user_9392,auth-service,development,server-9,user_2657
+2026-01-02T06:06:45.639562Z,WARNING,High memory usage detected: 76%,notification-service,staging,server-1,user_2476
+2026-01-02T06:07:43.239562Z,WARNING,Deprecated API endpoint called: /api/v1/products,auth-service,development,server-5,user_5042
+2026-01-02T06:08:40.839562Z,WARNING,Connection pool near capacity: 83%,payment-service,development,server-2,user_5049
+2026-01-02T06:09:38.439562Z,WARNING,High memory usage detected: 81%,database-service,production,server-4,user_6920
+2026-01-02T06:10:36.039562Z,WARNING,Slow query detected: 591ms,user-service,staging,server-6,user_2071
+2026-01-02T06:11:33.639562Z,WARNING,High memory usage detected: 79%,user-service,staging,server-4,user_4552
+2026-01-02T06:12:31.239562Z,WARNING,Slow query detected: 2860ms,user-service,staging,server-9,user_4702
+2026-01-02T06:13:28.839562Z,WARNING,Slow query detected: 510ms,auth-service,production,server-10,user_8309
+2026-01-02T06:14:26.439562Z,WARNING,Deprecated API endpoint called: /api/v1/orders,auth-service,staging,server-7,user_8206
+2026-01-02T06:15:24.039562Z,WARNING,High memory usage detected: 82%,user-service,production,server-9,user_2991
+2026-01-02T06:16:21.639562Z,WARNING,High memory usage detected: 88%,payment-service,development,server-9,user_9797
+2026-01-02T06:17:19.239562Z,WARNING,Rate limit approaching for user user_2409,user-service,development,server-10,user_8208
+2026-01-02T06:18:16.839562Z,WARNING,Slow query detected: 1038ms,database-service,development,server-7,user_6658
+2026-01-02T06:19:14.439562Z,WARNING,Connection pool near capacity: 81%,database-service,production,server-1,user_2784
+2026-01-02T06:20:12.039562Z,WARNING,Deprecated API endpoint called: /api/v1/orders,database-service,production,server-1,user_4927
+2026-01-02T06:21:09.639562Z,WARNING,Connection pool near capacity: 70%,payment-service,development,server-2,user_8612
+2026-01-02T06:22:07.239562Z,WARNING,Rate limit approaching for user user_4524,user-service,staging,server-3,user_7860
+2026-01-02T06:23:04.839562Z,ERROR,Authentication failed for user user_5866,auth-service,production,server-8,user_9511
+2026-01-02T06:24:02.439562Z,WARNING,High memory usage detected: 90%,user-service,staging,server-2,user_6754
+2026-01-02T06:25:00.039562Z,WARNING,High memory usage detected: 88%,api-gateway,staging,server-9,user_6396
+2026-01-02T06:25:57.639562Z,WARNING,Deprecated API endpoint called: /api/v1/orders,notification-service,production,server-6,user_2792
+2026-01-02T06:26:55.239562Z,WARNING,Slow query detected: 3265ms,database-service,development,server-7,user_3763
+2026-01-02T06:27:52.839562Z,ERROR,Database connection failed: invalid credentials,notification-service,staging,server-10,user_4749
+2026-01-02T06:28:50.439562Z,WARNING,Slow query detected: 2802ms,auth-service,staging,server-6,user_1507
+2026-01-02T06:29:48.039562Z,WARNING,Connection pool near capacity: 73%,user-service,staging,server-8,user_1646
+2026-01-02T06:30:45.639562Z,WARNING,Slow query detected: 1025ms,notification-service,development,server-8,user_2347
+2026-01-02T06:31:43.239562Z,WARNING,Deprecated API endpoint called: /api/v1/products,user-service,staging,server-8,user_1761
+2026-01-02T06:32:40.839562Z,WARNING,Deprecated API endpoint called: /api/v1/orders,user-service,development,server-2,user_2501
+2026-01-02T06:33:38.439562Z,WARNING,High memory usage detected: 75%,database-service,production,server-4,user_8901
+2026-01-02T06:34:36.039562Z,WARNING,High memory usage detected: 83%,payment-service,staging,server-9,user_1548
+2026-01-02T06:35:33.639562Z,WARNING,Rate limit approaching for user user_6443,user-service,development,server-7,user_7943
+2026-01-02T06:36:31.239562Z,ERROR,Database connection failed: invalid credentials,api-gateway,production,server-9,user_5793
+2026-01-02T06:37:28.839562Z,WARNING,Rate limit approaching for user user_7688,database-service,staging,server-10,user_4833
+2026-01-02T06:38:26.439562Z,WARNING,High memory usage detected: 94%,user-service,production,server-10,user_8643
+2026-01-02T06:39:24.039562Z,WARNING,Rate limit approaching for user user_3588,auth-service,development,server-10,user_1122
+2026-01-02T06:40:21.639562Z,WARNING,High memory usage detected: 81%,api-gateway,development,server-2,user_2241
+2026-01-02T06:41:19.239562Z,WARNING,Slow query detected: 1487ms,payment-service,development,server-7,user_6891
+2026-01-02T06:42:16.839562Z,WARNING,Rate limit approaching for user user_1644,auth-service,staging,server-1,user_4895
+2026-01-02T06:43:14.439562Z,WARNING,Rate limit approaching for user user_5074,auth-service,staging,server-2,user_3468
+2026-01-02T06:44:12.039562Z,WARNING,Deprecated API endpoint called: /api/v1/products,database-service,staging,server-3,user_2936
+2026-01-02T06:45:09.639562Z,WARNING,Rate limit approaching for user user_5997,auth-service,production,server-5,user_4493
+2026-01-02T06:46:07.239562Z,WARNING,Rate limit approaching for user user_1819,api-gateway,development,server-3,user_3062
+2026-01-02T06:47:04.839562Z,WARNING,Deprecated API endpoint called: /api/v1/products,user-service,production,server-5,user_7115
+2026-01-02T06:48:02.439562Z,WARNING,High memory usage detected: 81%,user-service,development,server-3,user_9740
+2026-01-02T06:49:00.039562Z,WARNING,Rate limit approaching for user user_4810,auth-service,development,server-5,user_1151
+2026-01-02T06:49:57.639562Z,ERROR,Failed to process payment: timeout,user-service,production,server-5,user_8522
+2026-01-02T06:50:55.239562Z,WARNING,Deprecated API endpoint called: /api/v1/users,api-gateway,production,server-10,user_8512
+2026-01-02T06:51:52.839562Z,WARNING,Rate limit approaching for user user_9954,api-gateway,development,server-10,user_2947
+2026-01-02T06:52:50.439562Z,ERROR,Failed to send notification: timeout,notification-service,production,server-4,user_2064
+2026-01-02T06:53:48.039562Z,WARNING,Slow query detected: 3571ms,user-service,production,server-5,user_9770
+2026-01-02T06:54:45.639562Z,WARNING,Slow query detected: 4115ms,database-service,production,server-7,user_3026
+2026-01-02T06:55:43.239562Z,WARNING,Slow query detected: 3644ms,auth-service,production,server-5,user_1991
+2026-01-02T06:56:40.839562Z,WARNING,Connection pool near capacity: 95%,payment-service,development,server-2,user_1226
+2026-01-02T06:57:38.439562Z,WARNING,Deprecated API endpoint called: /api/v1/users,user-service,staging,server-6,user_1234
+2026-01-02T06:58:36.039562Z,WARNING,Connection pool near capacity: 81%,database-service,production,server-8,user_8874
+2026-01-02T06:59:33.639562Z,WARNING,Rate limit approaching for user user_8875,database-service,staging,server-9,user_5271
+2026-01-02T07:00:31.239562Z,WARNING,Slow query detected: 2972ms,auth-service,development,server-7,user_6011
+2026-01-02T07:01:28.839562Z,WARNING,Slow query detected: 4020ms,notification-service,development,server-4,user_3292
+2026-01-02T07:02:26.439562Z,ERROR,API request timeout: /api/v1/users,notification-service,production,server-3,user_8955
+2026-01-02T07:03:24.039562Z,WARNING,Deprecated API endpoint called: /api/v1/products,notification-service,development,server-7,user_3364
+2026-01-02T07:04:21.639562Z,WARNING,Slow query detected: 2474ms,user-service,development,server-9,user_1415
+2026-01-02T07:05:19.239562Z,WARNING,High memory usage detected: 82%,api-gateway,development,server-9,user_8366
+2026-01-02T07:06:16.839562Z,WARNING,Rate limit approaching for user user_9189,user-service,development,server-2,user_5709
+2026-01-02T07:07:14.439562Z,WARNING,Deprecated API endpoint called: /api/v1/orders,database-service,production,server-7,user_7634
+2026-01-02T07:08:12.039562Z,WARNING,Deprecated API endpoint called: /api/v1/orders,database-service,production,server-3,user_9367
+2026-01-02T07:09:09.639562Z,WARNING,Deprecated API endpoint called: /api/v1/products,notification-service,development,server-4,user_3680
+2026-01-02T07:10:07.239562Z,WARNING,Slow query detected: 1999ms,payment-service,development,server-3,user_7772
+2026-01-02T07:11:04.839562Z,WARNING,Rate limit approaching for user user_6126,database-service,production,server-10,user_3852
+2026-01-02T07:12:02.439562Z,WARNING,Connection pool near capacity: 79%,payment-service,production,server-10,user_8285
+2026-01-02T07:13:00.039562Z,WARNING,Connection pool near capacity: 77%,payment-service,staging,server-4,user_4095
+2026-01-02T07:13:57.639562Z,WARNING,Slow query detected: 4871ms,payment-service,production,server-7,user_3739
+2026-01-02T07:14:55.239562Z,WARNING,Deprecated API endpoint called: /api/v1/users,notification-service,staging,server-6,user_1709
+2026-01-02T07:15:52.839562Z,WARNING,Slow query detected: 4332ms,database-service,staging,server-10,user_1766
+2026-01-02T07:16:50.439562Z,WARNING,High memory usage detected: 85%,auth-service,staging,server-7,user_8389
+2026-01-02T07:17:48.039562Z,WARNING,High memory usage detected: 90%,database-service,staging,server-6,user_6563
+2026-01-02T07:18:45.639562Z,WARNING,Deprecated API endpoint called: /api/v1/orders,user-service,production,server-2,user_9747
+2026-01-02T07:19:43.239562Z,WARNING,High memory usage detected: 85%,database-service,staging,server-3,user_9783
+2026-01-02T07:20:40.839562Z,WARNING,High memory usage detected: 94%,api-gateway,development,server-10,user_1084
+2026-01-02T07:21:38.439562Z,WARNING,Slow query detected: 3855ms,notification-service,development,server-3,user_9345
+2026-01-02T07:22:36.039562Z,WARNING,High memory usage detected: 71%,database-service,staging,server-3,user_8447
+2026-01-02T07:23:33.639562Z,WARNING,High memory usage detected: 75%,database-service,staging,server-6,user_3344
+2026-01-02T07:24:31.239562Z,WARNING,Rate limit approaching for user user_8675,payment-service,staging,server-8,user_4380
+2026-01-02T07:25:28.839562Z,WARNING,Slow query detected: 3587ms,notification-service,development,server-10,user_3969
+2026-01-02T07:26:26.439562Z,WARNING,High memory usage detected: 89%,user-service,development,server-10,user_3640
+2026-01-02T07:27:24.039562Z,WARNING,Rate limit approaching for user user_9368,notification-service,staging,server-9,user_1331
+2026-01-02T07:28:21.639562Z,WARNING,Rate limit approaching for user user_3198,notification-service,development,server-10,user_5608
+2026-01-02T07:29:19.239562Z,WARNING,Deprecated API endpoint called: /api/v1/products,payment-service,production,server-3,user_8169
+2026-01-02T07:30:16.839562Z,WARNING,Deprecated API endpoint called: /api/v1/orders,user-service,production,server-4,user_8111
+2026-01-02T07:31:14.439562Z,WARNING,High memory usage detected: 91%,api-gateway,production,server-2,user_7146
+2026-01-02T07:32:12.039562Z,WARNING,Slow query detected: 4487ms,database-service,development,server-4,user_7276
+2026-01-02T07:33:09.639562Z,WARNING,Slow query detected: 1833ms,user-service,development,server-10,user_5201
+2026-01-02T07:34:07.239562Z,WARNING,High memory usage detected: 73%,notification-service,development,server-10,user_9156
+2026-01-02T07:35:04.839562Z,ERROR,Failed to send notification: not found,api-gateway,development,server-8,user_2278
+2026-01-02T07:36:02.439562Z,WARNING,Rate limit approaching for user user_1684,api-gateway,staging,server-2,user_6589
+2026-01-02T07:37:00.039562Z,WARNING,Connection pool near capacity: 88%,user-service,development,server-4,user_3678
+2026-01-02T07:37:57.639562Z,WARNING,Connection pool near capacity: 78%,database-service,staging,server-2,user_4237
+2026-01-02T07:38:55.239562Z,WARNING,Deprecated API endpoint called: /api/v1/products,notification-service,production,server-1,user_9453
+2026-01-02T07:39:52.839562Z,WARNING,High memory usage detected: 87%,payment-service,production,server-5,user_6620
+2026-01-02T07:40:50.439562Z,WARNING,Slow query detected: 2643ms,notification-service,staging,server-3,user_7231
+2026-01-02T07:41:48.039562Z,WARNING,Deprecated API endpoint called: /api/v1/orders,payment-service,production,server-10,user_7655
+2026-01-02T07:42:45.639562Z,WARNING,Deprecated API endpoint called: /api/v1/products,user-service,development,server-2,user_6937
+2026-01-02T07:43:43.239562Z,WARNING,Deprecated API endpoint called: /api/v1/products,auth-service,development,server-2,user_5127
+2026-01-02T07:44:40.839562Z,WARNING,Slow query detected: 4347ms,auth-service,production,server-8,user_8974
+2026-01-02T07:45:38.439562Z,WARNING,High memory usage detected: 70%,payment-service,development,server-2,user_5402
+2026-01-02T07:46:36.039562Z,WARNING,Rate limit approaching for user user_1861,payment-service,development,server-7,user_2356
+2026-01-02T07:47:33.639562Z,WARNING,Slow query detected: 4873ms,api-gateway,staging,server-9,user_1832
+2026-01-02T07:48:31.239562Z,ERROR,Failed to process payment: connection refused,payment-service,staging,server-3,user_5579
+2026-01-02T07:49:28.839562Z,WARNING,Connection pool near capacity: 73%,payment-service,production,server-6,user_6520
+2026-01-02T07:50:26.439562Z,WARNING,Connection pool near capacity: 78%,auth-service,staging,server-5,user_9973
+2026-01-02T07:51:24.039562Z,ERROR,Failed to process payment: not found,auth-service,development,server-2,user_3357
+2026-01-02T07:52:21.639562Z,WARNING,Connection pool near capacity: 78%,auth-service,production,server-9,user_4059
+2026-01-02T07:53:19.239562Z,ERROR,Authentication failed for user user_2858,auth-service,production,server-8,user_5791
+2026-01-02T07:54:16.839562Z,WARNING,Rate limit approaching for user user_5457,database-service,staging,server-1,user_5748
+2026-01-02T07:55:14.439562Z,WARNING,Connection pool near capacity: 88%,database-service,development,server-4,user_4426
+2026-01-02T07:56:12.039562Z,WARNING,Deprecated API endpoint called: /api/v1/users,auth-service,development,server-1,user_8956
+2026-01-02T07:57:09.639562Z,ERROR,Failed to send notification: invalid credentials,api-gateway,production,server-3,user_8043
+2026-01-02T07:58:07.239562Z,WARNING,Connection pool near capacity: 81%,user-service,development,server-2,user_8915
+2026-01-02T07:59:04.839562Z,WARNING,Rate limit approaching for user user_7587,auth-service,staging,server-9,user_1057
+2026-01-02T08:00:02.439562Z,WARNING,Slow query detected: 505ms,api-gateway,production,server-10,user_4814
+2026-01-02T08:01:00.039562Z,WARNING,High memory usage detected: 83%,user-service,development,server-3,user_7977
+2026-01-02T08:01:57.639562Z,WARNING,Slow query detected: 660ms,api-gateway,production,server-6,user_2474
+2026-01-02T08:02:55.239562Z,WARNING,Connection pool near capacity: 89%,payment-service,staging,server-6,user_1409
+2026-01-02T08:03:52.839562Z,WARNING,Deprecated API endpoint called: /api/v1/products,user-service,production,server-5,user_7743
+2026-01-02T08:04:50.439562Z,WARNING,Rate limit approaching for user user_9214,auth-service,production,server-8,user_2789
+2026-01-02T08:05:48.039562Z,WARNING,High memory usage detected: 82%,database-service,staging,server-10,user_6588
+2026-01-02T08:06:45.639562Z,WARNING,Rate limit approaching for user user_2146,auth-service,staging,server-10,user_3178
+2026-01-02T08:07:43.239562Z,WARNING,Rate limit approaching for user user_5518,auth-service,staging,server-3,user_9539
+2026-01-02T08:08:40.839562Z,WARNING,High memory usage detected: 94%,database-service,staging,server-3,user_4734
+2026-01-02T08:09:38.439562Z,WARNING,High memory usage detected: 70%,payment-service,development,server-8,user_9994
+2026-01-02T08:10:36.039562Z,WARNING,Deprecated API endpoint called: /api/v1/orders,payment-service,production,server-8,user_3553
+2026-01-02T08:11:33.639562Z,ERROR,API request timeout: /api/v1/products,payment-service,production,server-9,user_2115
+2026-01-02T08:12:31.239562Z,WARNING,Rate limit approaching for user user_7778,api-gateway,development,server-1,user_8940
+2026-01-02T08:13:28.839562Z,WARNING,High memory usage detected: 79%,auth-service,staging,server-9,user_6403
+2026-01-02T08:14:26.439562Z,WARNING,Slow query detected: 3579ms,api-gateway,development,server-8,user_1754
+2026-01-02T08:15:24.039562Z,WARNING,High memory usage detected: 82%,user-service,production,server-2,user_6244
+2026-01-02T08:16:21.639562Z,WARNING,Connection pool near capacity: 86%,notification-service,production,server-10,user_9374
+2026-01-02T08:17:19.239562Z,WARNING,Rate limit approaching for user user_2406,api-gateway,development,server-1,user_2291
+2026-01-02T08:18:16.839562Z,WARNING,High memory usage detected: 80%,database-service,development,server-3,user_3164
+2026-01-02T08:19:14.439562Z,WARNING,Connection pool near capacity: 76%,auth-service,staging,server-7,user_9855
+2026-01-02T08:20:12.039562Z,WARNING,Rate limit approaching for user user_1209,api-gateway,staging,server-9,user_6936
+2026-01-02T08:21:09.639562Z,ERROR,API request timeout: /api/v1/products,payment-service,staging,server-8,user_1759
+2026-01-02T08:22:07.239562Z,ERROR,Database connection failed: timeout,notification-service,production,server-9,user_8209
+2026-01-02T08:23:04.839562Z,WARNING,Rate limit approaching for user user_3064,api-gateway,production,server-1,user_6196
+2026-01-02T08:24:02.439562Z,WARNING,High memory usage detected: 89%,auth-service,production,server-2,user_7004
+2026-01-02T08:25:00.039562Z,WARNING,Rate limit approaching for user user_8982,user-service,staging,server-5,user_5008
+2026-01-02T08:25:57.639562Z,WARNING,High memory usage detected: 80%,user-service,development,server-3,user_4264
+2026-01-02T08:26:55.239562Z,WARNING,High memory usage detected: 77%,api-gateway,production,server-5,user_5961
+2026-01-02T08:27:52.839562Z,WARNING,Connection pool near capacity: 93%,user-service,development,server-3,user_6701
+2026-01-02T08:28:50.439562Z,WARNING,Rate limit approaching for user user_5786,api-gateway,production,server-9,user_4276
+2026-01-02T08:29:48.039562Z,WARNING,Slow query detected: 497ms,payment-service,development,server-4,user_5546
+2026-01-02T08:30:45.639562Z,WARNING,Rate limit approaching for user user_5003,auth-service,staging,server-5,user_6229
+2026-01-02T08:31:43.239562Z,WARNING,Connection pool near capacity: 88%,database-service,production,server-9,user_8107
+2026-01-02T08:32:40.839562Z,WARNING,Connection pool near capacity: 90%,api-gateway,development,server-5,user_1260
+2026-01-02T08:33:38.439562Z,WARNING,Connection pool near capacity: 76%,database-service,staging,server-3,user_2515
+2026-01-02T08:34:36.039562Z,WARNING,Deprecated API endpoint called: /api/v1/users,user-service,production,server-10,user_4239
+2026-01-02T08:35:33.639562Z,WARNING,Connection pool near capacity: 85%,auth-service,production,server-1,user_7570
+2026-01-02T08:36:31.239562Z,WARNING,High memory usage detected: 90%,user-service,development,server-7,user_1084
+2026-01-02T08:37:28.839562Z,WARNING,High memory usage detected: 92%,notification-service,development,server-4,user_2660
+2026-01-02T08:38:26.439562Z,WARNING,Slow query detected: 220ms,api-gateway,production,server-7,user_7706
+2026-01-02T08:39:24.039562Z,WARNING,Connection pool near capacity: 81%,user-service,production,server-5,user_4334
+2026-01-02T08:40:21.639562Z,WARNING,Connection pool near capacity: 70%,api-gateway,development,server-5,user_3913
+2026-01-02T08:41:19.239562Z,WARNING,High memory usage detected: 74%,database-service,production,server-5,user_4125
+2026-01-02T08:42:16.839562Z,WARNING,Connection pool near capacity: 83%,payment-service,staging,server-3,user_2392
+2026-01-02T08:43:14.439562Z,WARNING,Deprecated API endpoint called: /api/v1/users,payment-service,production,server-2,user_8919
+2026-01-02T08:44:12.039562Z,WARNING,Deprecated API endpoint called: /api/v1/products,auth-service,staging,server-7,user_9160
+2026-01-02T08:45:09.639562Z,WARNING,High memory usage detected: 76%,user-service,production,server-4,user_6775
+2026-01-02T08:46:07.239562Z,WARNING,Slow query detected: 3961ms,payment-service,development,server-2,user_2657
+2026-01-02T08:47:04.839562Z,WARNING,Connection pool near capacity: 71%,user-service,production,server-4,user_4653
+2026-01-02T08:48:02.439562Z,WARNING,Slow query detected: 3438ms,payment-service,production,server-2,user_4789
+2026-01-02T08:49:00.039562Z,WARNING,Rate limit approaching for user user_4555,database-service,staging,server-6,user_6425
+2026-01-02T08:49:57.639562Z,WARNING,Connection pool near capacity: 85%,user-service,production,server-1,user_7643
+2026-01-02T08:50:55.239562Z,WARNING,Connection pool near capacity: 70%,payment-service,production,server-5,user_7361
+2026-01-02T08:51:52.839562Z,WARNING,Connection pool near capacity: 91%,database-service,production,server-6,user_1151
+2026-01-02T08:52:50.439562Z,WARNING,Connection pool near capacity: 71%,notification-service,staging,server-1,user_4602
+2026-01-02T08:53:48.039562Z,ERROR,Database connection failed: connection refused,payment-service,staging,server-7,user_2076
+2026-01-02T08:54:45.639562Z,WARNING,Rate limit approaching for user user_1589,api-gateway,staging,server-7,user_7542
+2026-01-02T08:55:43.239562Z,WARNING,Slow query detected: 4138ms,payment-service,staging,server-10,user_8897
+2026-01-02T08:56:40.839562Z,WARNING,Rate limit approaching for user user_1560,auth-service,production,server-10,user_1191
+2026-01-02T08:57:38.439562Z,WARNING,Slow query detected: 1128ms,payment-service,staging,server-1,user_1873
+2026-01-02T08:58:36.039562Z,WARNING,Connection pool near capacity: 84%,payment-service,development,server-2,user_5252
+2026-01-02T08:59:33.639562Z,WARNING,High memory usage detected: 94%,payment-service,development,server-3,user_9230
+2026-01-02T09:00:31.239562Z,WARNING,High memory usage detected: 95%,api-gateway,production,server-8,user_1892
+2026-01-02T09:01:28.839562Z,ERROR,Failed to process payment: invalid credentials,auth-service,development,server-3,user_4929
+2026-01-02T09:02:26.439562Z,WARNING,Connection pool near capacity: 85%,user-service,development,server-10,user_9877
+2026-01-02T09:03:24.039562Z,WARNING,High memory usage detected: 92%,api-gateway,production,server-7,user_1311
+2026-01-02T09:04:21.639562Z,WARNING,High memory usage detected: 75%,payment-service,production,server-4,user_9797
+2026-01-02T09:05:19.239562Z,WARNING,High memory usage detected: 75%,user-service,development,server-4,user_8505
+2026-01-02T09:06:16.839562Z,WARNING,High memory usage detected: 75%,auth-service,production,server-4,user_6315
+2026-01-02T09:07:14.439562Z,WARNING,Connection pool near capacity: 77%,api-gateway,development,server-8,user_6525
+2026-01-02T09:08:12.039562Z,WARNING,Connection pool near capacity: 88%,database-service,production,server-6,user_2057
+2026-01-02T09:09:09.639562Z,WARNING,High memory usage detected: 93%,payment-service,production,server-3,user_2165
+2026-01-02T09:10:07.239562Z,WARNING,Slow query detected: 3424ms,api-gateway,staging,server-9,user_9805
+2026-01-02T09:11:04.839562Z,WARNING,High memory usage detected: 79%,payment-service,development,server-2,user_7932
+2026-01-02T09:12:02.439562Z,WARNING,Deprecated API endpoint called: /api/v1/orders,payment-service,staging,server-4,user_6224
+2026-01-02T09:13:00.039562Z,WARNING,High memory usage detected: 80%,user-service,staging,server-1,user_2320
+2026-01-02T09:13:57.639562Z,WARNING,Rate limit approaching for user user_4381,auth-service,development,server-9,user_2912
+2026-01-02T09:14:55.239562Z,WARNING,Rate limit approaching for user user_4543,user-service,production,server-10,user_6487
+2026-01-02T09:15:52.839562Z,WARNING,Deprecated API endpoint called: /api/v1/products,notification-service,production,server-8,user_4904
+2026-01-02T09:16:50.439562Z,WARNING,High memory usage detected: 73%,payment-service,production,server-3,user_3958
+2026-01-02T09:17:48.039562Z,WARNING,Connection pool near capacity: 75%,user-service,staging,server-2,user_6717
+2026-01-02T09:18:45.639562Z,WARNING,Connection pool near capacity: 90%,payment-service,staging,server-8,user_7340
+2026-01-02T09:19:43.239562Z,WARNING,Slow query detected: 4682ms,payment-service,development,server-1,user_3058
+2026-01-02T09:20:40.839562Z,WARNING,Deprecated API endpoint called: /api/v1/users,payment-service,staging,server-7,user_3454
+2026-01-02T09:21:38.439562Z,WARNING,Slow query detected: 142ms,api-gateway,staging,server-4,user_8917
+2026-01-02T09:22:36.039562Z,WARNING,Slow query detected: 3626ms,payment-service,production,server-10,user_9613
+2026-01-02T09:23:33.639562Z,WARNING,Connection pool near capacity: 83%,payment-service,development,server-9,user_6365
+2026-01-02T09:24:31.239562Z,WARNING,Connection pool near capacity: 95%,notification-service,production,server-1,user_6211
+2026-01-02T09:25:28.839562Z,WARNING,Connection pool near capacity: 83%,payment-service,production,server-6,user_1160
+2026-01-02T09:26:26.439562Z,WARNING,Deprecated API endpoint called: /api/v1/users,notification-service,staging,server-6,user_7463
+2026-01-02T09:27:24.039562Z,WARNING,High memory usage detected: 72%,payment-service,staging,server-1,user_1955
+2026-01-02T09:28:21.639562Z,WARNING,Deprecated API endpoint called: /api/v1/orders,auth-service,production,server-3,user_3852
+2026-01-02T09:29:19.239562Z,WARNING,High memory usage detected: 84%,payment-service,staging,server-2,user_6874
+2026-01-02T09:30:16.839562Z,WARNING,Connection pool near capacity: 80%,database-service,production,server-7,user_1417
+2026-01-02T09:31:14.439562Z,WARNING,Rate limit approaching for user user_4227,notification-service,production,server-5,user_6726
+2026-01-02T09:32:12.039562Z,WARNING,Slow query detected: 2056ms,user-service,staging,server-9,user_4945
+2026-01-02T09:33:09.639562Z,WARNING,Connection pool near capacity: 93%,payment-service,development,server-9,user_2102
+2026-01-02T09:34:07.239562Z,WARNING,Slow query detected: 1267ms,api-gateway,development,server-10,user_7067
+2026-01-02T09:35:04.839562Z,WARNING,Rate limit approaching for user user_3415,payment-service,development,server-3,user_3457
+2026-01-02T09:36:02.439562Z,WARNING,High memory usage detected: 81%,api-gateway,development,server-8,user_5152
+2026-01-02T09:37:00.039562Z,WARNING,Rate limit approaching for user user_3451,user-service,staging,server-4,user_2607
+2026-01-02T09:37:57.639562Z,WARNING,Connection pool near capacity: 80%,payment-service,staging,server-1,user_7580
+2026-01-02T09:38:55.239562Z,WARNING,Connection pool near capacity: 75%,user-service,staging,server-5,user_9039
+2026-01-02T09:39:52.839562Z,WARNING,Deprecated API endpoint called: /api/v1/users,database-service,production,server-4,user_7824
+2026-01-02T09:40:50.439562Z,WARNING,Rate limit approaching for user user_8032,auth-service,staging,server-7,user_8802
+2026-01-02T09:41:48.039562Z,WARNING,Connection pool near capacity: 93%,user-service,production,server-2,user_3658
+2026-01-02T09:42:45.639562Z,WARNING,Slow query detected: 4512ms,api-gateway,development,server-3,user_2091
+2026-01-02T09:43:43.239562Z,WARNING,Rate limit approaching for user user_8943,auth-service,production,server-10,user_7504
+2026-01-02T09:44:40.839562Z,WARNING,High memory usage detected: 78%,auth-service,staging,server-9,user_5302
+2026-01-02T09:45:38.439562Z,WARNING,High memory usage detected: 76%,api-gateway,production,server-4,user_8117
+2026-01-02T09:46:36.039562Z,WARNING,Connection pool near capacity: 78%,notification-service,production,server-8,user_7679
+2026-01-02T09:47:33.639562Z,WARNING,Rate limit approaching for user user_4297,user-service,staging,server-1,user_8859
+2026-01-02T09:48:31.239562Z,WARNING,Slow query detected: 3126ms,auth-service,production,server-4,user_3247
+2026-01-02T09:49:28.839562Z,WARNING,High memory usage detected: 72%,database-service,staging,server-3,user_6888
+2026-01-02T09:50:26.439562Z,ERROR,Database connection failed: timeout,database-service,staging,server-4,user_8120
+2026-01-02T09:51:24.039562Z,WARNING,Connection pool near capacity: 77%,database-service,production,server-10,user_2321
+2026-01-02T09:52:21.639562Z,WARNING,Slow query detected: 238ms,notification-service,development,server-9,user_3978
+2026-01-02T09:53:19.239562Z,WARNING,Connection pool near capacity: 89%,database-service,staging,server-3,user_3206
+2026-01-02T09:54:16.839562Z,WARNING,High memory usage detected: 77%,user-service,production,server-3,user_5924
+2026-01-02T09:55:14.439562Z,WARNING,High memory usage detected: 73%,api-gateway,production,server-4,user_4953
+2026-01-02T09:56:12.039562Z,WARNING,Deprecated API endpoint called: /api/v1/products,user-service,production,server-10,user_2665
+2026-01-02T09:57:09.639562Z,WARNING,Rate limit approaching for user user_6467,database-service,staging,server-9,user_1236
+2026-01-02T09:58:07.239562Z,WARNING,Slow query detected: 4534ms,auth-service,development,server-4,user_1178
+2026-01-02T09:59:04.839562Z,WARNING,Deprecated API endpoint called: /api/v1/orders,notification-service,development,server-10,user_3939
+2026-01-02T10:00:02.439562Z,WARNING,Slow query detected: 3887ms,auth-service,production,server-10,user_7335
+2026-01-02T10:01:00.039562Z,WARNING,Connection pool near capacity: 85%,database-service,production,server-10,user_5779
+2026-01-02T10:01:57.639562Z,WARNING,Rate limit approaching for user user_3989,user-service,staging,server-10,user_9358
+2026-01-02T10:02:55.239562Z,WARNING,High memory usage detected: 93%,database-service,production,server-2,user_2410
+2026-01-02T10:03:52.839562Z,WARNING,Connection pool near capacity: 70%,api-gateway,production,server-10,user_6206
+2026-01-02T10:04:50.439562Z,WARNING,Deprecated API endpoint called: /api/v1/orders,auth-service,production,server-3,user_7789
+2026-01-02T10:05:48.039562Z,ERROR,Failed to process payment: timeout,payment-service,staging,server-5,user_9791
+2026-01-02T10:06:45.639562Z,WARNING,Deprecated API endpoint called: /api/v1/products,notification-service,development,server-9,user_2550
+2026-01-02T10:07:43.239562Z,WARNING,Rate limit approaching for user user_9973,payment-service,staging,server-8,user_3098
+2026-01-02T10:08:40.839562Z,WARNING,High memory usage detected: 80%,notification-service,development,server-5,user_4080
+2026-01-02T10:09:38.439562Z,WARNING,Deprecated API endpoint called: /api/v1/orders,user-service,staging,server-1,user_9105
+2026-01-02T10:10:36.039562Z,WARNING,Connection pool near capacity: 89%,user-service,development,server-10,user_9795
+2026-01-02T10:11:33.639562Z,WARNING,Rate limit approaching for user user_6452,payment-service,production,server-1,user_4230
+2026-01-02T10:12:31.239562Z,WARNING,High memory usage detected: 76%,notification-service,development,server-1,user_9410
+2026-01-02T10:13:28.839562Z,WARNING,Slow query detected: 968ms,api-gateway,production,server-8,user_7775
+2026-01-02T10:14:26.439562Z,ERROR,API request timeout: /api/v1/products,auth-service,staging,server-8,user_1116
+2026-01-02T10:15:24.039562Z,WARNING,High memory usage detected: 80%,notification-service,production,server-2,user_8147
+2026-01-02T10:16:21.639562Z,ERROR,Failed to send notification: connection refused,api-gateway,development,server-4,user_6020
+2026-01-02T10:17:19.239562Z,WARNING,High memory usage detected: 91%,notification-service,staging,server-10,user_3086
+2026-01-02T10:18:16.839562Z,WARNING,Deprecated API endpoint called: /api/v1/products,api-gateway,production,server-1,user_1149
+2026-01-02T10:19:14.439562Z,WARNING,High memory usage detected: 87%,api-gateway,development,server-4,user_5919
+2026-01-02T10:20:12.039562Z,WARNING,High memory usage detected: 78%,user-service,production,server-3,user_1141
+2026-01-02T10:21:09.639562Z,WARNING,High memory usage detected: 81%,database-service,production,server-2,user_5318
+2026-01-02T10:22:07.239562Z,WARNING,Slow query detected: 4694ms,database-service,production,server-2,user_6780
+2026-01-02T10:23:04.839562Z,WARNING,Deprecated API endpoint called: /api/v1/products,api-gateway,production,server-4,user_7439
+2026-01-02T10:24:02.439562Z,WARNING,Rate limit approaching for user user_8794,database-service,staging,server-9,user_3310
+2026-01-02T10:25:00.039562Z,WARNING,Slow query detected: 1830ms,payment-service,production,server-7,user_8179
+2026-01-02T10:25:57.639562Z,WARNING,High memory usage detected: 84%,api-gateway,production,server-2,user_8379
+2026-01-02T10:26:55.239562Z,WARNING,Deprecated API endpoint called: /api/v1/users,database-service,development,server-6,user_9701
+2026-01-02T10:27:52.839562Z,WARNING,Slow query detected: 2060ms,api-gateway,production,server-1,user_1646
+2026-01-02T10:28:50.439562Z,WARNING,Deprecated API endpoint called: /api/v1/users,user-service,development,server-6,user_5044
+2026-01-02T10:29:48.039562Z,WARNING,Connection pool near capacity: 75%,user-service,production,server-2,user_6471
+2026-01-02T10:30:45.639562Z,ERROR,Failed to process payment: timeout,database-service,production,server-5,user_1096
+2026-01-02T10:31:43.239562Z,WARNING,Rate limit approaching for user user_3359,auth-service,development,server-10,user_7658
+2026-01-02T10:32:40.839562Z,WARNING,Rate limit approaching for user user_7963,auth-service,staging,server-1,user_3490
+2026-01-02T10:33:38.439562Z,WARNING,Connection pool near capacity: 72%,api-gateway,development,server-8,user_9363
+2026-01-02T10:34:36.039562Z,WARNING,Deprecated API endpoint called: /api/v1/products,user-service,staging,server-8,user_6332
+2026-01-02T10:35:33.639562Z,WARNING,High memory usage detected: 95%,notification-service,production,server-4,user_2806
+2026-01-02T10:36:31.239562Z,WARNING,Connection pool near capacity: 71%,notification-service,production,server-9,user_8465
+2026-01-02T10:37:28.839562Z,WARNING,High memory usage detected: 92%,api-gateway,development,server-10,user_2045
+2026-01-02T10:38:26.439562Z,WARNING,Slow query detected: 2191ms,database-service,production,server-9,user_6083
+2026-01-02T10:39:24.039562Z,WARNING,Connection pool near capacity: 76%,auth-service,development,server-2,user_4873
+2026-01-02T10:40:21.639562Z,WARNING,Connection pool near capacity: 75%,auth-service,staging,server-6,user_6278
+2026-01-02T10:41:19.239562Z,WARNING,High memory usage detected: 73%,api-gateway,staging,server-10,user_6287
+2026-01-02T10:42:16.839562Z,WARNING,Rate limit approaching for user user_4914,notification-service,development,server-1,user_5282
+2026-01-02T10:43:14.439562Z,WARNING,Rate limit approaching for user user_6127,api-gateway,production,server-8,user_8256
+2026-01-02T10:44:12.039562Z,WARNING,Connection pool near capacity: 74%,payment-service,staging,server-6,user_4368
+2026-01-02T10:45:09.639562Z,WARNING,Deprecated API endpoint called: /api/v1/users,notification-service,development,server-7,user_6143
+2026-01-02T10:46:07.239562Z,WARNING,Slow query detected: 3049ms,notification-service,staging,server-6,user_8554
+2026-01-02T10:47:04.839562Z,WARNING,Rate limit approaching for user user_3347,user-service,development,server-9,user_2923
+2026-01-02T10:48:02.439562Z,WARNING,Deprecated API endpoint called: /api/v1/users,api-gateway,production,server-3,user_1849
+2026-01-02T10:49:00.039562Z,WARNING,High memory usage detected: 77%,database-service,staging,server-7,user_8513
+2026-01-02T10:49:57.639562Z,WARNING,High memory usage detected: 75%,user-service,development,server-1,user_7576
+2026-01-02T10:50:55.239562Z,WARNING,Deprecated API endpoint called: /api/v1/products,notification-service,production,server-7,user_3382
+2026-01-02T10:51:52.839562Z,WARNING,Rate limit approaching for user user_1499,notification-service,staging,server-3,user_3438
+2026-01-02T10:52:50.439562Z,WARNING,Rate limit approaching for user user_9956,notification-service,staging,server-8,user_3329
+2026-01-02T10:53:48.039562Z,WARNING,Deprecated API endpoint called: /api/v1/users,user-service,staging,server-10,user_5208
+2026-01-02T10:54:45.639562Z,WARNING,Deprecated API endpoint called: /api/v1/products,user-service,staging,server-1,user_5134
+2026-01-02T10:55:43.239562Z,WARNING,Rate limit approaching for user user_8556,notification-service,staging,server-3,user_1932
+2026-01-02T10:56:40.839562Z,WARNING,High memory usage detected: 73%,auth-service,development,server-7,user_6323
+2026-01-02T10:57:38.439562Z,WARNING,Connection pool near capacity: 85%,api-gateway,staging,server-4,user_6143
+2026-01-02T10:58:36.039562Z,WARNING,Rate limit approaching for user user_7676,auth-service,staging,server-8,user_4739
+2026-01-02T10:59:33.639562Z,ERROR,Failed to process payment: not found,payment-service,staging,server-4,user_5877
+2026-01-02T11:00:31.239562Z,WARNING,High memory usage detected: 83%,user-service,development,server-10,user_2107
+2026-01-02T11:01:28.839562Z,WARNING,High memory usage detected: 93%,api-gateway,staging,server-5,user_3247
+2026-01-02T11:02:26.439562Z,WARNING,High memory usage detected: 82%,database-service,production,server-2,user_3982
+2026-01-02T11:03:24.039562Z,WARNING,Connection pool near capacity: 73%,database-service,development,server-6,user_5428
+2026-01-02T11:04:21.639562Z,WARNING,Slow query detected: 1910ms,api-gateway,production,server-2,user_7384
+2026-01-02T11:05:19.239562Z,WARNING,Connection pool near capacity: 73%,user-service,production,server-4,user_6885
+2026-01-02T11:06:16.839562Z,WARNING,Deprecated API endpoint called: /api/v1/users,auth-service,development,server-7,user_6893
+2026-01-02T11:07:14.439562Z,WARNING,Deprecated API endpoint called: /api/v1/products,payment-service,staging,server-4,user_9178
+2026-01-02T11:08:12.039562Z,WARNING,Slow query detected: 1059ms,notification-service,production,server-8,user_1516
+2026-01-02T11:09:09.639562Z,WARNING,High memory usage detected: 84%,database-service,staging,server-7,user_1010
+2026-01-02T11:10:07.239562Z,WARNING,High memory usage detected: 70%,api-gateway,production,server-3,user_1739
+2026-01-02T11:11:04.839562Z,WARNING,Slow query detected: 1734ms,auth-service,production,server-7,user_2411
+2026-01-02T11:12:02.439562Z,WARNING,Slow query detected: 1423ms,auth-service,development,server-4,user_1400
+2026-01-02T11:13:00.039562Z,WARNING,Rate limit approaching for user user_7609,notification-service,staging,server-5,user_7973
+2026-01-02T11:13:57.639562Z,WARNING,High memory usage detected: 76%,notification-service,development,server-5,user_7266
+2026-01-02T11:14:55.239562Z,WARNING,Connection pool near capacity: 73%,payment-service,development,server-4,user_7514
+2026-01-02T11:15:52.839562Z,WARNING,Slow query detected: 676ms,payment-service,staging,server-3,user_4072
+2026-01-02T11:16:50.439562Z,WARNING,Rate limit approaching for user user_8090,database-service,development,server-2,user_4349
+2026-01-02T11:17:48.039562Z,WARNING,Rate limit approaching for user user_5189,auth-service,production,server-3,user_2727
+2026-01-02T11:18:45.639562Z,WARNING,Slow query detected: 2130ms,database-service,production,server-5,user_2430
+2026-01-02T11:19:43.239562Z,WARNING,Slow query detected: 1740ms,api-gateway,staging,server-3,user_5687
+2026-01-02T11:20:40.839562Z,WARNING,Slow query detected: 452ms,notification-service,staging,server-7,user_6402
+2026-01-02T11:21:38.439562Z,WARNING,Slow query detected: 3556ms,user-service,production,server-6,user_5936
+2026-01-02T11:22:36.039562Z,WARNING,High memory usage detected: 76%,auth-service,production,server-7,user_2791
+2026-01-02T11:23:33.639562Z,WARNING,Slow query detected: 2052ms,auth-service,development,server-6,user_7130
+2026-01-02T11:24:31.239562Z,WARNING,Slow query detected: 4551ms,payment-service,production,server-10,user_8664
+2026-01-02T11:25:28.839562Z,WARNING,Rate limit approaching for user user_3745,auth-service,production,server-4,user_4881
+2026-01-02T11:26:26.439562Z,WARNING,Slow query detected: 332ms,auth-service,staging,server-6,user_1659
+2026-01-02T11:27:24.039562Z,ERROR,Database connection failed: invalid credentials,user-service,development,server-8,user_1529
+2026-01-02T11:28:21.639562Z,ERROR,Authentication failed for user user_8549,payment-service,production,server-1,user_3833
+2026-01-02T11:29:19.239562Z,WARNING,High memory usage detected: 88%,payment-service,development,server-2,user_9491
+2026-01-02T11:30:16.839562Z,WARNING,High memory usage detected: 72%,database-service,staging,server-7,user_7682
+2026-01-02T11:31:14.439562Z,WARNING,Slow query detected: 3304ms,user-service,staging,server-8,user_2893
+2026-01-02T11:32:12.039562Z,WARNING,Rate limit approaching for user user_4117,payment-service,production,server-8,user_5185
+2026-01-02T11:33:09.639562Z,WARNING,Connection pool near capacity: 78%,api-gateway,development,server-6,user_8871
+2026-01-02T11:34:07.239562Z,WARNING,Deprecated API endpoint called: /api/v1/products,auth-service,production,server-8,user_4760
+2026-01-02T11:35:04.839562Z,WARNING,Rate limit approaching for user user_8184,notification-service,production,server-6,user_5697
+2026-01-02T11:36:02.439562Z,WARNING,Slow query detected: 776ms,database-service,staging,server-9,user_4978
+2026-01-02T11:37:00.039562Z,WARNING,Rate limit approaching for user user_2845,user-service,production,server-4,user_4201
+2026-01-02T11:37:57.639562Z,WARNING,Connection pool near capacity: 73%,database-service,staging,server-3,user_9211
+2026-01-02T11:38:55.239562Z,WARNING,Deprecated API endpoint called: /api/v1/users,user-service,staging,server-4,user_3688
+2026-01-02T11:39:52.839562Z,WARNING,Rate limit approaching for user user_5702,api-gateway,development,server-6,user_4344
+2026-01-02T11:40:50.439562Z,WARNING,Slow query detected: 303ms,auth-service,development,server-6,user_1578
+2026-01-02T11:41:48.039562Z,WARNING,Connection pool near capacity: 82%,database-service,staging,server-6,user_7380
+2026-01-02T11:42:45.639562Z,WARNING,Deprecated API endpoint called: /api/v1/orders,auth-service,development,server-7,user_3932
+2026-01-02T11:43:43.239562Z,WARNING,Deprecated API endpoint called: /api/v1/orders,user-service,development,server-5,user_2865
+2026-01-02T11:44:40.839562Z,WARNING,Slow query detected: 2236ms,payment-service,production,server-1,user_4896
+2026-01-02T11:45:38.439562Z,WARNING,Deprecated API endpoint called: /api/v1/orders,api-gateway,development,server-4,user_4192
+2026-01-02T11:46:36.039562Z,WARNING,Slow query detected: 4763ms,user-service,development,server-1,user_3338
+2026-01-02T11:47:33.639562Z,ERROR,Authentication failed for user user_9468,notification-service,production,server-7,user_2958
+2026-01-02T11:48:31.239562Z,WARNING,Connection pool near capacity: 83%,payment-service,staging,server-4,user_7048
+2026-01-02T11:49:28.839562Z,WARNING,Slow query detected: 1500ms,api-gateway,development,server-7,user_7263
+2026-01-02T11:50:26.439562Z,WARNING,Slow query detected: 2244ms,payment-service,production,server-4,user_2785
+2026-01-02T11:51:24.039562Z,WARNING,High memory usage detected: 86%,api-gateway,staging,server-2,user_8031
+2026-01-02T11:52:21.639562Z,WARNING,Connection pool near capacity: 92%,user-service,staging,server-9,user_9414
+2026-01-02T11:53:19.239562Z,WARNING,Connection pool near capacity: 74%,auth-service,production,server-4,user_8986
+2026-01-02T11:54:16.839562Z,WARNING,High memory usage detected: 79%,payment-service,staging,server-1,user_4757
+2026-01-02T11:55:14.439562Z,WARNING,Connection pool near capacity: 84%,user-service,development,server-10,user_3627
+2026-01-02T11:56:12.039562Z,WARNING,High memory usage detected: 70%,payment-service,staging,server-7,user_4093
+2026-01-02T11:57:09.639562Z,WARNING,High memory usage detected: 89%,api-gateway,production,server-2,user_5383
+2026-01-02T11:58:07.239562Z,ERROR,Failed to send notification: timeout,user-service,production,server-1,user_2630
+2026-01-02T11:59:04.839562Z,WARNING,Slow query detected: 4584ms,database-service,staging,server-5,user_2176
+2026-01-02T12:00:02.439562Z,WARNING,High memory usage detected: 92%,notification-service,production,server-9,user_1369
+2026-01-02T12:01:00.039562Z,WARNING,Connection pool near capacity: 86%,notification-service,development,server-9,user_1813
+2026-01-02T12:01:57.639562Z,WARNING,Rate limit approaching for user user_8136,api-gateway,production,server-4,user_4453
+2026-01-02T12:02:55.239562Z,WARNING,Connection pool near capacity: 83%,notification-service,development,server-1,user_2720
+2026-01-02T12:03:52.839562Z,WARNING,Deprecated API endpoint called: /api/v1/orders,auth-service,development,server-6,user_5664
+2026-01-02T12:04:50.439562Z,WARNING,Rate limit approaching for user user_5858,notification-service,staging,server-9,user_7266
+2026-01-02T12:05:48.039562Z,WARNING,Connection pool near capacity: 88%,api-gateway,production,server-7,user_1675
+2026-01-02T12:06:45.639562Z,WARNING,Slow query detected: 238ms,payment-service,staging,server-5,user_7428
+2026-01-02T12:07:43.239562Z,WARNING,Connection pool near capacity: 72%,database-service,production,server-5,user_5117
+2026-01-02T12:08:40.839562Z,WARNING,Slow query detected: 3739ms,user-service,staging,server-7,user_8180
+2026-01-02T12:09:38.439562Z,WARNING,Deprecated API endpoint called: /api/v1/orders,payment-service,staging,server-10,user_4102
+2026-01-02T12:10:36.039562Z,WARNING,Deprecated API endpoint called: /api/v1/orders,payment-service,development,server-2,user_4199
+2026-01-02T12:11:33.639562Z,WARNING,Rate limit approaching for user user_5802,payment-service,development,server-7,user_7634
+2026-01-02T12:12:31.239562Z,WARNING,High memory usage detected: 82%,user-service,production,server-4,user_7211
+2026-01-02T12:13:28.839562Z,WARNING,Slow query detected: 4075ms,auth-service,development,server-10,user_8699
+2026-01-02T12:14:26.439562Z,WARNING,Deprecated API endpoint called: /api/v1/orders,payment-service,production,server-4,user_4881
+2026-01-02T12:15:24.039562Z,WARNING,Slow query detected: 2801ms,api-gateway,production,server-9,user_8084
+2026-01-02T12:16:21.639562Z,WARNING,Rate limit approaching for user user_3916,user-service,development,server-1,user_6682
+2026-01-02T12:17:19.239562Z,WARNING,Slow query detected: 2594ms,auth-service,development,server-4,user_8418
+2026-01-02T12:18:16.839562Z,WARNING,Rate limit approaching for user user_1486,api-gateway,development,server-1,user_8143
+2026-01-02T12:19:14.439562Z,WARNING,High memory usage detected: 80%,api-gateway,production,server-8,user_8967
+2026-01-02T12:20:12.039562Z,WARNING,Slow query detected: 4369ms,notification-service,production,server-10,user_9945
+2026-01-02T12:21:09.639562Z,WARNING,Slow query detected: 2778ms,api-gateway,staging,server-9,user_1375
+2026-01-02T12:22:07.239562Z,WARNING,Slow query detected: 764ms,payment-service,staging,server-8,user_9439
+2026-01-02T12:23:04.839562Z,WARNING,Slow query detected: 3906ms,payment-service,staging,server-1,user_5652
+2026-01-02T12:24:02.439562Z,WARNING,Slow query detected: 3894ms,database-service,development,server-3,user_2144
+2026-01-02T12:25:00.039562Z,WARNING,Slow query detected: 3596ms,payment-service,production,server-6,user_8257
+2026-01-02T12:25:57.639562Z,WARNING,Connection pool near capacity: 87%,notification-service,staging,server-4,user_1164
+2026-01-02T12:26:55.239562Z,WARNING,Slow query detected: 2803ms,api-gateway,development,server-3,user_6660
+2026-01-02T12:27:52.839562Z,WARNING,Connection pool near capacity: 86%,user-service,staging,server-2,user_6210
+2026-01-02T12:28:50.439562Z,WARNING,Connection pool near capacity: 85%,user-service,staging,server-7,user_3599
+2026-01-02T12:29:48.039562Z,WARNING,Rate limit approaching for user user_6853,auth-service,development,server-8,user_2445
+2026-01-02T12:30:45.639562Z,WARNING,Connection pool near capacity: 79%,auth-service,production,server-2,user_5822
+2026-01-02T12:31:43.239562Z,WARNING,High memory usage detected: 79%,notification-service,production,server-7,user_8645
+2026-01-02T12:32:40.839562Z,WARNING,Rate limit approaching for user user_5943,notification-service,production,server-2,user_9226
+2026-01-02T12:33:38.439562Z,WARNING,High memory usage detected: 74%,auth-service,production,server-5,user_5651
+2026-01-02T12:34:36.039562Z,WARNING,Slow query detected: 2512ms,payment-service,production,server-1,user_2191
+2026-01-02T12:35:33.639562Z,WARNING,Deprecated API endpoint called: /api/v1/users,notification-service,production,server-5,user_4230
+2026-01-02T12:36:31.239562Z,WARNING,Deprecated API endpoint called: /api/v1/users,user-service,staging,server-8,user_4264
+2026-01-02T12:37:28.839562Z,WARNING,Deprecated API endpoint called: /api/v1/products,user-service,development,server-9,user_9207
+2026-01-02T12:38:26.439562Z,ERROR,Failed to send notification: connection refused,notification-service,staging,server-8,user_9893
+2026-01-02T12:39:24.039562Z,WARNING,Deprecated API endpoint called: /api/v1/users,auth-service,development,server-4,user_9972
+2026-01-02T12:40:21.639562Z,WARNING,Deprecated API endpoint called: /api/v1/products,database-service,production,server-7,user_8801
+2026-01-02T12:41:19.239562Z,WARNING,High memory usage detected: 76%,payment-service,development,server-5,user_4741
+2026-01-02T12:42:16.839562Z,WARNING,Connection pool near capacity: 77%,user-service,production,server-7,user_4963
+2026-01-02T12:43:14.439562Z,WARNING,Connection pool near capacity: 77%,notification-service,staging,server-7,user_4889
+2026-01-02T12:44:12.039562Z,WARNING,Connection pool near capacity: 88%,api-gateway,development,server-4,user_2267
+2026-01-02T12:45:09.639562Z,WARNING,Rate limit approaching for user user_4571,payment-service,production,server-2,user_6819
+2026-01-02T12:46:07.239562Z,ERROR,Failed to send notification: connection refused,auth-service,production,server-6,user_3835
+2026-01-02T12:47:04.839562Z,WARNING,Connection pool near capacity: 86%,notification-service,development,server-6,user_3293
+2026-01-02T12:48:02.439562Z,WARNING,Deprecated API endpoint called: /api/v1/users,auth-service,production,server-2,user_9285
+2026-01-02T12:49:00.039562Z,WARNING,Deprecated API endpoint called: /api/v1/users,auth-service,production,server-4,user_6918
+2026-01-02T12:49:57.639562Z,WARNING,Connection pool near capacity: 78%,notification-service,staging,server-4,user_3629
+2026-01-02T12:50:55.239562Z,WARNING,High memory usage detected: 75%,user-service,development,server-4,user_4732
+2026-01-02T12:51:52.839562Z,WARNING,Connection pool near capacity: 70%,payment-service,development,server-8,user_9699
+2026-01-02T12:52:50.439562Z,WARNING,Deprecated API endpoint called: /api/v1/orders,notification-service,staging,server-2,user_3475
+2026-01-02T12:53:48.039562Z,WARNING,Deprecated API endpoint called: /api/v1/users,notification-service,production,server-10,user_2555
+2026-01-02T12:54:45.639562Z,WARNING,High memory usage detected: 90%,auth-service,development,server-7,user_3543
+2026-01-02T12:55:43.239562Z,WARNING,Rate limit approaching for user user_5721,database-service,staging,server-6,user_9098
+2026-01-02T12:56:40.839562Z,WARNING,Rate limit approaching for user user_8334,notification-service,development,server-4,user_9814
+2026-01-02T12:57:38.439562Z,WARNING,High memory usage detected: 90%,auth-service,production,server-8,user_2184
+2026-01-02T12:58:36.039562Z,ERROR,Database connection failed: connection refused,api-gateway,development,server-8,user_2979
+2026-01-02T12:59:33.639562Z,WARNING,Slow query detected: 2121ms,notification-service,development,server-9,user_2918
+2026-01-02T13:00:31.239562Z,WARNING,Rate limit approaching for user user_7175,database-service,staging,server-1,user_4928
+2026-01-02T13:01:28.839562Z,WARNING,Rate limit approaching for user user_4247,user-service,production,server-3,user_4504
+2026-01-02T13:02:26.439562Z,WARNING,Connection pool near capacity: 86%,user-service,development,server-8,user_2134
+2026-01-02T13:03:24.039562Z,WARNING,Connection pool near capacity: 75%,api-gateway,production,server-6,user_2090
+2026-01-02T13:04:21.639562Z,WARNING,Slow query detected: 3998ms,user-service,staging,server-2,user_7121
+2026-01-02T13:05:19.239562Z,WARNING,High memory usage detected: 94%,auth-service,development,server-4,user_1285
+2026-01-02T13:06:16.839562Z,ERROR,API request timeout: /api/v1/orders,api-gateway,staging,server-7,user_1808
+2026-01-02T13:07:14.439562Z,WARNING,Deprecated API endpoint called: /api/v1/orders,user-service,production,server-10,user_3809
+2026-01-02T13:08:12.039562Z,WARNING,Connection pool near capacity: 81%,user-service,staging,server-10,user_9164
+2026-01-02T13:09:09.639562Z,WARNING,Deprecated API endpoint called: /api/v1/orders,user-service,development,server-2,user_1134
+2026-01-02T13:10:07.239562Z,WARNING,Connection pool near capacity: 88%,database-service,staging,server-7,user_8865
+2026-01-02T13:11:04.839562Z,WARNING,Slow query detected: 2061ms,notification-service,production,server-3,user_7089
+2026-01-02T13:12:02.439562Z,ERROR,Failed to send notification: connection refused,notification-service,staging,server-4,user_3664
+2026-01-02T13:13:00.039562Z,WARNING,High memory usage detected: 84%,notification-service,production,server-6,user_7693
+2026-01-02T13:13:57.639562Z,WARNING,Connection pool near capacity: 91%,notification-service,staging,server-3,user_8174
+2026-01-02T13:14:55.239562Z,ERROR,Database connection failed: connection refused,database-service,development,server-9,user_3637
+2026-01-02T13:15:52.839562Z,WARNING,Deprecated API endpoint called: /api/v1/products,api-gateway,staging,server-5,user_5615
+2026-01-02T13:16:50.439562Z,WARNING,Deprecated API endpoint called: /api/v1/orders,user-service,production,server-3,user_4310
+2026-01-02T13:17:48.039562Z,WARNING,Deprecated API endpoint called: /api/v1/orders,user-service,development,server-5,user_6478
+2026-01-02T13:18:45.639562Z,ERROR,Authentication failed for user user_1498,payment-service,development,server-2,user_6239
+2026-01-02T13:19:43.239562Z,WARNING,High memory usage detected: 93%,user-service,production,server-8,user_9762
+2026-01-02T13:20:40.839562Z,WARNING,Deprecated API endpoint called: /api/v1/orders,database-service,development,server-4,user_1334
+2026-01-02T13:21:38.439562Z,WARNING,Deprecated API endpoint called: /api/v1/users,database-service,staging,server-5,user_5491
+2026-01-02T13:22:36.039562Z,WARNING,Deprecated API endpoint called: /api/v1/products,notification-service,staging,server-3,user_6630
+2026-01-02T13:23:33.639562Z,WARNING,High memory usage detected: 84%,auth-service,staging,server-10,user_4615
+2026-01-02T13:24:31.239562Z,WARNING,High memory usage detected: 76%,user-service,development,server-10,user_6502
+2026-01-02T13:25:28.839562Z,WARNING,Connection pool near capacity: 79%,user-service,development,server-5,user_1453
+2026-01-02T13:26:26.439562Z,WARNING,Connection pool near capacity: 73%,api-gateway,production,server-2,user_8808
+2026-01-02T13:27:24.039562Z,WARNING,High memory usage detected: 82%,database-service,staging,server-7,user_3817
+2026-01-02T13:28:21.639562Z,ERROR,Failed to process payment: timeout,api-gateway,production,server-1,user_2527
+2026-01-02T13:29:19.239562Z,ERROR,Database connection failed: not found,notification-service,staging,server-5,user_6220
+2026-01-02T13:30:16.839562Z,WARNING,Deprecated API endpoint called: /api/v1/products,api-gateway,development,server-3,user_9429
+2026-01-02T13:31:14.439562Z,WARNING,Slow query detected: 4192ms,notification-service,staging,server-6,user_7530
+2026-01-02T13:32:12.039562Z,WARNING,Slow query detected: 3030ms,payment-service,development,server-10,user_6607
+2026-01-02T13:33:09.639562Z,WARNING,High memory usage detected: 92%,api-gateway,development,server-10,user_7991
+2026-01-02T13:34:07.239562Z,WARNING,High memory usage detected: 76%,database-service,production,server-1,user_4575
+2026-01-02T13:35:04.839562Z,WARNING,Deprecated API endpoint called: /api/v1/orders,auth-service,development,server-5,user_8757
+2026-01-02T13:36:02.439562Z,WARNING,Slow query detected: 4282ms,user-service,development,server-9,user_2363
+2026-01-02T13:37:00.039562Z,ERROR,Failed to process payment: not found,notification-service,staging,server-8,user_9671
+2026-01-02T13:37:57.639562Z,WARNING,Slow query detected: 2657ms,auth-service,production,server-6,user_6056
+2026-01-02T13:38:55.239562Z,WARNING,Rate limit approaching for user user_3382,payment-service,production,server-7,user_4059
+2026-01-02T13:39:52.839562Z,WARNING,Rate limit approaching for user user_5244,user-service,production,server-7,user_2140
+2026-01-02T13:40:50.439562Z,ERROR,API request timeout: /api/v1/products,payment-service,staging,server-2,user_1154
+2026-01-02T13:41:48.039562Z,WARNING,Rate limit approaching for user user_1723,payment-service,production,server-9,user_2365
+2026-01-02T13:42:45.639562Z,WARNING,Rate limit approaching for user user_1318,api-gateway,development,server-5,user_5281
+2026-01-02T13:43:43.239562Z,WARNING,Slow query detected: 2228ms,user-service,staging,server-6,user_8782
+2026-01-02T13:44:40.839562Z,WARNING,High memory usage detected: 72%,user-service,staging,server-2,user_1301
+2026-01-02T13:45:38.439562Z,WARNING,Rate limit approaching for user user_5895,payment-service,production,server-5,user_2599
+2026-01-02T13:46:36.039562Z,WARNING,High memory usage detected: 94%,database-service,production,server-6,user_5195
+2026-01-02T13:47:33.639562Z,WARNING,High memory usage detected: 93%,user-service,production,server-2,user_1546
+2026-01-02T13:48:31.239562Z,WARNING,Slow query detected: 1434ms,notification-service,staging,server-5,user_8094
+2026-01-02T13:49:28.839562Z,WARNING,Connection pool near capacity: 86%,auth-service,development,server-3,user_9230
+2026-01-02T13:50:26.439562Z,WARNING,Connection pool near capacity: 80%,api-gateway,development,server-8,user_9274
+2026-01-02T13:51:24.039562Z,WARNING,High memory usage detected: 90%,payment-service,staging,server-9,user_3256
+2026-01-02T13:52:21.639562Z,WARNING,Connection pool near capacity: 91%,payment-service,staging,server-3,user_3871
+2026-01-02T13:53:19.239562Z,WARNING,Rate limit approaching for user user_8530,api-gateway,development,server-8,user_4807
+2026-01-02T13:54:16.839562Z,WARNING,Connection pool near capacity: 89%,auth-service,staging,server-2,user_5256
+2026-01-02T13:55:14.439562Z,WARNING,Slow query detected: 655ms,database-service,production,server-1,user_2561
+2026-01-02T13:56:12.039562Z,WARNING,Slow query detected: 3009ms,user-service,production,server-3,user_4896
+2026-01-02T13:57:09.639562Z,ERROR,Failed to send notification: not found,database-service,staging,server-3,user_3132
+2026-01-02T13:58:07.239562Z,WARNING,Deprecated API endpoint called: /api/v1/orders,user-service,development,server-7,user_9231
+2026-01-02T13:59:04.839562Z,WARNING,Deprecated API endpoint called: /api/v1/users,user-service,development,server-1,user_9797
+2026-01-02T14:00:02.439562Z,WARNING,Rate limit approaching for user user_8008,notification-service,production,server-3,user_7706
+2026-01-02T14:01:00.039562Z,WARNING,High memory usage detected: 74%,database-service,development,server-2,user_2374
+2026-01-02T14:01:57.639562Z,WARNING,Slow query detected: 3253ms,payment-service,staging,server-9,user_5894
+2026-01-02T14:02:55.239562Z,WARNING,Connection pool near capacity: 95%,database-service,development,server-2,user_7194
+2026-01-02T14:03:52.839562Z,WARNING,Rate limit approaching for user user_8885,database-service,staging,server-10,user_7438
+2026-01-02T14:04:50.439562Z,WARNING,Deprecated API endpoint called: /api/v1/products,database-service,staging,server-6,user_6243
+2026-01-02T14:05:48.039562Z,WARNING,Connection pool near capacity: 75%,user-service,production,server-9,user_2851
+2026-01-02T14:06:45.639562Z,WARNING,Rate limit approaching for user user_9930,database-service,production,server-7,user_4883
+2026-01-02T14:07:43.239562Z,ERROR,API request timeout: /api/v1/users,payment-service,staging,server-7,user_8535
+2026-01-02T14:08:40.839562Z,WARNING,Rate limit approaching for user user_8070,auth-service,production,server-8,user_3522
+2026-01-02T14:09:38.439562Z,WARNING,Rate limit approaching for user user_8750,notification-service,production,server-3,user_8272
+2026-01-02T14:10:36.039562Z,WARNING,Slow query detected: 897ms,auth-service,development,server-3,user_3600
+2026-01-02T14:11:33.639562Z,WARNING,High memory usage detected: 95%,payment-service,staging,server-7,user_9552
+2026-01-02T14:12:31.239562Z,WARNING,Deprecated API endpoint called: /api/v1/users,database-service,development,server-6,user_9842
+2026-01-02T14:13:28.839562Z,WARNING,Connection pool near capacity: 82%,auth-service,staging,server-5,user_3331
+2026-01-02T14:14:26.439562Z,WARNING,Rate limit approaching for user user_6337,database-service,staging,server-8,user_3866
+2026-01-02T14:15:24.039562Z,WARNING,Deprecated API endpoint called: /api/v1/orders,api-gateway,development,server-1,user_2277
+2026-01-02T14:16:21.639562Z,WARNING,Deprecated API endpoint called: /api/v1/orders,auth-service,production,server-5,user_8863
+2026-01-02T14:17:19.239562Z,WARNING,Rate limit approaching for user user_9846,user-service,development,server-5,user_1646
+2026-01-02T14:18:16.839562Z,WARNING,Connection pool near capacity: 79%,auth-service,development,server-6,user_4717
+2026-01-02T14:19:14.439562Z,WARNING,Slow query detected: 4797ms,database-service,staging,server-6,user_5019
+2026-01-02T14:20:12.039562Z,WARNING,Deprecated API endpoint called: /api/v1/users,database-service,production,server-7,user_8493
+2026-01-02T14:21:09.639562Z,WARNING,Deprecated API endpoint called: /api/v1/products,database-service,production,server-9,user_2717
+2026-01-02T14:22:07.239562Z,WARNING,Deprecated API endpoint called: /api/v1/orders,user-service,development,server-10,user_2209
+2026-01-02T14:23:04.839562Z,WARNING,Connection pool near capacity: 94%,payment-service,staging,server-1,user_5529
+2026-01-02T14:24:02.439562Z,WARNING,Deprecated API endpoint called: /api/v1/products,api-gateway,development,server-5,user_1486
+2026-01-02T14:25:00.039562Z,WARNING,Connection pool near capacity: 76%,auth-service,development,server-2,user_6066
+2026-01-02T14:25:57.639562Z,WARNING,Deprecated API endpoint called: /api/v1/orders,user-service,production,server-3,user_3585
+2026-01-02T14:26:55.239562Z,WARNING,Connection pool near capacity: 87%,notification-service,production,server-4,user_2687
+2026-01-02T14:27:52.839562Z,WARNING,Slow query detected: 1532ms,user-service,production,server-5,user_3883
+2026-01-02T14:28:50.439562Z,WARNING,Connection pool near capacity: 83%,api-gateway,development,server-9,user_4095
+2026-01-02T14:29:48.039562Z,WARNING,Slow query detected: 3416ms,api-gateway,development,server-2,user_5687
+2026-01-02T14:30:45.639562Z,WARNING,High memory usage detected: 94%,database-service,production,server-10,user_8893
+2026-01-02T14:31:43.239562Z,ERROR,Failed to process payment: connection refused,auth-service,staging,server-10,user_7882
+2026-01-02T14:32:40.839562Z,WARNING,Rate limit approaching for user user_5890,auth-service,development,server-5,user_3375
+2026-01-02T14:33:38.439562Z,WARNING,Connection pool near capacity: 83%,auth-service,production,server-6,user_9058
+2026-01-02T14:34:36.039562Z,WARNING,High memory usage detected: 88%,api-gateway,development,server-10,user_2334
+2026-01-02T14:35:33.639562Z,WARNING,Deprecated API endpoint called: /api/v1/products,database-service,production,server-2,user_8905
+2026-01-02T14:36:31.239562Z,WARNING,High memory usage detected: 81%,auth-service,production,server-3,user_3696
+2026-01-02T14:37:28.839562Z,WARNING,Rate limit approaching for user user_9249,user-service,staging,server-1,user_9214
+2026-01-02T14:38:26.439562Z,WARNING,Connection pool near capacity: 75%,user-service,production,server-1,user_7299
+2026-01-02T14:39:24.039562Z,WARNING,Rate limit approaching for user user_5660,api-gateway,production,server-5,user_4696
+2026-01-02T14:40:21.639562Z,ERROR,Database connection failed: connection refused,database-service,development,server-6,user_2568
+2026-01-02T14:41:19.239562Z,WARNING,High memory usage detected: 77%,database-service,development,server-7,user_5630
+2026-01-02T14:42:16.839562Z,WARNING,Slow query detected: 1069ms,auth-service,production,server-10,user_8448
+2026-01-02T14:43:14.439562Z,WARNING,Rate limit approaching for user user_4624,database-service,development,server-2,user_5746
+2026-01-02T14:44:12.039562Z,WARNING,Rate limit approaching for user user_2800,auth-service,production,server-2,user_7391
+2026-01-02T14:45:09.639562Z,WARNING,Deprecated API endpoint called: /api/v1/users,payment-service,development,server-5,user_5935
+2026-01-02T14:46:07.239562Z,WARNING,Deprecated API endpoint called: /api/v1/orders,api-gateway,staging,server-3,user_8603
+2026-01-02T14:47:04.839562Z,WARNING,Connection pool near capacity: 70%,database-service,development,server-4,user_9993
+2026-01-02T14:48:02.439562Z,WARNING,High memory usage detected: 88%,auth-service,development,server-4,user_6357
+2026-01-02T14:49:00.039562Z,WARNING,Rate limit approaching for user user_8380,auth-service,production,server-6,user_7578
+2026-01-02T14:49:57.639562Z,WARNING,Connection pool near capacity: 81%,notification-service,development,server-5,user_6018
+2026-01-02T14:50:55.239562Z,WARNING,Connection pool near capacity: 83%,auth-service,production,server-1,user_7033
+2026-01-02T14:51:52.839562Z,WARNING,Rate limit approaching for user user_2191,notification-service,production,server-4,user_3775
+2026-01-02T14:52:50.439562Z,WARNING,Rate limit approaching for user user_1998,api-gateway,development,server-3,user_9749
+2026-01-02T14:53:48.039562Z,WARNING,Slow query detected: 706ms,user-service,staging,server-7,user_9965
+2026-01-02T14:54:45.639562Z,WARNING,Slow query detected: 2758ms,notification-service,development,server-6,user_8184
+2026-01-02T14:55:43.239562Z,WARNING,Connection pool near capacity: 76%,api-gateway,production,server-3,user_6922
+2026-01-02T14:56:40.839562Z,WARNING,Rate limit approaching for user user_4427,user-service,production,server-9,user_9107
+2026-01-02T14:57:38.439562Z,WARNING,Rate limit approaching for user user_7986,payment-service,production,server-3,user_4675
+2026-01-02T14:58:36.039562Z,WARNING,Deprecated API endpoint called: /api/v1/products,database-service,development,server-9,user_6645
+2026-01-02T14:59:33.639562Z,WARNING,Connection pool near capacity: 86%,payment-service,production,server-6,user_9101
+2026-01-02T15:00:31.239562Z,WARNING,Connection pool near capacity: 76%,user-service,staging,server-1,user_1488
+2026-01-02T15:01:28.839562Z,WARNING,Rate limit approaching for user user_6699,user-service,production,server-9,user_2613
+2026-01-02T15:02:26.439562Z,WARNING,Slow query detected: 1334ms,database-service,production,server-1,user_9512
+2026-01-02T15:03:24.039562Z,WARNING,High memory usage detected: 83%,auth-service,development,server-9,user_3915
+2026-01-02T15:04:21.639562Z,ERROR,API request timeout: /api/v1/users,auth-service,staging,server-2,user_1837
+2026-01-02T15:05:19.239562Z,ERROR,Database connection failed: connection refused,payment-service,production,server-9,user_6280
+2026-01-02T15:06:16.839562Z,WARNING,Slow query detected: 2917ms,user-service,staging,server-3,user_2340
+2026-01-02T15:07:14.439562Z,WARNING,Rate limit approaching for user user_5618,payment-service,staging,server-4,user_9765
+2026-01-02T15:08:12.039562Z,WARNING,Connection pool near capacity: 87%,api-gateway,staging,server-3,user_1611
+2026-01-02T15:09:09.639562Z,WARNING,High memory usage detected: 91%,user-service,staging,server-3,user_2609
+2026-01-02T15:10:07.239562Z,WARNING,Connection pool near capacity: 88%,auth-service,production,server-5,user_8316
+2026-01-02T15:11:04.839562Z,WARNING,Connection pool near capacity: 95%,api-gateway,staging,server-6,user_1349
+2026-01-02T15:12:02.439562Z,WARNING,High memory usage detected: 79%,auth-service,development,server-6,user_5396
+2026-01-02T15:13:00.039562Z,WARNING,Deprecated API endpoint called: /api/v1/orders,user-service,development,server-2,user_9377
+2026-01-02T15:13:57.639562Z,WARNING,Rate limit approaching for user user_4552,notification-service,staging,server-1,user_1959
+2026-01-02T15:14:55.239562Z,WARNING,Deprecated API endpoint called: /api/v1/products,api-gateway,staging,server-5,user_6648
+2026-01-02T15:15:52.839562Z,ERROR,API request timeout: /api/v1/orders,notification-service,development,server-4,user_6481
+2026-01-02T15:16:50.439562Z,WARNING,Rate limit approaching for user user_1627,notification-service,staging,server-3,user_3113
+2026-01-02T15:17:48.039562Z,WARNING,Connection pool near capacity: 80%,notification-service,staging,server-8,user_7752
+2026-01-02T15:18:45.639562Z,WARNING,Connection pool near capacity: 73%,payment-service,development,server-9,user_9342
+2026-01-02T15:19:43.239562Z,WARNING,Slow query detected: 2282ms,payment-service,development,server-3,user_3397
+2026-01-02T15:20:40.839562Z,WARNING,Deprecated API endpoint called: /api/v1/orders,payment-service,staging,server-8,user_1838
+2026-01-02T15:21:38.439562Z,WARNING,Slow query detected: 3952ms,payment-service,development,server-2,user_7400
+2026-01-02T15:22:36.039562Z,WARNING,High memory usage detected: 84%,auth-service,production,server-1,user_1745
+2026-01-02T15:23:33.639562Z,WARNING,Slow query detected: 2455ms,database-service,staging,server-9,user_3337
+2026-01-02T15:24:31.239562Z,WARNING,Deprecated API endpoint called: /api/v1/users,database-service,staging,server-5,user_9431
+2026-01-02T15:25:28.839562Z,WARNING,Connection pool near capacity: 76%,auth-service,staging,server-2,user_8982
+2026-01-02T15:26:26.439562Z,WARNING,Connection pool near capacity: 89%,auth-service,production,server-3,user_2899
+2026-01-02T15:27:24.039562Z,WARNING,Slow query detected: 988ms,payment-service,staging,server-10,user_4695
+2026-01-02T15:28:21.639562Z,WARNING,Connection pool near capacity: 92%,notification-service,development,server-6,user_2581
+2026-01-02T15:29:19.239562Z,WARNING,Connection pool near capacity: 73%,user-service,staging,server-3,user_9547
+2026-01-02T15:30:16.839562Z,ERROR,Authentication failed for user user_5210,api-gateway,production,server-5,user_7595
+2026-01-02T15:31:14.439562Z,WARNING,Rate limit approaching for user user_3575,user-service,development,server-4,user_2957
+2026-01-02T15:32:12.039562Z,WARNING,High memory usage detected: 88%,database-service,production,server-8,user_4539
+2026-01-02T15:33:09.639562Z,WARNING,High memory usage detected: 88%,notification-service,production,server-8,user_1709
+2026-01-02T15:34:07.239562Z,WARNING,Rate limit approaching for user user_4763,auth-service,production,server-3,user_3560
+2026-01-02T15:35:04.839562Z,WARNING,Slow query detected: 1870ms,user-service,staging,server-10,user_2269
+2026-01-02T15:36:02.439562Z,WARNING,Connection pool near capacity: 94%,api-gateway,production,server-8,user_4568
+2026-01-02T15:37:00.039562Z,WARNING,Deprecated API endpoint called: /api/v1/orders,database-service,development,server-7,user_2327
+2026-01-02T15:37:57.639562Z,WARNING,Connection pool near capacity: 75%,payment-service,development,server-9,user_4836
+2026-01-02T15:38:55.239562Z,WARNING,Slow query detected: 3978ms,notification-service,production,server-5,user_7647
+2026-01-02T15:39:52.839562Z,WARNING,Slow query detected: 4454ms,user-service,production,server-5,user_9062
+2026-01-02T15:40:50.439562Z,WARNING,Deprecated API endpoint called: /api/v1/products,notification-service,production,server-7,user_9556
+2026-01-02T15:41:48.039562Z,WARNING,Rate limit approaching for user user_4007,notification-service,production,server-6,user_5349
+2026-01-02T15:42:45.639562Z,WARNING,Connection pool near capacity: 84%,user-service,staging,server-6,user_6498
+2026-01-02T15:43:43.239562Z,ERROR,Authentication failed for user user_1544,payment-service,staging,server-9,user_9979
+2026-01-02T15:44:40.839562Z,WARNING,Rate limit approaching for user user_7908,auth-service,staging,server-7,user_4445
+2026-01-02T15:45:38.439562Z,WARNING,Slow query detected: 2851ms,auth-service,production,server-6,user_1431
+2026-01-02T15:46:36.039562Z,WARNING,High memory usage detected: 86%,payment-service,staging,server-7,user_4094
+2026-01-02T15:47:33.639562Z,WARNING,Slow query detected: 4089ms,auth-service,production,server-1,user_8911
+2026-01-02T15:48:31.239562Z,WARNING,Connection pool near capacity: 88%,database-service,production,server-5,user_8702
+2026-01-02T15:49:28.839562Z,WARNING,High memory usage detected: 82%,user-service,staging,server-6,user_4033
+2026-01-02T15:50:26.439562Z,WARNING,Deprecated API endpoint called: /api/v1/users,user-service,production,server-4,user_7532
+2026-01-02T15:51:24.039562Z,WARNING,Connection pool near capacity: 71%,payment-service,production,server-3,user_5036
+2026-01-02T15:52:21.639562Z,WARNING,Deprecated API endpoint called: /api/v1/products,auth-service,development,server-3,user_8263
+2026-01-02T15:53:19.239562Z,WARNING,High memory usage detected: 81%,database-service,development,server-6,user_6723
+2026-01-02T15:54:16.839562Z,WARNING,High memory usage detected: 71%,database-service,development,server-4,user_7791
+2026-01-02T15:55:14.439562Z,WARNING,High memory usage detected: 94%,payment-service,development,server-1,user_4933
+2026-01-02T15:56:12.039562Z,WARNING,Rate limit approaching for user user_4522,database-service,production,server-1,user_7691
+2026-01-02T15:57:09.639562Z,WARNING,Deprecated API endpoint called: /api/v1/users,notification-service,production,server-10,user_7263
+2026-01-02T15:58:07.239562Z,WARNING,Rate limit approaching for user user_2063,notification-service,staging,server-1,user_5337
+2026-01-02T15:59:04.839562Z,WARNING,Connection pool near capacity: 86%,notification-service,staging,server-2,user_3127
+2026-01-02T16:00:02.439562Z,ERROR,Failed to send notification: connection refused,notification-service,development,server-2,user_5229
+2026-01-02T16:01:00.039562Z,WARNING,Rate limit approaching for user user_6222,notification-service,staging,server-6,user_6332
+2026-01-02T16:01:57.639562Z,WARNING,High memory usage detected: 78%,notification-service,production,server-1,user_3452
+2026-01-02T16:02:55.239562Z,WARNING,Deprecated API endpoint called: /api/v1/products,notification-service,production,server-8,user_2708
+2026-01-02T16:03:52.839562Z,ERROR,Failed to send notification: connection refused,auth-service,production,server-3,user_8228
+2026-01-02T16:04:50.439562Z,WARNING,Rate limit approaching for user user_2370,user-service,production,server-8,user_3688
+2026-01-02T16:05:48.039562Z,WARNING,Deprecated API endpoint called: /api/v1/orders,api-gateway,staging,server-2,user_2865
+2026-01-02T16:06:45.639562Z,WARNING,Slow query detected: 3327ms,api-gateway,staging,server-6,user_1116
+2026-01-02T16:07:43.239562Z,WARNING,Slow query detected: 4879ms,auth-service,staging,server-1,user_4056
+2026-01-02T16:08:40.839562Z,WARNING,Connection pool near capacity: 79%,notification-service,production,server-4,user_6894
+2026-01-02T16:09:38.439562Z,WARNING,Rate limit approaching for user user_9779,notification-service,production,server-7,user_4281
+2026-01-02T16:10:36.039562Z,WARNING,Deprecated API endpoint called: /api/v1/users,payment-service,staging,server-6,user_5631
+2026-01-02T16:11:33.639562Z,ERROR,Authentication failed for user user_6535,api-gateway,staging,server-4,user_9424
+2026-01-02T16:12:31.239562Z,WARNING,Rate limit approaching for user user_1794,user-service,staging,server-5,user_9120
+2026-01-02T16:13:28.839562Z,WARNING,Connection pool near capacity: 77%,api-gateway,staging,server-5,user_9123
+2026-01-02T16:14:26.439562Z,WARNING,Deprecated API endpoint called: /api/v1/orders,auth-service,development,server-5,user_5868
+2026-01-02T16:15:24.039562Z,WARNING,High memory usage detected: 74%,user-service,staging,server-7,user_2687
+2026-01-02T16:16:21.639562Z,WARNING,Deprecated API endpoint called: /api/v1/users,auth-service,development,server-5,user_2441
+2026-01-02T16:17:19.239562Z,WARNING,Connection pool near capacity: 80%,user-service,development,server-10,user_4743
+2026-01-02T16:18:16.839562Z,ERROR,Database connection failed: invalid credentials,auth-service,development,server-1,user_1093
+2026-01-02T16:19:14.439562Z,WARNING,Slow query detected: 3886ms,notification-service,staging,server-6,user_2393
+2026-01-02T16:20:12.039562Z,WARNING,Connection pool near capacity: 89%,user-service,development,server-2,user_5326
+2026-01-02T16:21:09.639562Z,WARNING,Slow query detected: 3558ms,database-service,development,server-3,user_5250
+2026-01-02T16:22:07.239562Z,WARNING,Slow query detected: 4507ms,payment-service,production,server-2,user_7537
+2026-01-02T16:23:04.839562Z,WARNING,High memory usage detected: 79%,user-service,production,server-10,user_6015
+2026-01-02T16:24:02.439562Z,WARNING,High memory usage detected: 74%,api-gateway,development,server-7,user_9493
+2026-01-02T16:25:00.039562Z,WARNING,Slow query detected: 2160ms,database-service,production,server-3,user_2600
+2026-01-02T16:25:57.639562Z,WARNING,Connection pool near capacity: 94%,database-service,development,server-8,user_4778
+2026-01-02T16:26:55.239562Z,WARNING,Deprecated API endpoint called: /api/v1/users,auth-service,development,server-7,user_1330
+2026-01-02T16:27:52.839562Z,ERROR,Failed to send notification: not found,notification-service,staging,server-6,user_2147
+2026-01-02T16:28:50.439562Z,WARNING,High memory usage detected: 78%,auth-service,staging,server-3,user_8066
+2026-01-02T16:29:48.039562Z,WARNING,Deprecated API endpoint called: /api/v1/users,user-service,development,server-6,user_6223
+2026-01-02T16:30:45.639562Z,WARNING,High memory usage detected: 79%,database-service,development,server-9,user_7762
+2026-01-02T16:31:43.239562Z,WARNING,Rate limit approaching for user user_5930,notification-service,staging,server-7,user_8076
+2026-01-02T16:32:40.839562Z,WARNING,Deprecated API endpoint called: /api/v1/users,database-service,production,server-4,user_4464
+2026-01-02T16:33:38.439562Z,WARNING,Rate limit approaching for user user_9237,auth-service,development,server-8,user_4692
+2026-01-02T16:34:36.039562Z,WARNING,Deprecated API endpoint called: /api/v1/orders,notification-service,production,server-2,user_2201
+2026-01-02T16:35:33.639562Z,WARNING,Connection pool near capacity: 82%,user-service,development,server-6,user_6463
+2026-01-02T16:36:31.239562Z,WARNING,Rate limit approaching for user user_3936,database-service,development,server-4,user_8936
+2026-01-02T16:37:28.839562Z,WARNING,Rate limit approaching for user user_1739,user-service,staging,server-4,user_7576
+2026-01-02T16:38:26.439562Z,WARNING,Slow query detected: 1862ms,api-gateway,production,server-4,user_1130
+2026-01-02T16:39:24.039562Z,WARNING,Slow query detected: 3086ms,auth-service,production,server-2,user_9016
+2026-01-02T16:40:21.639562Z,WARNING,Connection pool near capacity: 76%,payment-service,staging,server-9,user_3861
+2026-01-02T16:41:19.239562Z,WARNING,Rate limit approaching for user user_8391,notification-service,production,server-2,user_7292
+2026-01-02T16:42:16.839562Z,WARNING,Connection pool near capacity: 79%,payment-service,development,server-1,user_8302
+2026-01-02T16:43:14.439562Z,WARNING,Rate limit approaching for user user_9413,api-gateway,production,server-7,user_8703
+2026-01-02T16:44:12.039562Z,WARNING,High memory usage detected: 95%,auth-service,production,server-7,user_4150
+2026-01-02T16:45:09.639562Z,WARNING,Deprecated API endpoint called: /api/v1/products,payment-service,production,server-8,user_4912
+2026-01-02T16:46:07.239562Z,WARNING,High memory usage detected: 85%,database-service,production,server-4,user_7586
+2026-01-02T16:47:04.839562Z,WARNING,Rate limit approaching for user user_2737,user-service,development,server-4,user_6699
+2026-01-02T16:48:02.439562Z,WARNING,Deprecated API endpoint called: /api/v1/orders,user-service,production,server-2,user_6616
+2026-01-02T16:49:00.039562Z,ERROR,Database connection failed: invalid credentials,notification-service,staging,server-6,user_3029
+2026-01-02T16:49:57.639562Z,ERROR,Failed to send notification: not found,payment-service,production,server-2,user_8672
+2026-01-02T16:50:55.239562Z,WARNING,Deprecated API endpoint called: /api/v1/orders,auth-service,production,server-4,user_3205
+2026-01-02T16:51:52.839562Z,WARNING,Slow query detected: 674ms,api-gateway,development,server-5,user_8192
+2026-01-02T16:52:50.439562Z,WARNING,Slow query detected: 3450ms,database-service,development,server-10,user_4936
+2026-01-02T16:53:48.039562Z,WARNING,Slow query detected: 489ms,user-service,production,server-9,user_8550
+2026-01-02T16:54:45.639562Z,WARNING,High memory usage detected: 75%,api-gateway,staging,server-8,user_8165
+2026-01-02T16:55:43.239562Z,WARNING,High memory usage detected: 71%,auth-service,development,server-10,user_1944
+2026-01-02T16:56:40.839562Z,WARNING,Connection pool near capacity: 75%,api-gateway,production,server-2,user_9099
+2026-01-02T16:57:38.439562Z,ERROR,Authentication failed for user user_2670,payment-service,production,server-9,user_5539
+2026-01-02T16:58:36.039562Z,WARNING,Deprecated API endpoint called: /api/v1/orders,database-service,production,server-6,user_4440
+2026-01-02T16:59:33.639562Z,ERROR,Failed to process payment: connection refused,notification-service,development,server-3,user_9359
+2026-01-02T17:00:31.239562Z,WARNING,High memory usage detected: 89%,auth-service,production,server-9,user_9835
+2026-01-02T17:01:28.839562Z,WARNING,High memory usage detected: 78%,auth-service,development,server-5,user_6376
+2026-01-02T17:02:26.439562Z,WARNING,Connection pool near capacity: 76%,auth-service,staging,server-6,user_8586
+2026-01-02T17:03:24.039562Z,WARNING,Connection pool near capacity: 94%,auth-service,development,server-3,user_4329
+2026-01-02T17:04:21.639562Z,WARNING,Deprecated API endpoint called: /api/v1/orders,database-service,production,server-6,user_2928
+2026-01-02T17:05:19.239562Z,WARNING,Slow query detected: 3093ms,payment-service,staging,server-1,user_4374
+2026-01-02T17:06:16.839562Z,WARNING,High memory usage detected: 82%,notification-service,staging,server-10,user_9959
+2026-01-02T17:07:14.439562Z,WARNING,High memory usage detected: 91%,user-service,staging,server-10,user_7336
+2026-01-02T17:08:12.039562Z,WARNING,Connection pool near capacity: 80%,auth-service,development,server-7,user_1522
+2026-01-02T17:09:09.639562Z,WARNING,Connection pool near capacity: 89%,api-gateway,staging,server-6,user_3550
+2026-01-02T17:10:07.239562Z,WARNING,Connection pool near capacity: 78%,auth-service,development,server-3,user_9237
+2026-01-02T17:11:04.839562Z,ERROR,API request timeout: /api/v1/orders,payment-service,staging,server-10,user_9348
+2026-01-02T17:12:02.439562Z,ERROR,API request timeout: /api/v1/orders,user-service,development,server-2,user_8456
+2026-01-02T17:13:00.039562Z,WARNING,Slow query detected: 1524ms,user-service,production,server-7,user_4849
+2026-01-02T17:13:57.639562Z,ERROR,Database connection failed: not found,notification-service,staging,server-2,user_9320
+2026-01-02T17:14:55.239562Z,WARNING,Rate limit approaching for user user_8189,notification-service,development,server-5,user_7746
+2026-01-02T17:15:52.839562Z,WARNING,Deprecated API endpoint called: /api/v1/users,user-service,production,server-7,user_9799
+2026-01-02T17:16:50.439562Z,WARNING,High memory usage detected: 72%,database-service,production,server-7,user_4660
+2026-01-02T17:17:48.039562Z,WARNING,High memory usage detected: 70%,database-service,development,server-9,user_8549
+2026-01-02T17:18:45.639562Z,WARNING,High memory usage detected: 79%,api-gateway,staging,server-7,user_9383
+2026-01-02T17:19:43.239562Z,ERROR,Failed to process payment: connection refused,auth-service,production,server-9,user_2321
+2026-01-02T17:20:40.839562Z,WARNING,Slow query detected: 1324ms,notification-service,production,server-10,user_3126
+2026-01-02T17:21:38.439562Z,WARNING,High memory usage detected: 88%,user-service,production,server-8,user_8945
+2026-01-02T17:22:36.039562Z,WARNING,High memory usage detected: 82%,api-gateway,staging,server-6,user_8438
+2026-01-02T17:23:33.639562Z,WARNING,Connection pool near capacity: 78%,payment-service,staging,server-2,user_8124
+2026-01-02T17:24:31.239562Z,WARNING,Deprecated API endpoint called: /api/v1/orders,notification-service,production,server-2,user_9789
+2026-01-02T17:25:28.839562Z,WARNING,Rate limit approaching for user user_1831,api-gateway,staging,server-1,user_5345
+2026-01-02T17:26:26.439562Z,WARNING,High memory usage detected: 83%,api-gateway,production,server-6,user_7395
+2026-01-02T17:27:24.039562Z,WARNING,Slow query detected: 1664ms,api-gateway,development,server-1,user_9420
+2026-01-02T17:28:21.639562Z,WARNING,High memory usage detected: 70%,user-service,development,server-7,user_9356
+2026-01-02T17:29:19.239562Z,ERROR,Database connection failed: connection refused,user-service,staging,server-5,user_5129
+2026-01-02T17:30:16.839562Z,WARNING,High memory usage detected: 82%,notification-service,development,server-7,user_2782
+2026-01-02T17:31:14.439562Z,ERROR,Database connection failed: invalid credentials,api-gateway,production,server-10,user_8530
+2026-01-02T17:32:12.039562Z,WARNING,Connection pool near capacity: 73%,api-gateway,development,server-1,user_9353
+2026-01-02T17:33:09.639562Z,WARNING,High memory usage detected: 89%,api-gateway,production,server-2,user_6460
+2026-01-02T17:34:07.239562Z,ERROR,API request timeout: /api/v1/orders,api-gateway,production,server-2,user_1973
+2026-01-02T17:35:04.839562Z,WARNING,Connection pool near capacity: 74%,payment-service,production,server-8,user_7916
+2026-01-02T17:36:02.439562Z,WARNING,Deprecated API endpoint called: /api/v1/users,payment-service,production,server-4,user_6799
+2026-01-02T17:37:00.039562Z,WARNING,Deprecated API endpoint called: /api/v1/products,notification-service,development,server-5,user_4376
+2026-01-02T17:37:57.639562Z,WARNING,Rate limit approaching for user user_3119,user-service,staging,server-1,user_1057
+2026-01-02T17:38:55.239562Z,ERROR,API request timeout: /api/v1/orders,user-service,production,server-5,user_5469
+2026-01-02T17:39:52.839562Z,WARNING,High memory usage detected: 88%,user-service,staging,server-10,user_2482
+2026-01-02T17:40:50.439562Z,WARNING,Rate limit approaching for user user_3434,notification-service,development,server-2,user_1399
+2026-01-02T17:41:48.039562Z,WARNING,Slow query detected: 4726ms,user-service,production,server-9,user_1058
+2026-01-02T17:42:45.639562Z,WARNING,Deprecated API endpoint called: /api/v1/products,notification-service,production,server-7,user_9515
+2026-01-02T17:43:43.239562Z,WARNING,Deprecated API endpoint called: /api/v1/orders,user-service,development,server-6,user_7517
+2026-01-02T17:44:40.839562Z,WARNING,Rate limit approaching for user user_6505,payment-service,staging,server-5,user_4766
+2026-01-02T17:45:38.439562Z,WARNING,High memory usage detected: 75%,user-service,development,server-2,user_3160
+2026-01-02T17:46:36.039562Z,WARNING,High memory usage detected: 95%,auth-service,production,server-10,user_6485
+2026-01-02T17:47:33.639562Z,WARNING,Rate limit approaching for user user_2061,notification-service,development,server-9,user_3694
+2026-01-02T17:48:31.239562Z,WARNING,High memory usage detected: 93%,auth-service,development,server-6,user_9462
+2026-01-02T17:49:28.839562Z,WARNING,Connection pool near capacity: 71%,api-gateway,development,server-4,user_5319
+2026-01-02T17:50:26.439562Z,WARNING,Slow query detected: 3250ms,auth-service,staging,server-6,user_4425
+2026-01-02T17:51:24.039562Z,WARNING,Deprecated API endpoint called: /api/v1/orders,api-gateway,staging,server-8,user_8294
+2026-01-02T17:52:21.639562Z,WARNING,Deprecated API endpoint called: /api/v1/users,user-service,development,server-4,user_7441
+2026-01-02T17:53:19.239562Z,WARNING,High memory usage detected: 70%,database-service,development,server-5,user_3992
+2026-01-02T17:54:16.839562Z,WARNING,Rate limit approaching for user user_6686,auth-service,staging,server-9,user_3850
+2026-01-02T17:55:14.439562Z,WARNING,Deprecated API endpoint called: /api/v1/products,payment-service,production,server-9,user_4618
+2026-01-02T17:56:12.039562Z,WARNING,High memory usage detected: 82%,notification-service,development,server-9,user_6424
+2026-01-02T17:57:09.639562Z,WARNING,Slow query detected: 289ms,api-gateway,staging,server-10,user_4233
+2026-01-02T17:58:07.239562Z,WARNING,Rate limit approaching for user user_4237,api-gateway,production,server-8,user_3849
+2026-01-02T17:59:04.839562Z,WARNING,Deprecated API endpoint called: /api/v1/orders,database-service,development,server-6,user_2078
+2026-01-02T18:00:02.439562Z,WARNING,Rate limit approaching for user user_3578,api-gateway,staging,server-10,user_7961
+2026-01-02T18:01:00.039562Z,WARNING,High memory usage detected: 87%,user-service,development,server-7,user_4476
+2026-01-02T18:01:57.639562Z,WARNING,High memory usage detected: 76%,user-service,development,server-6,user_5175
+2026-01-02T18:02:55.239562Z,WARNING,Deprecated API endpoint called: /api/v1/products,payment-service,production,server-6,user_4617
+2026-01-02T18:03:52.839562Z,WARNING,Rate limit approaching for user user_9974,payment-service,production,server-1,user_8422
+2026-01-02T18:04:50.439562Z,WARNING,High memory usage detected: 73%,database-service,production,server-9,user_9425
+2026-01-02T18:05:48.039562Z,WARNING,Connection pool near capacity: 92%,database-service,staging,server-4,user_6543
+2026-01-02T18:06:45.639562Z,ERROR,Failed to send notification: timeout,auth-service,production,server-6,user_3070
+2026-01-02T18:07:43.239562Z,WARNING,Connection pool near capacity: 93%,user-service,development,server-1,user_3600
+2026-01-02T18:08:40.839562Z,WARNING,Deprecated API endpoint called: /api/v1/users,api-gateway,production,server-10,user_9732
+2026-01-02T18:09:38.439562Z,WARNING,Rate limit approaching for user user_9524,api-gateway,production,server-8,user_1002
+2026-01-02T18:10:36.039562Z,WARNING,Rate limit approaching for user user_3217,api-gateway,development,server-8,user_9709
+2026-01-02T18:11:33.639562Z,WARNING,Slow query detected: 903ms,user-service,staging,server-6,user_7810
+2026-01-02T18:12:31.239562Z,WARNING,High memory usage detected: 72%,database-service,staging,server-5,user_5734
+2026-01-02T18:13:28.839562Z,WARNING,High memory usage detected: 83%,user-service,production,server-2,user_3554
+2026-01-02T18:14:26.439562Z,WARNING,Slow query detected: 1248ms,database-service,staging,server-4,user_1704
+2026-01-02T18:15:24.039562Z,WARNING,Deprecated API endpoint called: /api/v1/users,auth-service,development,server-2,user_5234
+2026-01-02T18:16:21.639562Z,WARNING,Slow query detected: 1161ms,user-service,development,server-9,user_1640
+2026-01-02T18:17:19.239562Z,WARNING,High memory usage detected: 74%,database-service,production,server-3,user_8389
+2026-01-02T18:18:16.839562Z,WARNING,Rate limit approaching for user user_1469,database-service,development,server-8,user_5737
+2026-01-02T18:19:14.439562Z,WARNING,Deprecated API endpoint called: /api/v1/users,database-service,staging,server-8,user_1129
+2026-01-02T18:20:12.039562Z,WARNING,Connection pool near capacity: 95%,api-gateway,staging,server-9,user_6450
+2026-01-02T18:21:09.639562Z,WARNING,High memory usage detected: 89%,user-service,production,server-1,user_5784
+2026-01-02T18:22:07.239562Z,WARNING,Rate limit approaching for user user_5314,database-service,staging,server-2,user_5828
+2026-01-02T18:23:04.839562Z,WARNING,Slow query detected: 1133ms,notification-service,production,server-1,user_6489
+2026-01-02T18:24:02.439562Z,WARNING,High memory usage detected: 88%,user-service,production,server-2,user_4691
+2026-01-02T18:25:00.039562Z,WARNING,Rate limit approaching for user user_5602,auth-service,staging,server-7,user_3864
+2026-01-02T18:25:57.639562Z,WARNING,Rate limit approaching for user user_1961,payment-service,production,server-1,user_6965
+2026-01-02T18:26:55.239562Z,WARNING,High memory usage detected: 90%,user-service,staging,server-2,user_2892
+2026-01-02T18:27:52.839562Z,WARNING,Connection pool near capacity: 86%,notification-service,development,server-5,user_4356
+2026-01-02T18:28:50.439562Z,WARNING,Rate limit approaching for user user_1607,user-service,production,server-7,user_1445
+2026-01-02T18:29:48.039562Z,WARNING,Rate limit approaching for user user_6635,user-service,production,server-8,user_4288
+2026-01-02T18:30:45.639562Z,WARNING,Deprecated API endpoint called: /api/v1/users,database-service,development,server-8,user_5328
+2026-01-02T18:31:43.239562Z,WARNING,Connection pool near capacity: 71%,auth-service,development,server-5,user_8713
+2026-01-02T18:32:40.839562Z,WARNING,Rate limit approaching for user user_8858,notification-service,staging,server-10,user_5592
+2026-01-02T18:33:38.439562Z,WARNING,Connection pool near capacity: 82%,notification-service,staging,server-7,user_4822
+2026-01-02T18:34:36.039562Z,WARNING,Deprecated API endpoint called: /api/v1/orders,database-service,development,server-7,user_5112
+2026-01-02T18:35:33.639562Z,ERROR,API request timeout: /api/v1/orders,payment-service,production,server-5,user_9104
+2026-01-02T18:36:31.239562Z,WARNING,Deprecated API endpoint called: /api/v1/orders,user-service,staging,server-7,user_3351
+2026-01-02T18:37:28.839562Z,WARNING,Slow query detected: 1260ms,user-service,staging,server-4,user_3876
+2026-01-02T18:38:26.439562Z,ERROR,Database connection failed: invalid credentials,user-service,production,server-10,user_3394
+2026-01-02T18:39:24.039562Z,WARNING,Deprecated API endpoint called: /api/v1/products,auth-service,development,server-8,user_6203
+2026-01-02T18:40:21.639562Z,WARNING,Slow query detected: 4298ms,user-service,staging,server-1,user_4239
+2026-01-02T18:41:19.239562Z,WARNING,Slow query detected: 1144ms,user-service,staging,server-2,user_9731
+2026-01-02T18:42:16.839562Z,WARNING,High memory usage detected: 71%,api-gateway,development,server-1,user_5711
+2026-01-02T18:43:14.439562Z,WARNING,High memory usage detected: 85%,auth-service,production,server-4,user_8737
+2026-01-02T18:44:12.039562Z,WARNING,Connection pool near capacity: 88%,notification-service,staging,server-2,user_9876
+2026-01-02T18:45:09.639562Z,WARNING,Connection pool near capacity: 85%,auth-service,production,server-6,user_4007
+2026-01-02T18:46:07.239562Z,WARNING,Rate limit approaching for user user_3924,notification-service,production,server-3,user_6246
+2026-01-02T18:47:04.839562Z,WARNING,Slow query detected: 3989ms,auth-service,staging,server-6,user_2450
+2026-01-02T18:48:02.439562Z,WARNING,Rate limit approaching for user user_9096,payment-service,development,server-4,user_1475
+2026-01-02T18:49:00.039562Z,ERROR,Database connection failed: invalid credentials,auth-service,development,server-4,user_4237
+2026-01-02T18:49:57.639562Z,WARNING,Slow query detected: 3344ms,database-service,production,server-2,user_4452
+2026-01-02T18:50:55.239562Z,WARNING,High memory usage detected: 94%,notification-service,staging,server-4,user_7911
+2026-01-02T18:51:52.839562Z,WARNING,High memory usage detected: 95%,database-service,production,server-5,user_9827
+2026-01-02T18:52:50.439562Z,ERROR,Failed to process payment: not found,database-service,staging,server-4,user_2234
+2026-01-02T18:53:48.039562Z,WARNING,Connection pool near capacity: 76%,user-service,production,server-8,user_9395
+2026-01-02T18:54:45.639562Z,WARNING,Rate limit approaching for user user_4271,database-service,production,server-2,user_7515
+2026-01-02T18:55:43.239562Z,WARNING,Deprecated API endpoint called: /api/v1/users,auth-service,production,server-1,user_5688
+2026-01-02T18:56:40.839562Z,ERROR,Authentication failed for user user_3402,auth-service,production,server-6,user_5742
+2026-01-02T18:57:38.439562Z,WARNING,Slow query detected: 2086ms,api-gateway,production,server-9,user_6540
+2026-01-02T18:58:36.039562Z,WARNING,Deprecated API endpoint called: /api/v1/products,user-service,development,server-1,user_1479
+2026-01-02T18:59:33.639562Z,WARNING,Connection pool near capacity: 76%,api-gateway,production,server-2,user_3534
+2026-01-02T19:00:31.239562Z,ERROR,Failed to process payment: invalid credentials,auth-service,staging,server-5,user_4759
+2026-01-02T19:01:28.839562Z,WARNING,Rate limit approaching for user user_2896,auth-service,staging,server-9,user_8515
+2026-01-02T19:02:26.439562Z,WARNING,High memory usage detected: 92%,payment-service,production,server-6,user_2970
+2026-01-02T19:03:24.039562Z,WARNING,Rate limit approaching for user user_9969,database-service,development,server-2,user_2979
+2026-01-02T19:04:21.639562Z,WARNING,Slow query detected: 3565ms,database-service,production,server-1,user_8395
+2026-01-02T19:05:19.239562Z,WARNING,High memory usage detected: 91%,database-service,production,server-7,user_8473
+2026-01-02T19:06:16.839562Z,WARNING,Rate limit approaching for user user_9503,payment-service,staging,server-2,user_6265
+2026-01-02T19:07:14.439562Z,WARNING,Connection pool near capacity: 83%,auth-service,development,server-3,user_5493
+2026-01-02T19:08:12.039562Z,WARNING,Connection pool near capacity: 86%,auth-service,staging,server-3,user_8010
+2026-01-02T19:09:09.639562Z,WARNING,Deprecated API endpoint called: /api/v1/products,api-gateway,staging,server-8,user_4442
+2026-01-02T19:10:07.239562Z,WARNING,Deprecated API endpoint called: /api/v1/users,auth-service,development,server-10,user_9456
+2026-01-02T19:11:04.839562Z,WARNING,Slow query detected: 4710ms,api-gateway,development,server-7,user_8482
+2026-01-02T19:12:02.439562Z,WARNING,Deprecated API endpoint called: /api/v1/products,api-gateway,production,server-5,user_3461
+2026-01-02T19:13:00.039562Z,WARNING,High memory usage detected: 94%,user-service,staging,server-2,user_6400
+2026-01-02T19:13:57.639562Z,WARNING,Rate limit approaching for user user_5609,payment-service,staging,server-5,user_5805
+2026-01-02T19:14:55.239562Z,WARNING,High memory usage detected: 93%,database-service,staging,server-7,user_1215
+2026-01-02T19:15:52.839562Z,WARNING,Connection pool near capacity: 90%,database-service,staging,server-4,user_7310
+2026-01-02T19:16:50.439562Z,WARNING,Connection pool near capacity: 94%,notification-service,development,server-2,user_9941
+2026-01-02T19:17:48.039562Z,WARNING,Rate limit approaching for user user_1696,database-service,staging,server-6,user_1679
+2026-01-02T19:18:45.639562Z,WARNING,Deprecated API endpoint called: /api/v1/products,api-gateway,development,server-6,user_4848
+2026-01-02T19:19:43.239562Z,WARNING,Rate limit approaching for user user_8620,auth-service,development,server-3,user_8887
+2026-01-02T19:20:40.839562Z,WARNING,High memory usage detected: 71%,payment-service,development,server-8,user_3618
+2026-01-02T19:21:38.439562Z,ERROR,Failed to process payment: not found,database-service,development,server-1,user_8713
+2026-01-02T19:22:36.039562Z,WARNING,Deprecated API endpoint called: /api/v1/users,api-gateway,development,server-6,user_7928
+2026-01-02T19:23:33.639562Z,WARNING,Connection pool near capacity: 85%,api-gateway,development,server-10,user_9279
+2026-01-02T19:24:31.239562Z,WARNING,Deprecated API endpoint called: /api/v1/products,payment-service,production,server-2,user_9461
+2026-01-02T19:25:28.839562Z,WARNING,Slow query detected: 4076ms,payment-service,production,server-3,user_6644
+2026-01-02T19:26:26.439562Z,WARNING,Slow query detected: 2264ms,auth-service,development,server-8,user_9117
+2026-01-02T19:27:24.039562Z,WARNING,High memory usage detected: 73%,user-service,production,server-7,user_8709
+2026-01-02T19:28:21.639562Z,WARNING,Deprecated API endpoint called: /api/v1/users,database-service,development,server-7,user_2897
+2026-01-02T19:29:19.239562Z,WARNING,Deprecated API endpoint called: /api/v1/orders,api-gateway,staging,server-10,user_9979
+2026-01-02T19:30:16.839562Z,WARNING,Connection pool near capacity: 94%,notification-service,production,server-1,user_7628
+2026-01-02T19:31:14.439562Z,WARNING,Rate limit approaching for user user_5274,auth-service,production,server-7,user_5224
+2026-01-02T19:32:12.039562Z,ERROR,Authentication failed for user user_2816,user-service,staging,server-1,user_7758
+2026-01-02T19:33:09.639562Z,WARNING,Deprecated API endpoint called: /api/v1/orders,payment-service,development,server-5,user_9230
+2026-01-02T19:34:07.239562Z,ERROR,Authentication failed for user user_2446,notification-service,production,server-2,user_7414
+2026-01-02T19:35:04.839562Z,WARNING,Slow query detected: 3904ms,auth-service,staging,server-9,user_1628
+2026-01-02T19:36:02.439562Z,WARNING,Connection pool near capacity: 79%,api-gateway,staging,server-7,user_6566
+2026-01-02T19:37:00.039562Z,WARNING,Slow query detected: 1873ms,auth-service,production,server-10,user_3092
+2026-01-02T19:37:57.639562Z,WARNING,Rate limit approaching for user user_6321,user-service,production,server-2,user_7202
+2026-01-02T19:38:55.239562Z,WARNING,Rate limit approaching for user user_1884,api-gateway,staging,server-5,user_2890
+2026-01-02T19:39:52.839562Z,WARNING,Rate limit approaching for user user_1680,auth-service,development,server-8,user_1198
+2026-01-02T19:40:50.439562Z,ERROR,Authentication failed for user user_7376,auth-service,development,server-7,user_3545
+2026-01-02T19:41:48.039562Z,WARNING,High memory usage detected: 85%,payment-service,staging,server-9,user_1463
+2026-01-02T19:42:45.639562Z,WARNING,Deprecated API endpoint called: /api/v1/products,api-gateway,production,server-9,user_8841
+2026-01-02T19:43:43.239562Z,WARNING,Rate limit approaching for user user_5216,database-service,development,server-6,user_8029
+2026-01-02T19:44:40.839562Z,WARNING,Connection pool near capacity: 94%,api-gateway,development,server-2,user_3511
+2026-01-02T19:45:38.439562Z,WARNING,High memory usage detected: 71%,user-service,production,server-7,user_4554
+2026-01-02T19:46:36.039562Z,WARNING,Connection pool near capacity: 90%,user-service,production,server-9,user_1592
+2026-01-02T19:47:33.639562Z,WARNING,Connection pool near capacity: 77%,notification-service,production,server-4,user_8991
+2026-01-02T19:48:31.239562Z,WARNING,High memory usage detected: 95%,database-service,staging,server-8,user_2257
+2026-01-02T19:49:28.839562Z,WARNING,Slow query detected: 1850ms,auth-service,development,server-7,user_1717
+2026-01-02T19:50:26.439562Z,WARNING,High memory usage detected: 85%,notification-service,production,server-8,user_8662
+2026-01-02T19:51:24.039562Z,WARNING,Slow query detected: 3288ms,auth-service,development,server-5,user_4465
+2026-01-02T19:52:21.639562Z,WARNING,Slow query detected: 2606ms,auth-service,production,server-9,user_3857
+2026-01-02T19:53:19.239562Z,ERROR,Failed to send notification: timeout,user-service,development,server-7,user_5463
+2026-01-02T19:54:16.839562Z,WARNING,Connection pool near capacity: 82%,api-gateway,staging,server-2,user_7082
+2026-01-02T19:55:14.439562Z,WARNING,High memory usage detected: 71%,api-gateway,development,server-7,user_2330
+2026-01-02T19:56:12.039562Z,WARNING,Slow query detected: 4617ms,payment-service,staging,server-10,user_8482
+2026-01-02T19:57:09.639562Z,WARNING,Deprecated API endpoint called: /api/v1/products,api-gateway,staging,server-9,user_4481
+2026-01-02T19:58:07.239562Z,WARNING,Slow query detected: 1894ms,auth-service,staging,server-10,user_3021
+2026-01-02T19:59:04.839562Z,WARNING,Deprecated API endpoint called: /api/v1/orders,api-gateway,development,server-4,user_7632
+2026-01-02T20:00:02.439562Z,WARNING,Connection pool near capacity: 94%,auth-service,production,server-10,user_4840
+2026-01-02T20:01:00.039562Z,WARNING,High memory usage detected: 78%,auth-service,development,server-4,user_5766
+2026-01-02T20:01:57.639562Z,WARNING,Connection pool near capacity: 90%,notification-service,development,server-5,user_9265
+2026-01-02T20:02:55.239562Z,WARNING,Slow query detected: 3150ms,payment-service,staging,server-8,user_4388
+2026-01-02T20:03:52.839562Z,ERROR,Authentication failed for user user_3269,auth-service,production,server-3,user_5719
+2026-01-02T20:04:50.439562Z,ERROR,Authentication failed for user user_1012,api-gateway,staging,server-8,user_3449
+2026-01-02T20:05:48.039562Z,WARNING,High memory usage detected: 95%,notification-service,production,server-5,user_2666
+2026-01-02T20:06:45.639562Z,WARNING,Slow query detected: 847ms,auth-service,staging,server-9,user_2025
+2026-01-02T20:07:43.239562Z,WARNING,Slow query detected: 2627ms,database-service,development,server-4,user_8368
+2026-01-02T20:08:40.839562Z,WARNING,High memory usage detected: 70%,user-service,development,server-9,user_9700
+2026-01-02T20:09:38.439562Z,WARNING,High memory usage detected: 72%,notification-service,development,server-7,user_1322
+2026-01-02T20:10:36.039562Z,WARNING,High memory usage detected: 90%,api-gateway,staging,server-3,user_3972
+2026-01-02T20:11:33.639562Z,ERROR,Authentication failed for user user_2575,payment-service,production,server-7,user_5892
+2026-01-02T20:12:31.239562Z,WARNING,Slow query detected: 4020ms,database-service,staging,server-4,user_8651
+2026-01-02T20:13:28.839562Z,WARNING,Deprecated API endpoint called: /api/v1/users,user-service,development,server-6,user_7131
+2026-01-02T20:14:26.439562Z,ERROR,Database connection failed: connection refused,api-gateway,production,server-10,user_9766
+2026-01-02T20:15:24.039562Z,WARNING,Slow query detected: 4658ms,auth-service,production,server-8,user_7286
+2026-01-02T20:16:21.639562Z,ERROR,Authentication failed for user user_4768,api-gateway,staging,server-3,user_6948
+2026-01-02T20:17:19.239562Z,WARNING,Slow query detected: 642ms,notification-service,production,server-9,user_7912
+2026-01-02T20:18:16.839562Z,WARNING,Connection pool near capacity: 79%,database-service,development,server-1,user_4420
+2026-01-02T20:19:14.439562Z,WARNING,Deprecated API endpoint called: /api/v1/products,auth-service,staging,server-5,user_6650
+2026-01-02T20:20:12.039562Z,WARNING,High memory usage detected: 87%,api-gateway,development,server-9,user_3185
+2026-01-02T20:21:09.639562Z,WARNING,Connection pool near capacity: 83%,api-gateway,production,server-5,user_8362
+2026-01-02T20:22:07.239562Z,WARNING,High memory usage detected: 95%,user-service,staging,server-3,user_1498
+2026-01-02T20:23:04.839562Z,WARNING,High memory usage detected: 72%,database-service,development,server-7,user_7459
+2026-01-02T20:24:02.439562Z,WARNING,High memory usage detected: 76%,database-service,staging,server-6,user_8117
+2026-01-02T20:25:00.039562Z,WARNING,Connection pool near capacity: 83%,auth-service,production,server-5,user_2201
+2026-01-02T20:25:57.639562Z,WARNING,Rate limit approaching for user user_8014,api-gateway,staging,server-2,user_9885
+2026-01-02T20:26:55.239562Z,WARNING,Rate limit approaching for user user_3475,api-gateway,staging,server-7,user_3129
+2026-01-02T20:27:52.839562Z,WARNING,Slow query detected: 3277ms,auth-service,staging,server-2,user_5180
+2026-01-02T20:28:50.439562Z,ERROR,API request timeout: /api/v1/orders,api-gateway,production,server-8,user_7866
+2026-01-02T20:29:48.039562Z,WARNING,Connection pool near capacity: 80%,auth-service,staging,server-1,user_8990
+2026-01-02T20:30:45.639562Z,WARNING,Rate limit approaching for user user_1077,user-service,production,server-8,user_2363
+2026-01-02T20:31:43.239562Z,WARNING,High memory usage detected: 94%,api-gateway,development,server-5,user_9098
+2026-01-02T20:32:40.839562Z,WARNING,High memory usage detected: 95%,notification-service,development,server-10,user_3491
+2026-01-02T20:33:38.439562Z,WARNING,Rate limit approaching for user user_5835,auth-service,development,server-3,user_6514
+2026-01-02T20:34:36.039562Z,WARNING,Connection pool near capacity: 72%,user-service,staging,server-4,user_3198
+2026-01-02T20:35:33.639562Z,WARNING,High memory usage detected: 94%,notification-service,production,server-8,user_5430
+2026-01-02T20:36:31.239562Z,WARNING,High memory usage detected: 79%,api-gateway,production,server-6,user_4248
+2026-01-02T20:37:28.839562Z,WARNING,Slow query detected: 1562ms,payment-service,development,server-10,user_6344
+2026-01-02T20:38:26.439562Z,WARNING,Slow query detected: 2613ms,payment-service,development,server-1,user_5807
+2026-01-02T20:39:24.039562Z,WARNING,Rate limit approaching for user user_8358,payment-service,staging,server-5,user_3748
+2026-01-02T20:40:21.639562Z,WARNING,Slow query detected: 2329ms,database-service,staging,server-8,user_4928
+2026-01-02T20:41:19.239562Z,WARNING,Connection pool near capacity: 84%,auth-service,staging,server-8,user_1662
+2026-01-02T20:42:16.839562Z,WARNING,Rate limit approaching for user user_6047,notification-service,staging,server-2,user_3970
+2026-01-02T20:43:14.439562Z,WARNING,Connection pool near capacity: 94%,user-service,development,server-9,user_6428
+2026-01-02T20:44:12.039562Z,WARNING,Slow query detected: 1658ms,auth-service,development,server-7,user_4762
+2026-01-02T20:45:09.639562Z,WARNING,Slow query detected: 2212ms,payment-service,production,server-6,user_8222
+2026-01-02T20:46:07.239562Z,WARNING,High memory usage detected: 88%,api-gateway,development,server-9,user_6377
+2026-01-02T20:47:04.839562Z,WARNING,Connection pool near capacity: 81%,notification-service,development,server-6,user_5210
+2026-01-02T20:48:02.439562Z,WARNING,Connection pool near capacity: 82%,auth-service,development,server-7,user_1979
+2026-01-02T20:49:00.039562Z,WARNING,High memory usage detected: 89%,database-service,production,server-2,user_6958
+2026-01-02T20:49:57.639562Z,WARNING,Rate limit approaching for user user_6119,database-service,development,server-8,user_4645
+2026-01-02T20:50:55.239562Z,WARNING,High memory usage detected: 82%,database-service,production,server-5,user_7862
+2026-01-02T20:51:52.839562Z,WARNING,Slow query detected: 4012ms,auth-service,production,server-10,user_9621
+2026-01-02T20:52:50.439562Z,WARNING,Rate limit approaching for user user_7252,api-gateway,development,server-5,user_1918
+2026-01-02T20:53:48.039562Z,ERROR,Failed to process payment: not found,auth-service,development,server-2,user_1471
+2026-01-02T20:54:45.639562Z,WARNING,Slow query detected: 253ms,notification-service,staging,server-7,user_7019
+2026-01-02T20:55:43.239562Z,ERROR,Failed to send notification: not found,auth-service,production,server-9,user_1635
+2026-01-02T20:56:40.839562Z,WARNING,High memory usage detected: 79%,auth-service,production,server-8,user_2606
+2026-01-02T20:57:38.439562Z,WARNING,Deprecated API endpoint called: /api/v1/users,notification-service,production,server-3,user_7985
+2026-01-02T20:58:36.039562Z,WARNING,Rate limit approaching for user user_7255,database-service,production,server-2,user_5330
+2026-01-02T20:59:33.639562Z,WARNING,Slow query detected: 1995ms,notification-service,development,server-10,user_4664
+2026-01-02T21:00:31.239562Z,WARNING,High memory usage detected: 81%,database-service,development,server-7,user_6357
+2026-01-02T21:01:28.839562Z,WARNING,Slow query detected: 186ms,user-service,staging,server-3,user_8959
+2026-01-02T21:02:26.439562Z,WARNING,Deprecated API endpoint called: /api/v1/orders,user-service,staging,server-7,user_9091
+2026-01-02T21:03:24.039562Z,WARNING,Connection pool near capacity: 95%,user-service,staging,server-3,user_2530
+2026-01-02T21:04:21.639562Z,WARNING,Rate limit approaching for user user_4352,payment-service,staging,server-7,user_2593
+2026-01-02T21:05:19.239562Z,WARNING,Deprecated API endpoint called: /api/v1/products,auth-service,staging,server-1,user_5781
+2026-01-02T21:06:16.839562Z,WARNING,Slow query detected: 1268ms,database-service,staging,server-7,user_5054
+2026-01-02T21:07:14.439562Z,WARNING,Slow query detected: 1180ms,user-service,development,server-6,user_2677
+2026-01-02T21:08:12.039562Z,WARNING,Deprecated API endpoint called: /api/v1/users,api-gateway,development,server-2,user_2531
+2026-01-02T21:09:09.639562Z,ERROR,Failed to process payment: timeout,database-service,staging,server-6,user_9502
+2026-01-02T21:10:07.239562Z,WARNING,Rate limit approaching for user user_4129,payment-service,staging,server-8,user_4609
+2026-01-02T21:11:04.839562Z,WARNING,Connection pool near capacity: 86%,user-service,staging,server-3,user_4833
+2026-01-02T21:12:02.439562Z,WARNING,Slow query detected: 713ms,payment-service,development,server-2,user_7446
+2026-01-02T21:13:00.039562Z,WARNING,Slow query detected: 798ms,api-gateway,development,server-8,user_7100
+2026-01-02T21:13:57.639562Z,WARNING,Connection pool near capacity: 80%,auth-service,staging,server-10,user_9661
+2026-01-02T21:14:55.239562Z,WARNING,Rate limit approaching for user user_5193,auth-service,development,server-4,user_1274
+2026-01-02T21:15:52.839562Z,WARNING,High memory usage detected: 88%,auth-service,staging,server-3,user_8662
+2026-01-02T21:16:50.439562Z,ERROR,Database connection failed: invalid credentials,payment-service,staging,server-8,user_4562
+2026-01-02T21:17:48.039562Z,WARNING,Connection pool near capacity: 77%,database-service,production,server-1,user_9512
+2026-01-02T21:18:45.639562Z,WARNING,High memory usage detected: 81%,payment-service,staging,server-3,user_7820
+2026-01-02T21:19:43.239562Z,WARNING,Deprecated API endpoint called: /api/v1/users,auth-service,staging,server-4,user_5407
+2026-01-02T21:20:40.839562Z,WARNING,Rate limit approaching for user user_4770,auth-service,staging,server-10,user_7563
+2026-01-02T21:21:38.439562Z,WARNING,Connection pool near capacity: 90%,payment-service,staging,server-5,user_1400
+2026-01-02T21:22:36.039562Z,WARNING,High memory usage detected: 89%,api-gateway,development,server-6,user_6277
+2026-01-02T21:23:33.639562Z,WARNING,Rate limit approaching for user user_4964,notification-service,production,server-1,user_8252
+2026-01-02T21:24:31.239562Z,WARNING,Slow query detected: 2966ms,payment-service,development,server-5,user_3206
+2026-01-02T21:25:28.839562Z,WARNING,High memory usage detected: 74%,notification-service,staging,server-1,user_8571
+2026-01-02T21:26:26.439562Z,ERROR,API request timeout: /api/v1/products,user-service,staging,server-10,user_8378
+2026-01-02T21:27:24.039562Z,WARNING,Deprecated API endpoint called: /api/v1/orders,api-gateway,production,server-1,user_4289
+2026-01-02T21:28:21.639562Z,WARNING,Slow query detected: 2255ms,api-gateway,development,server-8,user_8004
+2026-01-02T21:29:19.239562Z,ERROR,Failed to process payment: timeout,auth-service,production,server-9,user_3224
+2026-01-02T21:30:16.839562Z,ERROR,Failed to send notification: connection refused,user-service,staging,server-8,user_5532
+2026-01-02T21:31:14.439562Z,ERROR,Authentication failed for user user_2439,database-service,production,server-10,user_7672
+2026-01-02T21:32:12.039562Z,WARNING,Slow query detected: 3826ms,auth-service,production,server-6,user_6591
+2026-01-02T21:33:09.639562Z,WARNING,Slow query detected: 493ms,notification-service,development,server-9,user_9672
+2026-01-02T21:34:07.239562Z,WARNING,Deprecated API endpoint called: /api/v1/users,api-gateway,staging,server-5,user_9102
+2026-01-02T21:35:04.839562Z,WARNING,Deprecated API endpoint called: /api/v1/products,user-service,development,server-3,user_5899
+2026-01-02T21:36:02.439562Z,WARNING,Connection pool near capacity: 71%,auth-service,staging,server-9,user_1169
+2026-01-02T21:37:00.039562Z,WARNING,Rate limit approaching for user user_7678,database-service,staging,server-1,user_6032
+2026-01-02T21:37:57.639562Z,WARNING,High memory usage detected: 80%,database-service,development,server-2,user_4973
+2026-01-02T21:38:55.239562Z,ERROR,Database connection failed: invalid credentials,database-service,staging,server-1,user_9501
+2026-01-02T21:39:52.839562Z,WARNING,Slow query detected: 1038ms,user-service,production,server-2,user_8306
+2026-01-02T21:40:50.439562Z,WARNING,High memory usage detected: 84%,auth-service,staging,server-8,user_3477
+2026-01-02T21:41:48.039562Z,WARNING,High memory usage detected: 74%,auth-service,production,server-9,user_7590
+2026-01-02T21:42:45.639562Z,WARNING,Deprecated API endpoint called: /api/v1/orders,database-service,production,server-3,user_2059
+2026-01-02T21:43:43.239562Z,WARNING,Connection pool near capacity: 94%,user-service,staging,server-9,user_6149
+2026-01-02T21:44:40.839562Z,WARNING,High memory usage detected: 83%,notification-service,staging,server-7,user_6875
+2026-01-02T21:45:38.439562Z,WARNING,Rate limit approaching for user user_2770,notification-service,staging,server-2,user_7248
+2026-01-02T21:46:36.039562Z,WARNING,Slow query detected: 4274ms,api-gateway,production,server-3,user_8998
+2026-01-02T21:47:33.639562Z,WARNING,Rate limit approaching for user user_1738,payment-service,staging,server-7,user_7706
+2026-01-02T21:48:31.239562Z,WARNING,Rate limit approaching for user user_2316,database-service,development,server-4,user_6574
+2026-01-02T21:49:28.839562Z,WARNING,Deprecated API endpoint called: /api/v1/products,api-gateway,development,server-3,user_8898
+2026-01-02T21:50:26.439562Z,WARNING,Connection pool near capacity: 79%,notification-service,staging,server-2,user_2896
+2026-01-02T21:51:24.039562Z,WARNING,Rate limit approaching for user user_8622,api-gateway,development,server-10,user_3605
+2026-01-02T21:52:21.639562Z,ERROR,API request timeout: /api/v1/products,user-service,staging,server-10,user_2753
+2026-01-02T21:53:19.239562Z,WARNING,Slow query detected: 3289ms,api-gateway,staging,server-1,user_2656
+2026-01-02T21:54:16.839562Z,WARNING,Slow query detected: 1207ms,payment-service,production,server-4,user_5567
+2026-01-02T21:55:14.439562Z,WARNING,Connection pool near capacity: 74%,database-service,development,server-10,user_9780
+2026-01-02T21:56:12.039562Z,WARNING,High memory usage detected: 73%,payment-service,production,server-7,user_7641
+2026-01-02T21:57:09.639562Z,WARNING,Slow query detected: 4325ms,user-service,development,server-8,user_7743
+2026-01-02T21:58:07.239562Z,WARNING,Rate limit approaching for user user_1017,database-service,development,server-10,user_5969
+2026-01-02T21:59:04.839562Z,WARNING,Rate limit approaching for user user_4387,user-service,staging,server-9,user_8346
+2026-01-02T22:00:02.439562Z,WARNING,Rate limit approaching for user user_8088,database-service,staging,server-9,user_2147
+2026-01-02T22:01:00.039562Z,WARNING,High memory usage detected: 86%,payment-service,staging,server-2,user_7289
+2026-01-02T22:01:57.639562Z,WARNING,Connection pool near capacity: 75%,auth-service,staging,server-9,user_7724
+2026-01-02T22:02:55.239562Z,WARNING,Connection pool near capacity: 84%,auth-service,development,server-1,user_7614
+2026-01-02T22:03:52.839562Z,WARNING,High memory usage detected: 94%,user-service,production,server-8,user_7009
+2026-01-02T22:04:50.439562Z,WARNING,Slow query detected: 245ms,payment-service,production,server-4,user_7292
+2026-01-02T22:05:48.039562Z,WARNING,Deprecated API endpoint called: /api/v1/orders,user-service,development,server-6,user_2290
+2026-01-02T22:06:45.639562Z,WARNING,Deprecated API endpoint called: /api/v1/users,database-service,production,server-1,user_3274
+2026-01-02T22:07:43.239562Z,ERROR,Authentication failed for user user_2529,notification-service,production,server-1,user_1487
+2026-01-02T22:08:40.839562Z,WARNING,Deprecated API endpoint called: /api/v1/products,database-service,production,server-1,user_4538
+2026-01-02T22:09:38.439562Z,WARNING,Rate limit approaching for user user_6794,database-service,staging,server-5,user_8944
+2026-01-02T22:10:36.039562Z,WARNING,Slow query detected: 4337ms,api-gateway,production,server-9,user_4547
+2026-01-02T22:11:33.639562Z,WARNING,Deprecated API endpoint called: /api/v1/products,database-service,development,server-2,user_5907
+2026-01-02T22:12:31.239562Z,WARNING,Rate limit approaching for user user_2993,user-service,development,server-8,user_1604
+2026-01-02T22:13:28.839562Z,WARNING,Deprecated API endpoint called: /api/v1/users,notification-service,development,server-2,user_2330
+2026-01-02T22:14:26.439562Z,WARNING,High memory usage detected: 73%,api-gateway,development,server-4,user_4417
+2026-01-02T22:15:24.039562Z,WARNING,Deprecated API endpoint called: /api/v1/orders,payment-service,development,server-7,user_3582
+2026-01-02T22:16:21.639562Z,WARNING,High memory usage detected: 70%,user-service,development,server-10,user_6092
+2026-01-02T22:17:19.239562Z,WARNING,High memory usage detected: 72%,api-gateway,development,server-3,user_8933
+2026-01-02T22:18:16.839562Z,WARNING,Rate limit approaching for user user_4065,auth-service,staging,server-5,user_7849
+2026-01-02T22:19:14.439562Z,WARNING,High memory usage detected: 75%,database-service,development,server-9,user_5415
+2026-01-02T22:20:12.039562Z,WARNING,High memory usage detected: 84%,api-gateway,development,server-4,user_2905

@@ -2,7 +2,7 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 
-interface DatePickerProps {
+export interface DatePickerProps {
   value?: Date | null;
   onChange: (date: Date | null) => void;
   placeholder?: string;

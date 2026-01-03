@@ -7,6 +7,12 @@ from channels.generic.websocket import AsyncWebsocketConsumer
 from channels.db import database_sync_to_async
 from datetime import datetime
 
+# Import connection tracker for real-time user count
+try:
+    from api.realtime import connection_tracker
+except ImportError:
+    connection_tracker = None
+
 
 class NotificationConsumer(AsyncWebsocketConsumer):
     """
@@ -121,6 +127,7 @@ class LogStreamConsumer(AsyncWebsocketConsumer):
         """Handle WebSocket connection."""
         self.user = self.scope["user"]
         self.log_stream_group = "log_stream"
+        self.filters = {}  # Initialize filters
         
         # Join log stream group
         await self.channel_layer.group_add(
@@ -128,18 +135,36 @@ class LogStreamConsumer(AsyncWebsocketConsumer):
             self.channel_name
         )
         
+        # Track connection for user count
+        connected_count = 0
+        if connection_tracker:
+            user_id = str(self.user.id) if self.user and self.user.is_authenticated else None
+            connected_count = await connection_tracker.add_connection(
+                self.log_stream_group,
+                self.channel_name,
+                user_id
+            )
+        
         await self.accept()
         
-        # Send connection confirmation
+        # Send connection confirmation with user count
         await self.send(text_data=json.dumps({
             'type': 'connection',
             'status': 'connected',
             'message': 'Connected to log stream',
+            'connected_users': connected_count,
             'timestamp': datetime.utcnow().isoformat()
         }))
     
     async def disconnect(self, close_code):
         """Handle WebSocket disconnection."""
+        # Untrack connection
+        if connection_tracker:
+            await connection_tracker.remove_connection(
+                self.log_stream_group,
+                self.channel_name
+            )
+        
         await self.channel_layer.group_discard(
             self.log_stream_group,
             self.channel_name

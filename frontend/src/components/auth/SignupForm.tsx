@@ -16,6 +16,7 @@ export default function SignupForm({ onSuccess, redirectTo = '/dashboard' }: Sig
   const { register, isLoading } = useAuth();
 
   const [formData, setFormData] = useState({
+    username: '',
     first_name: '',
     last_name: '',
     email: '',
@@ -30,6 +31,14 @@ export default function SignupForm({ onSuccess, redirectTo = '/dashboard' }: Sig
 
   const validateForm = (): boolean => {
     const newErrors: Record<string, string> = {};
+
+    if (!formData.username.trim()) {
+      newErrors.username = 'Username is required';
+    } else if (formData.username.length < 3) {
+      newErrors.username = 'Username must be at least 3 characters';
+    } else if (!/^[a-zA-Z0-9_]+$/.test(formData.username)) {
+      newErrors.username = 'Username can only contain letters, numbers, and underscores';
+    }
 
     if (!formData.first_name.trim()) {
       newErrors.first_name = 'First name is required';
@@ -84,8 +93,11 @@ export default function SignupForm({ onSuccess, redirectTo = '/dashboard' }: Sig
     setGeneralError(null);
 
     try {
-      const { confirmPassword, ...registerData } = formData;
-      await register(registerData);
+      const { confirmPassword, organization, ...registerData } = formData;
+      await register({
+        ...registerData,
+        password2: confirmPassword,
+      });
       onSuccess?.();
       router.push(redirectTo);
     } catch (err: unknown) {
@@ -154,6 +166,28 @@ export default function SignupForm({ onSuccess, redirectTo = '/dashboard' }: Sig
       )}
 
       <form onSubmit={handleSubmit} className="space-y-5" noValidate>
+        <Input
+          label="Username"
+          name="username"
+          type="text"
+          autoComplete="username"
+          placeholder="johndoe"
+          value={formData.username}
+          onChange={handleChange}
+          error={errors.username}
+          required
+          leftIcon={
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+              />
+            </svg>
+          }
+        />
+
         <div className="grid grid-cols-2 gap-4">
           <Input
             label="First name"

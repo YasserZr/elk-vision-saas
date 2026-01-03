@@ -272,15 +272,22 @@ class LogMetadata:
 
         results_status = list(collection.aggregate(pipeline_status))
 
-        # Get source aggregation
+        # Get detailed source aggregation with file names
         pipeline_source = [
             {"$match": match_query},
             {
                 "$group": {
-                    "_id": "$source",
-                    "count": {"$sum": "$log_count"},
+                    "_id": {
+                        "file_name": "$file_name",
+                        "source": "$source",
+                        "environment": "$environment",
+                        "service_name": "$service_name"
+                    },
+                    "log_count": {"$sum": "$log_count"},
+                    "file_size": {"$first": "$file_size"},
                 }
             },
+            {"$sort": {"log_count": -1}}
         ]
 
         results_source = list(collection.aggregate(pipeline_source))
@@ -305,6 +312,7 @@ class LogMetadata:
             "total_size_bytes": sum(r["total_size"] for r in results_status),
             "by_status": {},
             "by_source": {},
+            "by_source_detailed": [],
             "by_environment": {},
             "by_level": {
                 "error": 0,
@@ -322,9 +330,30 @@ class LogMetadata:
                 "avg_processing_time": result["avg_processing_time"],
             }
 
+        # Process detailed source information
         for result in results_source:
-            source = result["_id"] or "unknown"
-            stats["by_source"][source] = result["count"]
+            source_info = result["_id"]
+            file_name = source_info.get("file_name", "unknown")
+            source = source_info.get("source", "unknown")
+            environment = source_info.get("environment", "unknown")
+            service_name = source_info.get("service_name", "")
+            log_count = result.get("log_count", 0)
+            file_size = result.get("file_size", 0)
+            
+            # Add to detailed list
+            stats["by_source_detailed"].append({
+                "file_name": file_name,
+                "source": source,
+                "environment": environment,
+                "service_name": service_name,
+                "log_count": log_count,
+                "file_size": file_size
+            })
+            
+            # Also keep the old by_source format for backward compatibility
+            if source not in stats["by_source"]:
+                stats["by_source"][source] = 0
+            stats["by_source"][source] += log_count
 
         for result in results_env:
             env = result["_id"] or "unknown"

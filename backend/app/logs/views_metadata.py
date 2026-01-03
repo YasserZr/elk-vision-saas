@@ -39,9 +39,14 @@ class LogMetadataListView(APIView):
             # Get user's tenant
             profile = UserProfile.get_by_user_id(request.user.id)
             if not profile:
-                return Response(
-                    {"error": "Profile not found"}, status=status.HTTP_404_NOT_FOUND
+                # Auto-create profile for new user
+                profile = UserProfile.create(
+                    user_id=request.user.id,
+                    tenant_id="default",
+                    organization=getattr(request.user, 'username', 'default'),
+                    role="admin"
                 )
+                logger.info(f"Auto-created profile for user {request.user.id}")
 
             # Pagination
             page = int(request.query_params.get("page", 1))
@@ -200,9 +205,14 @@ class LogMetadataStatsView(APIView):
             # Get user's tenant
             profile = UserProfile.get_by_user_id(request.user.id)
             if not profile:
-                return Response(
-                    {"error": "Profile not found"}, status=status.HTTP_404_NOT_FOUND
+                # Auto-create profile for new user
+                profile = UserProfile.create(
+                    user_id=request.user.id,
+                    tenant_id="default",
+                    organization=getattr(request.user, 'username', 'default'),
+                    role="admin"
                 )
+                logger.info(f"Auto-created profile for user {request.user.id}")
 
             days = int(request.query_params.get("days", 30))
 
@@ -246,9 +256,14 @@ class LogMetadataRecentView(APIView):
             # Get user's tenant
             profile = UserProfile.get_by_user_id(request.user.id)
             if not profile:
-                return Response(
-                    {"error": "Profile not found"}, status=status.HTTP_404_NOT_FOUND
+                # Auto-create profile for new user
+                profile = UserProfile.create(
+                    user_id=request.user.id,
+                    tenant_id="default",
+                    organization=getattr(request.user, 'username', 'default'),
+                    role="admin"
                 )
+                logger.info(f"Auto-created profile for user {request.user.id}")
 
             limit = min(int(request.query_params.get("limit", 10)), 50)
 

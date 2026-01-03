@@ -5,7 +5,7 @@
 
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useLogStream } from '@/hooks/useWebSocket';
 import { Card, Button, Spinner } from '@/components/ui';
 
@@ -14,19 +14,23 @@ interface LogStreamProps {
   showFilters?: boolean;
 }
 
-export default function LogStream({ maxLogs = 50, showFilters = true }: LogStreamProps) {
+export default function LogStream({ maxLogs = 500, showFilters = true }: LogStreamProps) {
   const [filters, setFilters] = useState({
     level: '',
     source: '',
     environment: '',
+    searchText: '',
   });
   const [isPaused, setIsPaused] = useState(false);
+  const [autoScroll, setAutoScroll] = useState(true);
   const [pausedLogs, setPausedLogs] = useState<any[]>([]);
+  const logsContainerRef = useRef<HTMLDivElement>(null);
+  const bottomRef = useRef<HTMLDivElement>(null);
 
   const { isConnected, logs, clearLogs, setFilters: applyFilters } = useLogStream((log) => {
     // Handle each new log
     if (isPaused) {
-      setPausedLogs((prev) => [log, ...prev]);
+      setPausedLogs((prev) => [log, ...prev].slice(0, maxLogs));
     }
     
     // You can add custom logic here, e.g., play sound for critical errors
@@ -36,6 +40,26 @@ export default function LogStream({ maxLogs = 50, showFilters = true }: LogStrea
   });
 
   const displayLogs = isPaused ? pausedLogs : logs;
+
+  // Auto-scroll to bottom when new logs arrive
+  useEffect(() => {
+    if (autoScroll && !isPaused && bottomRef.current) {
+      bottomRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, [logs, autoScroll, isPaused]);
+
+  // Handle spacebar to pause/resume
+  useEffect(() => {
+    const handleKeyPress = (e: KeyboardEvent) => {
+      if (e.code === 'Space' && e.target === document.body) {
+        e.preventDefault();
+        setIsPaused((prev) => !prev);
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyPress);
+    return () => document.removeEventListener('keydown', handleKeyPress);
+  }, []);
 
   useEffect(() => {
     // Apply filters when they change
@@ -48,6 +72,18 @@ export default function LogStream({ maxLogs = 50, showFilters = true }: LogStrea
       applyFilters(activeFilters);
     }
   }, [filters, applyFilters]);
+
+  // Filter logs for text search (client-side)
+  const filteredLogs = displayLogs.filter((log) => {
+    if (filters.searchText) {
+      const searchLower = filters.searchText.toLowerCase();
+      const messageMatch = log.message?.toLowerCase().includes(searchLower);
+      const levelMatch = log.level?.toLowerCase().includes(searchLower);
+      const sourceMatch = log.source?.toLowerCase().includes(searchLower);
+      if (!messageMatch && !levelMatch && !sourceMatch) return false;
+    }
+    return true;
+  });
 
   const getLevelColor = (level: string) => {
     const colors: Record<string, string> = {
@@ -92,6 +128,19 @@ export default function LogStream({ maxLogs = 50, showFilters = true }: LogStrea
         </div>
 
         <div className="flex items-center gap-2">
+          {/* Auto-scroll toggle */}
+          <Button
+            variant={autoScroll ? 'primary' : 'outline'}
+            size="sm"
+            onClick={() => setAutoScroll(!autoScroll)}
+            title="Toggle auto-scroll"
+          >
+            <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+            </svg>
+            Auto-scroll
+          </Button>
+
           {isPaused ? (
             <Button variant="primary" size="sm" onClick={handleResume}>
               <svg className="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
@@ -117,6 +166,14 @@ export default function LogStream({ maxLogs = 50, showFilters = true }: LogStrea
       {showFilters && (
         <div className="p-4 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50">
           <div className="flex flex-wrap gap-3">
+            <input
+              type="text"
+              placeholder="Search logs..."
+              value={filters.searchText}
+              onChange={(e) => setFilters({ ...filters, searchText: e.target.value })}
+              className="px-3 py-1.5 text-sm bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 flex-1 min-w-[200px]"
+            />
+
             <select
               value={filters.level}
               onChange={(e) => setFilters({ ...filters, level: e.target.value })}
@@ -146,21 +203,26 @@ export default function LogStream({ maxLogs = 50, showFilters = true }: LogStrea
               className="px-3 py-1.5 text-sm bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500"
             />
 
-            {(filters.level || filters.source || filters.environment) && (
+            {(filters.level || filters.source || filters.environment || filters.searchText) && (
               <Button
                 variant="ghost"
                 size="sm"
-                onClick={() => setFilters({ level: '', source: '', environment: '' })}
+                onClick={() => setFilters({ level: '', source: '', environment: '', searchText: '' })}
               >
                 Clear Filters
               </Button>
             )}
           </div>
+          
+          {/* Keyboard shortcuts hint */}
+          <div className="mt-2 text-xs text-gray-500 dark:text-gray-400">
+            <kbd className="px-2 py-0.5 bg-white dark:bg-gray-900 rounded border border-gray-300 dark:border-gray-600">Space</kbd> to pause/resume
+          </div>
         </div>
       )}
 
       {/* Log Stream */}
-      <div className="flex-1 overflow-y-auto p-4 space-y-2 bg-gray-900 font-mono text-sm">
+      <div ref={logsContainerRef} className="flex-1 overflow-y-auto p-4 space-y-2 bg-gray-900 font-mono text-sm">
         {!isConnected && (
           <div className="flex items-center justify-center h-full text-gray-500">
             <div className="text-center">
@@ -170,7 +232,7 @@ export default function LogStream({ maxLogs = 50, showFilters = true }: LogStrea
           </div>
         )}
 
-        {isConnected && displayLogs.length === 0 && (
+        {isConnected && filteredLogs.length === 0 && (
           <div className="flex items-center justify-center h-full text-gray-500">
             <div className="text-center">
               <svg className="w-16 h-16 mx-auto mb-3 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -182,7 +244,7 @@ export default function LogStream({ maxLogs = 50, showFilters = true }: LogStrea
           </div>
         )}
 
-        {displayLogs.map((log, index) => (
+        {filteredLogs.map((log, index) => (
           <div
             key={log.id || index}
             className="flex items-start gap-3 p-2 rounded bg-gray-800 hover:bg-gray-750 transition-colors border-l-2 border-transparent hover:border-blue-500"
@@ -217,13 +279,14 @@ export default function LogStream({ maxLogs = 50, showFilters = true }: LogStrea
             )}
           </div>
         ))}
+        <div ref={bottomRef} />
       </div>
 
       {/* Footer Stats */}
       <div className="p-3 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50">
         <div className="flex items-center justify-between text-xs text-gray-500 dark:text-gray-400">
-          <span>{displayLogs.length} logs displayed (max {maxLogs})</span>
-          <span>Auto-scroll enabled</span>
+          <span>{filteredLogs.length} logs displayed (max {maxLogs})</span>
+          <span>{autoScroll ? 'Auto-scroll enabled' : 'Auto-scroll disabled'}</span>
         </div>
       </div>
     </Card>

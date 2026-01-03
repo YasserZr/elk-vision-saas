@@ -16,7 +16,7 @@ export default function LoginForm({ onSuccess, redirectTo = '/dashboard' }: Logi
   const { login, isLoading } = useAuth();
 
   const [formData, setFormData] = useState({
-    email: '',
+    username: '',
     password: '',
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -27,10 +27,10 @@ export default function LoginForm({ onSuccess, redirectTo = '/dashboard' }: Logi
   const validateForm = (): boolean => {
     const newErrors: Record<string, string> = {};
 
-    if (!formData.email) {
-      newErrors.email = 'Email is required';
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-      newErrors.email = 'Please enter a valid email address';
+    if (!formData.username) {
+      newErrors.username = 'Username is required';
+    } else if (formData.username.length < 3) {
+      newErrors.username = 'Username must be at least 3 characters';
     }
 
     if (!formData.password) {
@@ -114,14 +114,14 @@ export default function LoginForm({ onSuccess, redirectTo = '/dashboard' }: Logi
 
       <form onSubmit={handleSubmit} className="space-y-5" noValidate>
         <Input
-          label="Email address"
-          name="email"
-          type="email"
-          autoComplete="email"
-          placeholder="you@example.com"
-          value={formData.email}
+          label="Username"
+          name="username"
+          type="text"
+          autoComplete="username"
+          placeholder="Enter your username"
+          value={formData.username}
           onChange={handleChange}
-          error={errors.email}
+          error={errors.username}
           required
           leftIcon={
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -129,7 +129,7 @@ export default function LoginForm({ onSuccess, redirectTo = '/dashboard' }: Logi
                 strokeLinecap="round"
                 strokeLinejoin="round"
                 strokeWidth={2}
-                d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207"
+                d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
               />
             </svg>
           }

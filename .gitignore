@@ -89,3 +89,8 @@ Thumbs.db
 *.key
 *.cert
 secrets/
+
+# Documentation - ignore all markdown except README
+*.md
+!README.md
+!**/README.md
