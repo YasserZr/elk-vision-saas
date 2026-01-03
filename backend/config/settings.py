@@ -29,6 +29,7 @@ INSTALLED_APPS = [
     "rest_framework_simplejwt",
     "corsheaders",
     "channels",
+    "drf_spectacular",
     # Local apps
     "app.users",
     "app.logs",
@@ -107,9 +108,15 @@ MONGODB = {
 }
 
 # Elasticsearch Configuration
+ELASTICSEARCH_SCHEME = config("ELASTICSEARCH_SCHEME", default="http")
+ELASTICSEARCH_HOST = config("ELASTICSEARCH_HOST", default="elasticsearch:9200")
+
+# Build full Elasticsearch URL with scheme
+ES_HOST_URL = f"{ELASTICSEARCH_SCHEME}://{ELASTICSEARCH_HOST}"
+
 ELASTICSEARCH_DSL = {
     "default": {
-        "hosts": config("ELASTICSEARCH_HOST", default="localhost:9200"),
+        "hosts": [ES_HOST_URL],
         "http_auth": (
             config("ELASTICSEARCH_USER", default="elastic"),
             config("ELASTICSEARCH_PASSWORD", default="changeme"),
@@ -165,6 +172,17 @@ REST_FRAMEWORK = {
     ],
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
     "PAGE_SIZE": 100,
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
+}
+
+# API Documentation Settings
+SPECTACULAR_SETTINGS = {
+    "TITLE": "ELK Vision SaaS API",
+    "DESCRIPTION": "Centralized log management and monitoring platform with Elasticsearch, multi-tenant isolation, and real-time WebSocket notifications",
+    "VERSION": "1.0.0",
+    "SERVE_INCLUDE_SCHEMA": False,
+    "COMPONENT_SPLIT_REQUEST": True,
+    "SCHEMA_PATH_PREFIX": "/api/v1/",
 }
 
 # JWT Settings

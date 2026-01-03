@@ -138,9 +138,13 @@ class LogUploadView(APIView):
             )
 
     def _get_tenant_id(self, user):
-        """Get tenant ID for the user (simplified - should come from user profile)"""
-        # TODO: Implement proper tenant resolution from user profile
-        return getattr(user, "tenant_id", "default")
+        """Get tenant ID for the user from MongoDB user profile"""
+        from app.users.models_mongo import UserProfile
+        
+        profile = UserProfile.get_by_user_id(user.id)
+        if profile:
+            return profile.tenant_id
+        return "default"
 
 
 class LogUploadStatusView(APIView):
@@ -219,13 +223,21 @@ class LogSearchView(APIView):
 
         try:
             es_config = settings.ELASTICSEARCH_DSL["default"]
+            # Build proper Elasticsearch URL with scheme
+            es_host = es_config["hosts"][0]
+            if not es_host.startswith(('http://', 'https://')):
+                scheme = getattr(settings, 'ELASTICSEARCH_SCHEME', 'http')
+                es_host = f"{scheme}://{es_host}"
+            
             es = Elasticsearch(
-                hosts=es_config["hosts"], http_auth=es_config.get("http_auth")
+                hosts=[es_host], http_auth=es_config.get("http_auth")
             )
 
             # Build query
             tenant_id = self._get_tenant_id(request.user)
             must_clauses = [{"term": {"tenant_id": tenant_id}}]
+            
+            logger.info(f"Search - tenant_id: {tenant_id}, user: {request.user.id}, time_from: {time_from}, time_to: {time_to}")
 
             if query:
                 must_clauses.append(
@@ -261,12 +273,30 @@ class LogSearchView(APIView):
                 "from": (page - 1) * size,
             }
 
-            # Execute search
-            result = es.search(index=f"logs-{tenant_id}-*", body=search_body)
+            # Execute search (use logs-* since tenant_id is filtered in query)
+            logger.info(f"Executing search on logs-* with body: {search_body}")
+            result = es.search(index="logs-*", body=search_body)
+            logger.info(f"Search result: total={result['hits']['total']['value']}, took={result['took']}ms")
 
-            # Format results
+            # Format results - normalize field names
             hits = result["hits"]["hits"]
-            logs = [hit["_source"] for hit in hits]
+            logs = []
+            for hit in hits:
+                source = hit["_source"]
+                # Normalize field names to match frontend expectations
+                normalized = {
+                    "id": hit["_id"],
+                    "timestamp": source.get("@timestamp") or source.get("timestamp"),
+                    "level": source.get("level", "info"),
+                    "message": source.get("message") or source.get("raw_log") or source.get("original", ""),
+                    "source": source.get("source", ""),
+                    "service": source.get("service_name") or source.get("service", ""),
+                    "environment": source.get("environment", ""),
+                    "tenant_id": source.get("tenant_id", ""),
+                    # Include all original fields as metadata
+                    **source
+                }
+                logs.append(normalized)
 
             return Response(
                 {
@@ -326,12 +356,19 @@ class LogSearchView(APIView):
 
         try:
             es_config = settings.ELASTICSEARCH_DSL["default"]
+            es_host = es_config["hosts"][0]
+            logger.info(f"POST - Original es_host: {es_host}")
+            if not es_host.startswith("http://") and not es_host.startswith("https://"):
+                scheme = getattr(settings, "ELASTICSEARCH_SCHEME", "http")
+                es_host = f"{scheme}://{es_host}"
+            logger.info(f"POST - Final es_host: {es_host}")
             es = Elasticsearch(
-                hosts=es_config["hosts"], http_auth=es_config.get("http_auth")
+                hosts=[es_host], http_auth=es_config.get("http_auth")
             )
 
             # Build query
             tenant_id = self._get_tenant_id(request.user)
+            logger.info(f"POST Search - tenant_id: {tenant_id}, user: {request.user.id}, query: '{query}'")
             must_clauses = [{"term": {"tenant_id": tenant_id}}]
 
             if query:
@@ -375,11 +412,30 @@ class LogSearchView(APIView):
             }
 
             # Execute search
-            result = es.search(index=f"logs-{tenant_id}-*", body=search_body)
+            logger.info(f"Executing ES search with body: {search_body}")
+            result = es.search(index="logs-*", body=search_body)
+            logger.info(f"POST Search result: total={result['hits']['total']['value']}, returned={len(result['hits']['hits'])}, took={result['took']}ms")
+            logger.info(f"POST Search result: total={result['hits']['total']['value']}, returned={len(result['hits']['hits'])}, took={result['took']}ms")
 
-            # Format results
+            # Format results - normalize field names
             hits = result["hits"]["hits"]
-            logs = [hit["_source"] for hit in hits]
+            logs = []
+            for hit in hits:
+                source = hit["_source"]
+                # Normalize field names to match frontend expectations
+                normalized = {
+                    "id": hit["_id"],
+                    "timestamp": source.get("@timestamp") or source.get("timestamp"),
+                    "level": source.get("level", "info"),
+                    "message": source.get("message") or source.get("raw_log") or source.get("original", ""),
+                    "source": source.get("source", ""),
+                    "service": source.get("service_name") or source.get("service", ""),
+                    "environment": source.get("environment", ""),
+                    "tenant_id": source.get("tenant_id", ""),
+                    # Include all original fields as metadata
+                    **source
+                }
+                logs.append(normalized)
 
             return Response(
                 {
@@ -405,8 +461,13 @@ class LogSearchView(APIView):
             )
 
     def _get_tenant_id(self, user):
-        """Get tenant ID for the user"""
-        return getattr(user, "tenant_id", "default")
+        """Get tenant ID for the user from MongoDB user profile"""
+        from app.users.models_mongo import UserProfile
+        
+        profile = UserProfile.get_by_user_id(user.id)
+        if profile:
+            return profile.tenant_id
+        return "default"
 
 
 class LogstashMonitorView(APIView):
@@ -540,5 +601,10 @@ class LogstashMonitorView(APIView):
             )
 
     def _get_tenant_id(self, user):
-        """Get tenant ID for the user"""
-        return getattr(user, "tenant_id", "default")
+        """Get tenant ID for the user from MongoDB user profile"""
+        from app.users.models_mongo import UserProfile
+        
+        profile = UserProfile.get_by_user_id(user.id)
+        if profile:
+            return profile.tenant_id
+        return "default"
