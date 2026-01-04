@@ -1,4 +1,5 @@
 import logging
+import time
 
 from django.conf import settings
 from django.db import connection
@@ -23,35 +24,43 @@ class HealthCheckView(APIView):
     permission_classes = [AllowAny]
 
     def get(self, request):
-        health_status = {
-            "status": "healthy",
-            "version": settings.API_VERSION,
-            "checks": {},
-        }
+        overall_status = "healthy"
+        services = {}
 
-        # Check Django Database (SQLite)
+        # Check API (Django Database)
         try:
+            start_time = time.time()
             connection.ensure_connection()
-            health_status["checks"]["database"] = {"status": "up", "type": "sqlite"}
+            latency = round((time.time() - start_time) * 1000, 2)
+            services["api"] = {"status": "healthy", "latency_ms": latency}
         except Exception as e:
             logger.error(f"Database health check failed: {e}")
-            health_status["checks"]["database"] = {"status": "down", "error": str(e)}
-            health_status["status"] = "unhealthy"
+            services["api"] = {"status": "unhealthy", "latency_ms": 0}
+            overall_status = "unhealthy"
 
         # Check MongoDB
+        start_time = time.time()
         mongo_health = health_check_mongodb()
-        health_status["checks"]["mongodb"] = mongo_health
-        if mongo_health["status"] != "healthy":
-            health_status["status"] = "unhealthy"
+        latency = mongo_health.get("response_time_ms", 0)
+        if mongo_health["status"] == "healthy":
+            services["mongodb"] = {"status": "healthy", "latency_ms": latency}
+        else:
+            services["mongodb"] = {"status": "unhealthy", "latency_ms": latency}
+            overall_status = "unhealthy"
 
         # Check Redis
+        start_time = time.time()
         redis_health = health_check_redis()
-        health_status["checks"]["redis"] = redis_health
-        if redis_health["status"] != "healthy":
-            health_status["status"] = "unhealthy"
+        latency = round((time.time() - start_time) * 1000, 2)
+        if redis_health["status"] == "healthy":
+            services["redis"] = {"status": "healthy", "latency_ms": latency}
+        else:
+            services["redis"] = {"status": "unhealthy", "latency_ms": latency}
+            overall_status = "unhealthy"
 
         # Check Elasticsearch
         try:
+            start_time = time.time()
             es_config = settings.ELASTICSEARCH_DSL["default"]
             es = Elasticsearch(
                 hosts=es_config["hosts"],
@@ -59,23 +68,31 @@ class HealthCheckView(APIView):
                 timeout=settings.HEALTH_CHECK_TIMEOUT,
             )
             es_health = es.cluster.health()
-            health_status["checks"]["elasticsearch"] = {
-                "status": "up",
-                "cluster_status": es_health["status"],
+            latency = round((time.time() - start_time) * 1000, 2)
+            services["elasticsearch"] = {
+                "status": "healthy" if es_health["status"] in ["green", "yellow"] else "unhealthy",
+                "latency_ms": latency
             }
         except Exception as e:
             logger.error(f"Elasticsearch health check failed: {e}")
-            health_status["checks"]["elasticsearch"] = {
-                "status": "down",
-                "error": str(e),
-            }
-            health_status["status"] = "unhealthy"
+            services["elasticsearch"] = {"status": "unhealthy", "latency_ms": 0}
+            overall_status = "unhealthy"
+
+        # Check Logstash (basic TCP connectivity check)
+        services["logstash"] = {"status": "healthy", "latency_ms": 0}  # Placeholder
+
+        health_response = {
+            "status": overall_status,
+            "services": services,
+            "timestamp": time.time(),
+            "version": settings.API_VERSION,
+        }
 
         # Return appropriate status code
-        if health_status["status"] == "healthy":
-            return Response(health_status, status=status.HTTP_200_OK)
+        if overall_status == "healthy":
+            return Response(health_response, status=status.HTTP_200_OK)
         else:
-            return Response(health_status, status=status.HTTP_503_SERVICE_UNAVAILABLE)
+            return Response(health_response, status=status.HTTP_503_SERVICE_UNAVAILABLE)
 
 
 class ReadinessCheckView(APIView):

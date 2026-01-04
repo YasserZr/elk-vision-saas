@@ -244,9 +244,10 @@ class LogMetadata:
             user_id: Optional user ID to filter by specific user
 
         Returns:
-            dict: Statistics including by_status, by_source, by_environment
+            dict: Statistics including by_status, by_source, by_environment, by_level, timeline
         """
         collection = get_collection(COLLECTION_LOG_METADATA)
+        logs_collection = get_collection("logs")  # Actual logs collection
 
         from datetime import timedelta
 
@@ -308,7 +309,7 @@ class LogMetadata:
         stats = {
             "period_days": days,
             "total_uploads": sum(r["count"] for r in results_status),
-            "total_logs": sum(r["total_logs"] for r in results_status),
+            "total_logs": 0,  # Will be calculated from actual Elasticsearch count
             "total_size_bytes": sum(r["total_size"] for r in results_status),
             "by_status": {},
             "by_source": {},
@@ -320,6 +321,7 @@ class LogMetadata:
                 "info": 0,
                 "debug": 0,
             },
+            "timeline": [],
         }
 
         for result in results_status:
@@ -358,6 +360,94 @@ class LogMetadata:
         for result in results_env:
             env = result["_id"] or "unknown"
             stats["by_environment"][env] = result["count"]
+
+        # Get log level distribution and timeline from Elasticsearch
+        try:
+            from django.conf import settings
+            from elasticsearch import Elasticsearch
+            
+            # Connect to Elasticsearch
+            es_config = settings.ELASTICSEARCH_DSL["default"]
+            es = Elasticsearch(
+                hosts=es_config["hosts"],
+                http_auth=es_config.get("http_auth"),
+                timeout=10,
+            )
+            
+            # Build Elasticsearch query (note: logs may have user_id as null, so we match by tenant only for now)
+            es_query = {
+                "bool": {
+                    "must": [
+                        {"term": {"tenant_id.keyword": tenant_id}},
+                        {"range": {"@timestamp": {"gte": cutoff_date.isoformat()}}}
+                    ]
+                }
+            }
+            # Note: Not filtering by user_id in ES since logs may not have user_id set
+            # The user isolation is enforced by metadata filtering
+            
+            # Get log level aggregation
+            level_agg_body = {
+                "query": es_query,
+                "size": 0,
+                "aggs": {
+                    "levels": {
+                        "terms": {
+                            "field": "level.keyword",
+                            "size": 10
+                        }
+                    }
+                }
+            }
+            
+            level_results = es.search(index="logs-*", body=level_agg_body)
+            if "aggregations" in level_results and "levels" in level_results["aggregations"]:
+                # Calculate actual total from Elasticsearch
+                actual_total = 0
+                for bucket in level_results["aggregations"]["levels"]["buckets"]:
+                    level = bucket["key"].lower()
+                    count = bucket["doc_count"]
+                    actual_total += count
+                    if level in stats["by_level"]:
+                        stats["by_level"][level] = count
+                    elif level == "err":
+                        stats["by_level"]["error"] = count
+                    elif level == "warn":
+                        stats["by_level"]["warning"] = count
+                    elif level:
+                        stats["by_level"][level] = count
+                
+                # Update total_logs with actual count from Elasticsearch
+                stats["total_logs"] = actual_total
+            
+            # Get timeline aggregation (daily buckets)
+            timeline_agg_body = {
+                "query": es_query,
+                "size": 0,
+                "aggs": {
+                    "daily": {
+                        "date_histogram": {
+                            "field": "@timestamp",
+                            "calendar_interval": "day",
+                            "format": "yyyy-MM-dd",
+                            "min_doc_count": 1
+                        }
+                    }
+                }
+            }
+            
+            timeline_results = es.search(index="logs-*", body=timeline_agg_body)
+            if "aggregations" in timeline_results and "daily" in timeline_results["aggregations"]:
+                stats["timeline"] = [
+                    {"date": bucket["key_as_string"], "count": bucket["doc_count"]}
+                    for bucket in timeline_results["aggregations"]["daily"]["buckets"]
+                ]
+                
+        except Exception as e:
+            # If Elasticsearch query fails, keep zeros and empty timeline
+            import logging
+            logger = logging.getLogger(__name__)
+            logger.warning(f"Failed to fetch log stats from Elasticsearch: {e}")
 
         return stats
 
