@@ -16,6 +16,9 @@ volumes:
 networks:
   monitoring_network:
     driver: bridge
+  backend_network:
+  database_network:
+  frontend_network:
 
 services:
   # ============================================
@@ -64,7 +67,7 @@ services:
       - GF_USERS_ALLOW_SIGN_UP=false
       - GF_SERVER_ROOT_URL=http://localhost:3001/grafana/
       - GF_SERVER_SERVE_FROM_SUB_PATH=true
-      - GF_INSTALL_PLUGINS=grafana-clock-panel,grafana-piechart-panel,redis-datasource,yesoreyeram-infinity-datasource
+      # - GF_INSTALL_PLUGINS=grafana-clock-panel,grafana-piechart-panel,redis-datasource,yesoreyeram-infinity-datasource
       - GF_SMTP_HOST=${SMTP_HOST:-smtp.gmail.com:587}
       - GF_SMTP_USER=${SMTP_USER:-}
       - GF_SMTP_PASSWORD=${SMTP_PASSWORD:-}

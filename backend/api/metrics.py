@@ -117,6 +117,31 @@ db_connections_active = Gauge(
     ['database']
 )
 
+# MongoDB Metrics
+mongodb_connections_active = Gauge(
+    'django_mongodb_connections_active',
+    'Number of active MongoDB connections'
+)
+
+mongodb_operations_total = Counter(
+    'django_mongodb_operations_total',
+    'Total MongoDB operations',
+    ['operation', 'collection']
+)
+
+# Error Tracking Metrics
+http_errors_total = Counter(
+    'django_http_errors_total',
+    'Total HTTP errors',
+    ['status_code', 'method', 'view']
+)
+
+exceptions_total = Counter(
+    'django_exceptions_total',
+    'Total unhandled exceptions',
+    ['exception_type', 'view']
+)
+
 # File Upload Metrics
 file_uploads_total = Counter(
     'django_file_uploads_total',

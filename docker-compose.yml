@@ -269,7 +269,7 @@ services:
         daphne -b 0.0.0.0 -p 8000 config.asgi:application
       "
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8000/api/health/"]
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/api/health/').read()"]
       interval: 30s
       timeout: 10s
       retries: 3

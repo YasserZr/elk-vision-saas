@@ -2,21 +2,21 @@
 # ===============================================
 
 global:
-  # SMTP settings for email notifications
-  smtp_smarthost: 'smtp.gmail.com:587'
-  smtp_from: 'alertmanager@yourdomain.com'
-  smtp_auth_username: '${SMTP_USERNAME}'
-  smtp_auth_password: '${SMTP_PASSWORD}'
-  smtp_require_tls: true
+  # Resolve timeout
+  resolve_timeout: 5m
+  
+  # SMTP settings for email notifications (disabled by default)
+  # smtp_smarthost: 'smtp.gmail.com:587'
+  # smtp_from: 'alertmanager@yourdomain.com'
+  # smtp_auth_username: '${SMTP_USERNAME}'
+  # smtp_auth_password: '${SMTP_PASSWORD}'
+  # smtp_require_tls: true
 
-  # Slack settings
-  slack_api_url: '${SLACK_WEBHOOK_URL}'
+  # Slack settings (disabled by default)
+  # slack_api_url: '${SLACK_WEBHOOK_URL}'
 
   # PagerDuty settings (optional)
   # pagerduty_url: 'https://events.pagerduty.com/v2/enqueue'
-
-  # Resolve timeout
-  resolve_timeout: 5m
 
 # Templates for notifications
 templates:
@@ -90,84 +90,84 @@ inhibit_rules:
 
 # Receivers
 receivers:
-  # Default receiver
+  # Default receiver (notifications disabled until credentials configured)
   - name: 'default-receiver'
-    email_configs:
-      - to: 'ops-team@yourdomain.com'
-        send_resolved: true
-    slack_configs:
-      - channel: '#alerts'
-        send_resolved: true
-        title: '{{ template "slack.default.title" . }}'
-        text: '{{ template "slack.default.text" . }}'
+    # email_configs:
+    #   - to: 'ops-team@yourdomain.com'
+    #     send_resolved: true
+    # slack_configs:
+    #   - channel: '#alerts'
+    #     send_resolved: true
+    #     title: '{{ template "slack.default.title" . }}'
+    #     text: '{{ template "slack.default.text" . }}'
 
-  # Critical alerts - multiple channels
+  # Critical alerts (notifications disabled until credentials configured)
   - name: 'critical-alerts'
-    email_configs:
-      - to: 'oncall@yourdomain.com'
-        send_resolved: true
-        headers:
-          Subject: '🚨 CRITICAL: {{ .GroupLabels.alertname }}'
-    slack_configs:
-      - channel: '#critical-alerts'
-        send_resolved: true
-        color: '{{ if eq .Status "firing" }}danger{{ else }}good{{ end }}'
-        title: '🚨 CRITICAL ALERT'
-        text: |
-          *Alert:* {{ .GroupLabels.alertname }}
-          *Severity:* {{ .CommonLabels.severity }}
-          *Summary:* {{ range .Alerts }}{{ .Annotations.summary }}{{ end }}
-          *Description:* {{ range .Alerts }}{{ .Annotations.description }}{{ end }}
+    # email_configs:
+    #   - to: 'oncall@yourdomain.com'
+    #     send_resolved: true
+    #     headers:
+    #       Subject: '🚨 CRITICAL: {{ .GroupLabels.alertname }}'
+    # slack_configs:
+    #   - channel: '#critical-alerts'
+    #     send_resolved: true
+    #     color: '{{ if eq .Status "firing" }}danger{{ else }}good{{ end }}'
+    #     title: '🚨 CRITICAL ALERT'
+    #     text: |
+    #       *Alert:* {{ .GroupLabels.alertname }}
+    #       *Severity:* {{ .CommonLabels.severity }}
+    #       *Summary:* {{ range .Alerts }}{{ .Annotations.summary }}{{ end }}
+    #       *Description:* {{ range .Alerts }}{{ .Annotations.description }}{{ end }}
     # Uncomment for PagerDuty integration
     # pagerduty_configs:
     #   - service_key: '${PAGERDUTY_SERVICE_KEY}'
     #     severity: critical
 
-  # Warning alerts
+  # Warning alerts (notifications disabled until credentials configured)
   - name: 'warning-alerts'
-    slack_configs:
-      - channel: '#alerts'
-        send_resolved: true
-        color: '{{ if eq .Status "firing" }}warning{{ else }}good{{ end }}'
-        title: '⚠️ Warning Alert'
-        text: |
-          *Alert:* {{ .GroupLabels.alertname }}
-          *Summary:* {{ range .Alerts }}{{ .Annotations.summary }}{{ end }}
+    # slack_configs:
+    #   - channel: '#alerts'
+    #     send_resolved: true
+    #     color: '{{ if eq .Status "firing" }}warning{{ else }}good{{ end }}'
+    #     title: '⚠️ Warning Alert'
+    #     text: |
+    #       *Alert:* {{ .GroupLabels.alertname }}
+    #       *Summary:* {{ range .Alerts }}{{ .Annotations.summary }}{{ end }}
 
-  # Database alerts
+  # Database alerts (notifications disabled until credentials configured)
   - name: 'database-alerts'
-    email_configs:
-      - to: 'dba-team@yourdomain.com'
-        send_resolved: true
-    slack_configs:
-      - channel: '#database-alerts'
-        send_resolved: true
-        title: '🗄️ Database Alert'
-        text: |
-          *Database:* {{ .GroupLabels.job }}
-          *Alert:* {{ .GroupLabels.alertname }}
-          *Description:* {{ range .Alerts }}{{ .Annotations.description }}{{ end }}
+    # email_configs:
+    #   - to: 'dba-team@yourdomain.com'
+    #     send_resolved: true
+    # slack_configs:
+    #   - channel: '#database-alerts'
+    #     send_resolved: true
+    #     title: '🗄️ Database Alert'
+    #     text: |
+    #       *Database:* {{ .GroupLabels.job }}
+    #       *Alert:* {{ .GroupLabels.alertname }}
+    #       *Description:* {{ range .Alerts }}{{ .Annotations.description }}{{ end }}
 
-  # Application alerts
+  # Application alerts (notifications disabled until credentials configured)
   - name: 'application-alerts'
-    slack_configs:
-      - channel: '#app-alerts'
-        send_resolved: true
-        title: '📱 Application Alert'
-        text: |
-          *Alert:* {{ .GroupLabels.alertname }}
-          *Summary:* {{ range .Alerts }}{{ .Annotations.summary }}{{ end }}
+    # slack_configs:
+    #   - channel: '#app-alerts'
+    #     send_resolved: true
+    #     title: '📱 Application Alert'
+    #     text: |
+    #       *Alert:* {{ .GroupLabels.alertname }}
+    #       *Summary:* {{ range .Alerts }}{{ .Annotations.summary }}{{ end }}
 
-  # Infrastructure alerts
+  # Infrastructure alerts (notifications disabled until credentials configured)
   - name: 'infrastructure-alerts'
-    slack_configs:
-      - channel: '#infra-alerts'
-        send_resolved: true
-        title: '🖥️ Infrastructure Alert'
-        text: |
-          *Instance:* {{ .GroupLabels.instance }}
-          *Alert:* {{ .GroupLabels.alertname }}
-          *Description:* {{ range .Alerts }}{{ .Annotations.description }}{{ end }}
+    # slack_configs:
+    #   - channel: '#infra-alerts'
+    #     send_resolved: true
+    #     title: '🖥️ Infrastructure Alert'
+    #     text: |
+    #       *Instance:* {{ .GroupLabels.instance }}
+    #       *Alert:* {{ .GroupLabels.alertname }}
+    #       *Description:* {{ range .Alerts }}{{ .Annotations.description }}{{ end }}
 
   # Null receiver (discard alerts)
   - name: 'null'

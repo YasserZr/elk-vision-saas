@@ -29,6 +29,7 @@ def get_redis_client() -> redis.Redis:
         _redis_client = redis.Redis(
             host=settings.REDIS_HOST,
             port=settings.REDIS_PORT,
+            password=settings.REDIS_PASSWORD,
             db=2,  # Use DB 2 for application cache (0: Celery, 1: Django cache)
             decode_responses=True,
             socket_connect_timeout=5,

@@ -15,29 +15,29 @@ contactPoints:
           singleEmail: true
         disableResolveMessage: false
 
-  # Slack notification
-  - orgId: 1
-    name: slack-alerts
-    receivers:
-      - uid: slack-receiver
-        type: slack
-        settings:
-          recipient: '#monitoring-alerts'
-          token: ${SLACK_BOT_TOKEN}
-          username: Grafana Alerts
-          icon_emoji: ':chart_with_upwards_trend:'
-          mentionChannel: 'here'
-        disableResolveMessage: false
+  # Slack notification (disabled until SLACK_BOT_TOKEN is configured)
+  # - orgId: 1
+  #   name: slack-alerts
+  #   receivers:
+  #     - uid: slack-receiver
+  #       type: slack
+  #       settings:
+  #         recipient: '#monitoring-alerts'
+  #         token: ${SLACK_BOT_TOKEN}
+  #         username: Grafana Alerts
+  #         icon_emoji: ':chart_with_upwards_trend:'
+  #         mentionChannel: 'here'
+  #       disableResolveMessage: false
 
-  # Critical alerts (PagerDuty)
-  - orgId: 1
-    name: pagerduty-critical
-    receivers:
-      - uid: pagerduty-receiver
-        type: pagerduty
-        settings:
-          integrationKey: ${PAGERDUTY_INTEGRATION_KEY}
-          severity: critical
+  # Critical alerts (PagerDuty) - disabled until PAGERDUTY_INTEGRATION_KEY is configured
+  # - orgId: 1
+  #   name: pagerduty-critical
+  #   receivers:
+  #     - uid: pagerduty-receiver
+  #       type: pagerduty
+  #       settings:
+  #         integrationKey: ${PAGERDUTY_INTEGRATION_KEY}
+  #         severity: critical
 
 policies:
   - orgId: 1
@@ -45,22 +45,23 @@ policies:
     group_by:
       - grafana_folder
       - alertname
-    routes:
-      # Critical alerts go to PagerDuty
-      - receiver: pagerduty-critical
-        object_matchers:
-          - - severity
-            - =
-            - critical
-        continue: true
-      
-      # All alerts go to Slack
-      - receiver: slack-alerts
-        object_matchers:
-          - - alertname
-            - =~
-            - .*
-        continue: true
+    # Routes disabled until notification integrations are configured
+    # routes:
+    #   # Critical alerts go to PagerDuty
+    #   - receiver: pagerduty-critical
+    #     object_matchers:
+    #       - - severity
+    #         - =
+    #         - critical
+    #     continue: true
+    #   
+    #   # All alerts go to Slack
+    #   - receiver: slack-alerts
+    #     object_matchers:
+    #       - - alertname
+    #         - =~
+    #         - .*
+    #     continue: true
     
     group_wait: 30s
     group_interval: 5m

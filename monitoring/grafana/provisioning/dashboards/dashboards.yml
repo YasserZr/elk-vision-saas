@@ -4,8 +4,6 @@ apiVersion: 1
 providers:
   - name: 'ELK Vision Dashboards'
     orgId: 1
-    folder: 'ELK Vision SaaS'
-    folderUid: 'elk-vision'
     type: file
     disableDeletion: false
     updateIntervalSeconds: 30

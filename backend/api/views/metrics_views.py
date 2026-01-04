@@ -11,7 +11,7 @@ from django.utils.decorators import method_decorator
 from prometheus_client import generate_latest, CONTENT_TYPE_LATEST, REGISTRY
 from prometheus_client.core import CollectorRegistry
 
-from .metrics import (
+from api.metrics import (
     active_users,
     websocket_connections,
     celery_queue_length,
@@ -19,6 +19,7 @@ from .metrics import (
     db_connections_active,
     logs_storage_bytes,
     alerts_active,
+    mongodb_connections_active,
     set_app_info,
 )
 
@@ -89,6 +90,18 @@ class MetricsView(View):
                     db_connections_active.labels(database=alias).set(1)
                 else:
                     db_connections_active.labels(database=alias).set(0)
+        except Exception:
+            pass
+        
+        try:
+            # Update MongoDB connection count
+            from app.core.mongodb import get_mongo_client
+            
+            client = get_mongo_client()
+            # Get server status to check connection
+            server_status = client.admin.command('serverStatus')
+            current_connections = server_status.get('connections', {}).get('current', 0)
+            mongodb_connections_active.set(current_connections)
         except Exception:
             pass
         

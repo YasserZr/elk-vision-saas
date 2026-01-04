@@ -13,6 +13,14 @@ try:
 except ImportError:
     connection_tracker = None
 
+# Import metrics
+try:
+    from api.metrics import websocket_connections
+    METRICS_AVAILABLE = True
+except ImportError:
+    METRICS_AVAILABLE = False
+    websocket_connections = None
+
 
 class NotificationConsumer(AsyncWebsocketConsumer):
     """
@@ -34,6 +42,10 @@ class NotificationConsumer(AsyncWebsocketConsumer):
         
         await self.accept()
         
+        # Update WebSocket metrics
+        if METRICS_AVAILABLE and websocket_connections:
+            websocket_connections.labels(channel='notifications').inc()
+        
         # Send connection confirmation
         await self.send(text_data=json.dumps({
             'type': 'connection',
@@ -49,6 +61,10 @@ class NotificationConsumer(AsyncWebsocketConsumer):
             self.notification_group,
             self.channel_name
         )
+        
+        # Update WebSocket metrics
+        if METRICS_AVAILABLE and websocket_connections:
+            websocket_connections.labels(channel='notifications').dec()
     
     async def receive(self, text_data):
         """Handle incoming WebSocket messages."""
@@ -145,6 +161,10 @@ class LogStreamConsumer(AsyncWebsocketConsumer):
                 user_id
             )
         
+        # Update WebSocket metrics
+        if METRICS_AVAILABLE and websocket_connections:
+            websocket_connections.labels(channel='log_stream').inc()
+        
         await self.accept()
         
         # Send connection confirmation with user count
@@ -164,6 +184,10 @@ class LogStreamConsumer(AsyncWebsocketConsumer):
                 self.log_stream_group,
                 self.channel_name
             )
+        
+        # Update WebSocket metrics
+        if METRICS_AVAILABLE and websocket_connections:
+            websocket_connections.labels(channel='log_stream').dec()
         
         await self.channel_layer.group_discard(
             self.log_stream_group,

@@ -20,8 +20,9 @@ urlpatterns = [
     path("api/redoc/", SpectacularRedocView.as_view(url_name="schema"), name="redoc"),
     # Admin
     path("admin/", admin.site.urls),
-    # Health Check
+    # Health Check & Metrics
     path("api/", include("app.health.urls")),
+    path("", include("api.metrics_urls")),
     # JWT Authentication
     path("api/auth/login/", CustomTokenObtainPairView.as_view(), name="token_obtain_pair"),
     path("api/auth/refresh/", TokenRefreshView.as_view(), name="token_refresh"),

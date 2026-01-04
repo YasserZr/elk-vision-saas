@@ -10,11 +10,13 @@ from django.utils.deprecation import MiddlewareMixin
 from django.conf import settings
 
 try:
-    from .metrics import (
+    from api.metrics import (
         http_requests_total,
         http_request_duration_seconds,
         http_responses_total,
         rate_limit_hits,
+        http_errors_total,
+        exceptions_total,
     )
     METRICS_AVAILABLE = True
 except ImportError:
@@ -100,6 +102,14 @@ class PrometheusMetricsMiddleware(MiddlewareMixin):
             method=method
         ).inc()
         
+        # Track HTTP errors (4xx and 5xx)
+        if response.status_code >= 400:
+            http_errors_total.labels(
+                status_code=status,
+                method=method,
+                view=view_name
+            ).inc()
+        
         # Track rate limit hits (429 status)
         if response.status_code == 429:
             user_type = 'authenticated' if request.user.is_authenticated else 'anonymous'
@@ -123,6 +133,13 @@ class PrometheusExceptionMiddleware(MiddlewareMixin):
         
         view_name = self.get_view_name(request)
         method = request.method
+        exception_type = type(exception).__name__
+        
+        # Record exception
+        exceptions_total.labels(
+            exception_type=exception_type,
+            view=view_name
+        ).inc()
         
         # Record as 500 error
         http_requests_total.labels(
@@ -134,6 +151,12 @@ class PrometheusExceptionMiddleware(MiddlewareMixin):
         http_responses_total.labels(
             status='500',
             method=method
+        ).inc()
+        
+        http_errors_total.labels(
+            status_code='500',
+            method=method,
+            view=view_name
         ).inc()
         
         return None
