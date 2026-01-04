@@ -56,7 +56,15 @@ export default function SearchableTable<T extends Record<string, unknown>>({
       .filter((col) => col.filterable)
       .forEach((col) => {
         options[String(col.key)] = new Set(
-          data.map((item) => String(item[col.key as keyof T] ?? '')).filter(Boolean)
+          data
+            .map((item) => {
+              const value = item[col.key as keyof T];
+              // Convert to string, handle objects
+              if (value === null || value === undefined) return '';
+              if (typeof value === 'object') return JSON.stringify(value);
+              return String(value);
+            })
+            .filter(Boolean)
         );
       });
     return options;

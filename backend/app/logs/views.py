@@ -250,10 +250,10 @@ class LogSearchView(APIView):
                 )
 
             if log_level:
-                must_clauses.append({"term": {"level": log_level.upper()}})
+                must_clauses.append({"term": {"level.keyword": log_level.lower()}})
 
             if service:
-                must_clauses.append({"term": {"service_name": service}})
+                must_clauses.append({"term": {"service_name.keyword": service}})
 
             search_body = {
                 "query": {
@@ -382,16 +382,16 @@ class LogSearchView(APIView):
                 )
 
             if log_level:
-                must_clauses.append({"term": {"level": log_level.upper()}})
+                must_clauses.append({"term": {"level.keyword": log_level.lower()}})
 
             if service:
-                must_clauses.append({"term": {"service_name": service}})
+                must_clauses.append({"term": {"service_name.keyword": service}})
                 
             if source:
-                must_clauses.append({"term": {"source": source}})
+                must_clauses.append({"term": {"source.keyword": source}})
                 
             if environment:
-                must_clauses.append({"term": {"environment": environment}})
+                must_clauses.append({"term": {"environment.keyword": environment}})
 
             search_body = {
                 "query": {
