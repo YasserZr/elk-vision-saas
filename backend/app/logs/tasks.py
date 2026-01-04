@@ -11,6 +11,7 @@ from .models_mongo import LogMetadata
 from .parsers import LogParser
 from api.websocket_utils import send_upload_status
 from api.signals import notify_log_ingested
+from app.core.redis_cache import QueryCache
 
 logger = logging.getLogger(__name__)
 
@@ -123,6 +124,21 @@ def process_and_ingest_logs(self, content: str, format_type: str, metadata: dict
                 )
             except Exception as ws_error:
                 logger.warning(f"Failed to send WebSocket notification: {ws_error}")
+            
+            # Invalidate stats cache so dashboard updates immediately
+            try:
+                tenant_id = metadata.get('tenant_id', 'default')
+                # Delete all cached stats for this tenant (covers all users and time ranges)
+                cache_pattern = f"log_stats:{tenant_id}:*"
+                
+                # Since QueryCache.delete_pattern might not exist, delete common variations
+                for days in [7, 30, 90]:
+                    cache_key = f"log_stats:{tenant_id}:{user_id}:{days}"
+                    QueryCache.delete(cache_key)
+                    
+                logger.info(f"Task {task_id}: Invalidated stats cache for tenant {tenant_id}")
+            except Exception as cache_error:
+                logger.warning(f"Failed to invalidate cache: {cache_error}")
                 
             logger.info(f"Task {task_id}: Updated MongoDB metadata - Status: {status}")
         except Exception as e:
