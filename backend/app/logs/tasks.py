@@ -10,6 +10,7 @@ from .logstash_forwarder import get_logstash_forwarder
 from .models_mongo import LogMetadata
 from .parsers import LogParser
 from api.websocket_utils import send_upload_status
+from api.signals import notify_log_ingested
 
 logger = logging.getLogger(__name__)
 
@@ -213,6 +214,13 @@ def forward_to_logstash(task_id: str, entries: list, metadata: dict) -> dict:
             f"Sent: {result['sent']}, Failed: {result['failed']}"
         )
 
+        # Broadcast logs to WebSocket clients (send first 100 for real-time view)
+        try:
+            for entry in enriched_entries[:100]:  # Limit to avoid overwhelming WebSocket
+                notify_log_ingested(entry)
+        except Exception as ws_error:
+            logger.warning(f"Failed to broadcast log to WebSocket: {ws_error}")
+
         return {
             "status": "success" if result["failed"] == 0 else "partial",
             "message": f"Forwarded {result['sent']} entries to Logstash",
@@ -276,6 +284,13 @@ def ingest_to_elasticsearch(task_id: str, entries: list, metadata: dict) -> dict
             except Exception as e:
                 logger.error(f"Task {task_id}: Batch indexing error: {e}")
                 failed_count += len(batch)
+
+        # Broadcast logs to WebSocket clients (send first 100 for real-time view)
+        try:
+            for entry in entries[:100]:  # Limit to avoid overwhelming WebSocket
+                notify_log_ingested(entry)
+        except Exception as ws_error:
+            logger.warning(f"Failed to broadcast log to WebSocket: {ws_error}")
 
         result = {
             "status": "success" if failed_count == 0 else "partial",

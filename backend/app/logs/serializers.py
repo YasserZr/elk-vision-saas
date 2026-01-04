@@ -38,6 +38,20 @@ class LogFileUploadSerializer(serializers.Serializer):
         child=serializers.CharField(max_length=50), required=False, default=list
     )
 
+    def validate_tags(self, value):
+        """Handle tags as JSON string or list"""
+        if isinstance(value, str):
+            try:
+                # Try to parse as JSON array
+                parsed = json.loads(value)
+                if isinstance(parsed, list):
+                    return parsed
+                return [value]  # Single string value
+            except (json.JSONDecodeError, ValueError):
+                # If not JSON, treat as comma-separated string
+                return [tag.strip() for tag in value.split(',') if tag.strip()]
+        return value
+
     def validate_file(self, file):
         """Validate uploaded file"""
 

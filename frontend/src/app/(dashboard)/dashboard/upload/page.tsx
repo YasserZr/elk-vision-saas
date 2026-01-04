@@ -183,6 +183,7 @@ export default function EnhancedUploadPage() {
                 maxFileSize={100}
                 maxFiles={10}
                 acceptedFormats={['.log', '.txt', '.json', '.csv', '.ndjson']}
+                metadata={metadata}
               />
             </CardContent>
           </Card>

@@ -78,11 +78,25 @@ class JSONLogParser:
         entry: Dict[str, Any], metadata: Dict[str, Any]
     ) -> Dict[str, Any]:
         """Enrich log entry with metadata"""
+        # Get message - if not present, create from entry data
+        message = entry.get("message") or entry.get("msg") or entry.get("text")
+        if not message:
+            # If no message field, create a readable summary from the entry
+            # Exclude common metadata fields
+            exclude_keys = {"timestamp", "@timestamp", "level", "source", "environment", 
+                          "service_name", "tags", "tenant_id", "uploaded_by"}
+            data_fields = {k: v for k, v in entry.items() if k not in exclude_keys}
+            if data_fields:
+                # Create a compact string representation
+                message = " | ".join([f"{k}: {v}" for k, v in list(data_fields.items())[:5]])
+            else:
+                message = str(entry)
+        
         enriched = {
             "@timestamp": entry.get("timestamp")
             or entry.get("@timestamp")
             or datetime.utcnow().isoformat(),
-            "message": entry.get("message", ""),
+            "message": message,
             "level": entry.get("level", "INFO").upper(),
             "source": metadata.get("source", "manual_upload"),
             "environment": metadata.get("environment", "production"),

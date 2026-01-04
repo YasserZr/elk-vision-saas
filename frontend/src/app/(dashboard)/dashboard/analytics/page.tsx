@@ -193,7 +193,7 @@ export default function AnalyticsDashboardPage() {
       header: 'Message',
       render: (item) => (
         <span className="text-gray-900 dark:text-gray-100 line-clamp-2 text-sm">
-          {item.message}
+          {typeof item.message === 'string' ? item.message : JSON.stringify(item.message)}
         </span>
       ),
     },
@@ -366,7 +366,7 @@ export default function AnalyticsDashboardPage() {
                   </span>
                   <div className="flex-1 min-w-0">
                     <p className="text-sm text-gray-900 dark:text-gray-100 truncate">
-                      {log.message}
+                      {typeof log.message === 'string' ? log.message : JSON.stringify(log.message)}
                     </p>
                     <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
                       {new Date(log.timestamp).toLocaleString()} • {log.source}

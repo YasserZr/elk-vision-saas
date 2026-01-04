@@ -26,6 +26,12 @@ export interface LogFileUploadProps {
   maxFileSize?: number; // MB
   maxFiles?: number;
   acceptedFormats?: string[];
+  metadata?: {
+    source?: string;
+    environment?: string;
+    service_name?: string;
+    tags?: string;
+  };
 }
 
 const ACCEPTED_FORMATS = ['.log', '.txt', '.json', '.csv', '.ndjson'];
@@ -36,17 +42,12 @@ export default function LogFileUpload({
   maxFileSize = MAX_FILE_SIZE_MB,
   maxFiles = 10,
   acceptedFormats = ACCEPTED_FORMATS,
+  metadata: externalMetadata,
 }: LogFileUploadProps) {
   const [files, setFiles] = useState<LogFile[]>([]);
   const [isDragging, setIsDragging] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
   const [uploadStats, setUploadStats] = useState<{ success: number; failed: number } | null>(null);
-  const [metadata, setMetadata] = useState({
-    source: '',
-    environment: '',
-    serviceName: '',
-    tags: [] as string[],
-  });
   const inputRef = useRef<HTMLInputElement>(null);
   const abortControllerRef = useRef<AbortController | null>(null);
 
@@ -65,16 +66,28 @@ export default function LogFileUpload({
   };
 
   const detectLogFormat = async (file: File): Promise<string> => {
-    const text = await file.slice(0, 4096).text();
+    // Check file extension first
+    const ext = getFileExtension(file.name);
+    if (ext === '.json') return 'json';
+    if (ext === '.ndjson') return 'ndjson';
+    if (ext === '.csv') return 'csv';
     
-    // Try to detect JSON
+    // For other extensions, analyze content
+    const text = await file.slice(0, 4096).text();
+    const lines = text.split('\n').filter(l => l.trim());
+    
+    // Try to detect JSON (try parsing entire sample or first line)
     try {
-      JSON.parse(text.split('\n')[0]);
+      JSON.parse(text);
       return 'json';
-    } catch {}
+    } catch {
+      try {
+        JSON.parse(lines[0]);
+        return 'json';
+      } catch {}
+    }
 
     // Check for NDJSON
-    const lines = text.split('\n').filter(l => l.trim());
     if (lines.length > 1) {
       try {
         lines.slice(0, 3).forEach(line => JSON.parse(line));
@@ -83,7 +96,7 @@ export default function LogFileUpload({
     }
 
     // Check for CSV
-    if (text.includes(',') && lines[0].split(',').length > 2) {
+    if (text.includes(',') && lines[0] && lines[0].split(',').length > 2) {
       return 'csv';
     }
 
@@ -234,10 +247,10 @@ export default function LogFileUpload({
       await logsApi.upload(
         [logFile.file],
         {
-          source: metadata.source || undefined,
-          environment: metadata.environment || undefined,
-          service_name: metadata.serviceName || undefined,
-          tags: metadata.tags.length > 0 ? metadata.tags : undefined,
+          source: externalMetadata?.source || undefined,
+          environment: externalMetadata?.environment || undefined,
+          service_name: externalMetadata?.service_name || undefined,
+          tags: externalMetadata?.tags ? externalMetadata.tags.split(',').map(t => t.trim()).filter(Boolean) : undefined,
         },
         (progress) => {
           setFiles((prev) =>

@@ -4,14 +4,14 @@ Signal handlers for sending real-time WebSocket notifications.
 
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-from app.alerts.models import Alert
+# from app.alerts.models import Alert  # TODO: Uncomment when Alert model is created
 from api.websocket_utils import send_alert_notification, send_log_stream
 import logging
 
 logger = logging.getLogger(__name__)
 
 
-@receiver(post_save, sender=Alert)
+# @receiver(post_save, sender=Alert)
 def alert_created_handler(sender, instance, created, **kwargs):
     """
     Send WebSocket notification when a new alert is created.
