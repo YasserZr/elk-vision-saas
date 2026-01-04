@@ -71,9 +71,10 @@ ELK Vision SaaS is a comprehensive log management platform that enables organiza
 - **Backend**: Django 4.x with Django REST Framework and Channels
 - **Search Engine**: Elasticsearch 8.x for log indexing and search
 - **Log Pipeline**: Logstash for data ingestion and transformation
-- **Visualization**: Kibana 8.x for advanced analytics
+- **Visualization**: Kibana 8.x for advanced analytics and custom dashboards
 - **Databases**: PostgreSQL (metadata), MongoDB (logs), Redis (cache/pubsub)
 - **WebSocket**: Django Channels with Redis channel layer
+- **Monitoring**: Prometheus for metrics collection, Grafana for visualization
 - **Reverse Proxy**: Nginx for routing and load balancing
 
 ---
@@ -554,10 +555,11 @@ docker compose restart frontend
 - Frontend: http://localhost:3000
 - Backend API: http://localhost:8000/api
 - Django Admin: http://localhost:8000/admin
-- Kibana: http://localhost:5601
+- Kibana: http://localhost:5601 (log analytics & visualizations)
 - Elasticsearch: http://localhost:9200
-- Prometheus: http://localhost:9090
-- Grafana: http://localhost:3001
+- Prometheus: http://localhost:9090 (metrics collection)
+- Grafana: http://localhost:3001 (monitoring dashboards)
+- Alertmanager: http://localhost:9093 (alert management)
 
 ### Production Mode
 
@@ -629,10 +631,15 @@ curl http://localhost:9200/_cluster/health
 - Username: (created during setup)
 - Password: (created during setup)
 
-**Kibana** (if security enabled):
+**Kibana** (no authentication in development):
 - URL: http://localhost:5601
-- Username: elastic
-- Password: elastic123 (from .env)
+- Username: (none - security disabled for development)
+- Password: (none - security disabled for development)
+
+**Grafana**:
+- URL: http://localhost:3001
+- Username: admin
+- Password: admin (from .env GRAFANA_ADMIN_PASSWORD)
 
 ### Key Workflows
 

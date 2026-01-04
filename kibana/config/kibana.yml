@@ -3,11 +3,9 @@ server.host: "0.0.0.0"
 server.port: 5601
 
 elasticsearch.hosts: ["http://elasticsearch:9200"]
-elasticsearch.username: "kibana_system"
-elasticsearch.password: "2m=bHhWX89e-sVNo-tGX"
 
 # Security
-xpack.security.enabled: true
+xpack.security.enabled: false
 xpack.encryptedSavedObjects.encryptionKey: "${XPACK_ENCRYPTEDSAVEDOBJECTS_ENCRYPTIONKEY}"
 
 # Monitoring

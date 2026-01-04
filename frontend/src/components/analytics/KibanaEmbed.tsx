@@ -34,8 +34,12 @@ export function KibanaEmbed({
   const buildEmbedUrl = () => {
     if (!dashboardId) return null;
 
-    // Simple embed URL without complex parameters that cause rison errors
-    return `${kibanaUrl}/app/dashboards#/view/${dashboardId}?embed=true&_g=(time:(from:now-24h,to:now))`;
+    // Kibana 8.x embed URL format - match the working dashboard URL
+    const baseUrl = `${kibanaUrl}/app/dashboards#/view/${dashboardId}`;
+    
+    // Use exact format that works: _g parameter with RISON notation (not URL encoded)
+    // embed=true enables iframe embedding
+    return `${baseUrl}?embed=true&_g=(filters:!(),refreshInterval:(pause:!t,value:60000),time:(from:now-15d,to:now))`;
   };
 
   const embedUrl = buildEmbedUrl();

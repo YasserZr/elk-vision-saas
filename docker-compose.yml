@@ -108,8 +108,8 @@ services:
       - discovery.type=single-node
       - bootstrap.memory_lock=true
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
-      - xpack.security.enabled=true
-      - xpack.security.enrollment.enabled=true
+      - xpack.security.enabled=false
+      - xpack.security.enrollment.enabled=false
       - ELASTIC_PASSWORD=${ELASTICSEARCH_PASSWORD:-changeme}
     ulimits:
       memlock:
@@ -173,9 +173,7 @@ services:
     environment:
       - SERVERNAME=kibana
       - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
-      - ELASTICSEARCH_USERNAME=kibana_system
-      - ELASTICSEARCH_PASSWORD=2m=bHhWX89e-sVNo-tGX
-      - XPACK_SECURITY_ENABLED=true
+      - XPACK_SECURITY_ENABLED=false
       - XPACK_ENCRYPTEDSAVEDOBJECTS_ENCRYPTIONKEY=${KIBANA_ENCRYPTION_KEY:-a7d93f62b8c541e89f1d52e5a6b3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b1}
     volumes:
       - kibana_data:/usr/share/kibana/data
