@@ -1,0 +1,213 @@
+\chapter{Installation and Deployment Guide}
+
+\section{Prerequisites}
+
+\subsection{Required Software}
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{|l|l|l|}
+        \hline
+        \textbf{Software} & \textbf{Minimum Version} & \textbf{Purpose} \\
+        \hline
+        Docker & 24.0+ & Container runtime \\
+        Docker Compose & 2.20+ & Multi-container management \\
+        Git & 2.40+ & Version control \\
+        \hline
+    \end{tabular}
+    \caption{Required Software}
+    \label{tab:prerequisites}
+\end{table}
+
+\subsection{System Resources}
+
+\begin{itemize}
+    \item \textbf{Minimum}: 4 CPU cores, 8 GB RAM, 50 GB disk
+    \item \textbf{Recommended}: 8+ CPU cores, 16 GB RAM, 100 GB SSD
+\end{itemize}
+
+\section{Quick Start Installation}
+
+\begin{lstlisting}[language=bash, caption=Quick Start Commands]
+# 1. Clone the repository
+git clone https://github.com/YasserZr/elk-vision-saas.git
+cd elk-vision-saas
+
+# 2. Create environment file
+cp .env.example .env
+
+# 3. Generate secure Django secret key
+python -c "import secrets; print(secrets.token_urlsafe(50))"
+# Add to .env as SECRET_KEY=<generated_key>
+
+# 4. Build and start all services
+docker compose up -d
+
+# 5. Wait for services to be healthy (2-3 minutes)
+docker compose ps
+
+# 6. Run database migrations
+docker compose exec backend python manage.py migrate
+
+# 7. Create superuser
+docker compose exec backend python manage.py createsuperuser
+\end{lstlisting}
+
+\section{Environment Configuration}
+
+\subsection{Core Variables}
+
+\begin{lstlisting}[caption=Essential Environment Variables]
+# Django Backend
+SECRET_KEY=your-secret-key-min-50-chars
+DEBUG=False
+ALLOWED_HOSTS=localhost,127.0.0.1,backend
+
+# PostgreSQL
+POSTGRES_DB=elk_vision
+POSTGRES_USER=postgres
+POSTGRES_PASSWORD=postgres123
+
+# MongoDB
+MONGO_USER=admin
+MONGO_PASSWORD=password
+MONGO_DB_NAME=elk_vision
+
+# Redis
+REDIS_HOST=redis
+REDIS_PORT=6379
+REDIS_PASSWORD=redis123
+
+# Elasticsearch
+ELASTICSEARCH_HOST=elasticsearch:9200
+ELASTICSEARCH_PASSWORD=changeme
+
+# Frontend
+NEXT_PUBLIC_API_URL=http://localhost:8000
+NEXT_PUBLIC_WS_URL=ws://localhost:8000
+\end{lstlisting}
+
+\section{Service Access Points}
+
+After successful deployment, access services at:
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{|l|l|l|}
+        \hline
+        \textbf{Service} & \textbf{URL} & \textbf{Description} \\
+        \hline
+        Frontend & http://localhost:3000 & Web application \\
+        Backend API & http://localhost:8000/api & REST API \\
+        Django Admin & http://localhost:8000/admin & Administration \\
+        Kibana & http://localhost:5601 & Log visualization \\
+        Elasticsearch & http://localhost:9200 & Search API \\
+        Grafana & http://localhost:3001 & Monitoring dashboards \\
+        Prometheus & http://localhost:9090 & Metrics \\
+        Flower & http://localhost:5555 & Celery monitoring \\
+        \hline
+    \end{tabular}
+    \caption{Service Access URLs}
+    \label{tab:service-urls}
+\end{table}
+
+\section{Production Deployment}
+
+\subsection{Production Overrides}
+
+\begin{lstlisting}[language=bash, caption=Production Deployment]
+# Build production images
+docker compose -f docker-compose.yml \
+    -f docker-compose.prod.yml build
+
+# Start in production mode
+docker compose -f docker-compose.yml \
+    -f docker-compose.prod.yml up -d
+
+# Scale backend workers
+docker compose up -d --scale backend=3
+\end{lstlisting}
+
+\subsection{Security Checklist}
+
+\begin{itemize}
+    \item[$\square$] Change all default passwords
+    \item[$\square$] Set \code{DEBUG=False}
+    \item[$\square$] Configure HTTPS/TLS certificates
+    \item[$\square$] Enable Elasticsearch security
+    \item[$\square$] Restrict database access to internal networks
+    \item[$\square$] Set up firewall rules
+    \item[$\square$] Configure backup policies
+\end{itemize}
+
+\section{Cloud Deployment}
+
+\subsection{Google Cloud Platform}
+
+\begin{lstlisting}[language=bash, caption=GCP Deployment]
+# Build and push to Google Container Registry
+gcloud builds submit --tag gcr.io/PROJECT_ID/elk-backend
+
+# Deploy to Cloud Run
+gcloud run deploy elk-backend \
+    --image gcr.io/PROJECT_ID/elk-backend \
+    --platform managed \
+    --region us-central1
+\end{lstlisting}
+
+\subsection{AWS Deployment}
+
+\begin{lstlisting}[language=bash, caption=AWS ECS Deployment]
+# Push to ECR
+aws ecr get-login-password --region us-east-1 | \
+    docker login --username AWS --password-stdin \
+    ACCOUNT.dkr.ecr.us-east-1.amazonaws.com
+
+docker push ACCOUNT.dkr.ecr.us-east-1.amazonaws.com/elk-backend
+
+# Update ECS service
+aws ecs update-service --cluster elk-vision \
+    --service backend --force-new-deployment
+\end{lstlisting}
+
+\section{Database Backup}
+
+\begin{lstlisting}[language=bash, caption=Backup Commands]
+# PostgreSQL backup
+docker compose exec postgres \
+    pg_dump -U postgres elk_vision > backup.sql
+
+# MongoDB backup
+docker compose exec mongodb \
+    mongodump --out /backup
+
+# Elasticsearch snapshot
+curl -X PUT "http://localhost:9200/_snapshot/backup/snapshot_1"
+\end{lstlisting}
+
+\section{Troubleshooting}
+
+\subsection{Common Issues}
+
+\begin{description}
+    \item[Services fail to start] Check Docker daemon and port availability
+    \item[Database connection errors] Verify container health with \code{docker compose ps}
+    \item[Elasticsearch unhealthy] Increase memory allocation in \code{ES\_JAVA\_OPTS}
+    \item[WebSocket failures] Check Redis and Nginx WebSocket proxy configuration
+\end{description}
+
+\subsection{Health Check Commands}
+
+\begin{lstlisting}[language=bash, caption=Health Check Commands]
+# Service status
+docker compose ps
+
+# Backend health
+curl http://localhost:8000/api/health/
+
+# Elasticsearch cluster
+curl http://localhost:9200/_cluster/health?pretty
+
+# Redis ping
+docker compose exec redis redis-cli -a redis123 ping
+\end{lstlisting}

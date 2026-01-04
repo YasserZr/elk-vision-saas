@@ -1,0 +1,191 @@
+\chapter{ELK Stack Configuration}
+
+\section{Logstash Configuration}
+
+\subsection{Main Pipeline (\texttt{logstash.conf})}
+
+The Logstash pipeline is configured with multiple input sources, comprehensive filtering, and dual outputs for storage and real-time streaming.
+
+\subsubsection{Input Section}
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{|l|l|l|l|}
+        \hline
+        \textbf{Input Type} & \textbf{Port} & \textbf{Codec} & \textbf{Use Case} \\
+        \hline
+        TCP & 5000 & json\_lines & Real-time log streaming \\
+        UDP & 5000 & json\_lines & High-throughput scenarios \\
+        HTTP & 8080 & json & REST API submission \\
+        Beats & 5044 & beats & Filebeat/Metricbeat agents \\
+        \hline
+    \end{tabular}
+    \caption{Logstash Input Configuration}
+    \label{tab:logstash-inputs}
+\end{table}
+
+\subsubsection{Filter Section}
+
+The filter section performs the following transformations:
+
+\begin{enumerate}
+    \item \textbf{JSON Parsing}: Extracts fields from JSON log messages
+    \item \textbf{Timestamp Extraction}: Parses multiple date formats (ISO8601, custom)
+    \item \textbf{Level Normalization}: Converts log levels to lowercase
+    \item \textbf{GeoIP Enrichment}: Adds geographic data when IP addresses are present
+    \item \textbf{User Agent Parsing}: Extracts browser and device information
+    \item \textbf{Priority Tagging}: Marks error/critical logs as high priority
+    \item \textbf{Field Cleanup}: Removes redundant fields
+\end{enumerate}
+
+\subsubsection{Output Section}
+
+Dual output configuration enables:
+
+\begin{itemize}
+    \item \textbf{Elasticsearch}: Primary storage with daily index rotation
+    \item \textbf{Redis Pub/Sub}: Real-time streaming to WebSocket clients
+\end{itemize}
+
+\subsection{Logstash Settings (\texttt{logstash.yml})}
+
+\begin{lstlisting}[language=yaml, caption=Logstash Settings]
+http.host: "0.0.0.0"
+path.config: /usr/share/logstash/pipeline
+
+# Performance tuning
+pipeline.workers: 2
+pipeline.batch.size: 125
+pipeline.batch.delay: 50
+
+# Queue settings
+queue.type: persisted
+queue.max_bytes: 1gb
+
+# Monitoring
+xpack.monitoring.enabled: false
+\end{lstlisting}
+
+\section{Elasticsearch Configuration}
+
+\subsection{Index Settings}
+
+Logs are stored in daily indices with the pattern \code{logs-YYYY.MM.dd}:
+
+\begin{lstlisting}[language=json, caption=Elasticsearch Index Template]
+{
+  "index_patterns": ["logs-*"],
+  "settings": {
+    "number_of_shards": 1,
+    "number_of_replicas": 0,
+    "refresh_interval": "5s"
+  },
+  "mappings": {
+    "properties": {
+      "@timestamp": { "type": "date" },
+      "level": { "type": "keyword" },
+      "message": { "type": "text" },
+      "source": { "type": "keyword" },
+      "environment": { "type": "keyword" },
+      "user_id": { "type": "integer" },
+      "geoip": {
+        "properties": {
+          "location": { "type": "geo_point" }
+        }
+      }
+    }
+  }
+}
+\end{lstlisting}
+
+\subsection{Cluster Configuration}
+
+Development environment uses single-node mode:
+
+\begin{lstlisting}[language=yaml, caption=Elasticsearch Docker Configuration]
+environment:
+  - node.name=elasticsearch
+  - cluster.name=elk-cluster
+  - discovery.type=single-node
+  - bootstrap.memory_lock=true
+  - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+  - xpack.security.enabled=false
+\end{lstlisting}
+
+\section{Kibana Configuration}
+
+\subsection{Kibana Settings (\texttt{kibana.yml})}
+
+\begin{lstlisting}[language=yaml, caption=Kibana Configuration]
+server.host: "0.0.0.0"
+server.port: 5601
+server.name: kibana
+
+elasticsearch.hosts:
+  - http://elasticsearch:9200
+
+# Disable security for development
+xpack.security.enabled: false
+
+# Saved objects encryption
+xpack.encryptedSavedObjects.encryptionKey: 
+  "a7d93f62b8c541e..."
+
+# Logging
+logging.appenders.default:
+  type: console
+  layout:
+    type: json
+\end{lstlisting}
+
+\subsection{Integration with Frontend}
+
+Kibana dashboards can be embedded in the Next.js frontend:
+
+\begin{enumerate}
+    \item Create dashboard in Kibana at \code{http://localhost:5601}
+    \item Copy dashboard ID from URL
+    \item Configure \code{NEXT\_PUBLIC\_KIBANA\_DASHBOARD\_ID} in \code{.env}
+    \item Access embedded view in Analytics tab
+\end{enumerate}
+
+\section{Index Lifecycle Management}
+
+For production environments, configure ILM policies:
+
+\begin{lstlisting}[language=json, caption=Index Lifecycle Policy]
+{
+  "policy": {
+    "phases": {
+      "hot": {
+        "actions": {
+          "rollover": {
+            "max_size": "50GB",
+            "max_age": "1d"
+          }
+        }
+      },
+      "warm": {
+        "min_age": "7d",
+        "actions": {
+          "shrink": { "number_of_shards": 1 }
+        }
+      },
+      "delete": {
+        "min_age": "30d",
+        "actions": { "delete": {} }
+      }
+    }
+  }
+}
+\end{lstlisting}
+
+\section{ELK Stack Monitoring}
+
+The ELK Stack exposes monitoring endpoints:
+
+\begin{itemize}
+    \item \textbf{Elasticsearch}: \code{http://localhost:9200/\_cluster/health}
+    \item \textbf{Logstash}: \code{http://localhost:9600/\_node/stats}
+    \item \textbf{Kibana}: \code{http://localhost:5601/api/status}
+\end{itemize}

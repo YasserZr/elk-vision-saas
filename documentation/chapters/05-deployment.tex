@@ -1,0 +1,67 @@
+\chapter{Installation \& Deployment}
+
+\section{Quick Start}
+\begin{lstlisting}[language=bash]
+# Clone and configure
+git clone https://github.com/YasserZr/elk-vision-saas.git
+cd elk-vision-saas
+cp .env.example .env
+
+# Start all services
+docker compose up -d
+
+# Initialize database
+docker compose exec backend python manage.py migrate
+docker compose exec backend python manage.py createsuperuser
+\end{lstlisting}
+
+\section{Environment Variables}
+\begin{table}[H]
+\centering\small
+\begin{tabular}{|l|l|}
+\hline
+\textbf{Variable} & \textbf{Description} \\
+\hline
+SECRET\_KEY & Django secret key \\
+POSTGRES\_PASSWORD & PostgreSQL password \\
+MONGO\_PASSWORD & MongoDB password \\
+REDIS\_PASSWORD & Redis password \\
+ELASTICSEARCH\_PASSWORD & Elasticsearch password \\
+NEXT\_PUBLIC\_API\_URL & Backend API URL \\
+NEXT\_PUBLIC\_WS\_URL & WebSocket URL \\
+\hline
+\end{tabular}
+\caption{Key Environment Variables}
+\end{table}
+
+\section{Service URLs}
+\begin{multicols}{2}
+\begin{itemize}
+    \item Frontend: \texttt{http://localhost:3000}
+    \item Backend API: \texttt{http://localhost:8000}
+    \item Kibana: \texttt{http://localhost:5601}
+    \item Grafana: \texttt{http://localhost:3001}
+    \item Prometheus: \texttt{http://localhost:9090}
+    \item Flower: \texttt{http://localhost:5555}
+\end{itemize}
+\end{multicols}
+
+\section{Production Deployment}
+\begin{lstlisting}[language=bash]
+# Build and start production
+docker compose -f docker-compose.yml \
+    -f docker-compose.prod.yml up -d
+
+# Scale backend
+docker compose up -d --scale backend=3
+\end{lstlisting}
+
+\textbf{Security Checklist}: Change all passwords, set DEBUG=False, configure HTTPS, enable ES security, restrict DB access, set up backups.
+
+\section{Troubleshooting}
+\begin{itemize}
+    \item \textbf{Services fail}: Check Docker daemon, port availability
+    \item \textbf{DB connection}: Verify container health with \texttt{docker compose ps}
+    \item \textbf{ES unhealthy}: Increase \texttt{ES\_JAVA\_OPTS} memory
+    \item \textbf{WebSocket fails}: Check Redis and Nginx proxy config
+\end{itemize}

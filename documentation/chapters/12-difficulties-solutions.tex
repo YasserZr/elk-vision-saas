@@ -1,0 +1,162 @@
+\chapter{Difficulties Encountered and Solutions}
+
+\section{Real-Time Streaming Challenges}
+
+\subsection{Problem: WebSocket Connection Stability}
+
+\textbf{Issue}: Initial WebSocket implementation suffered from connection drops and reconnection failures, especially under high load or network interruptions.
+
+\textbf{Symptoms}:
+\begin{itemize}
+    \item Clients disconnected randomly
+    \item Failed reconnection attempts
+    \item Lost log messages during reconnection
+\end{itemize}
+
+\textbf{Solution}:
+\begin{enumerate}
+    \item Implemented exponential backoff reconnection strategy
+    \item Added heartbeat ping/pong messages every 30 seconds
+    \item Created connection status indicator in UI
+    \item Buffered missed messages on server side
+\end{enumerate}
+
+\subsection{Problem: High Latency in Log Delivery}
+
+\textbf{Issue}: Initial architecture had 3-5 second delay from log ingestion to browser display.
+
+\textbf{Root Cause}: Polling-based approach to check Elasticsearch for new logs.
+
+\textbf{Solution}:
+\begin{enumerate}
+    \item Replaced polling with Redis Pub/Sub
+    \item Added Logstash Redis output for dual-write
+    \item Created dedicated \code{realtime\_listener} service
+    \item Achieved sub-second latency (<500ms typical)
+\end{enumerate}
+
+\section{ELK Stack Integration Challenges}
+
+\subsection{Problem: Elasticsearch Memory Issues}
+
+\textbf{Issue}: Elasticsearch container frequently crashed with out-of-memory errors in development environment.
+
+\textbf{Solution}:
+\begin{itemize}
+    \item Reduced heap size to 512MB for development
+    \item Configured \code{bootstrap.memory\_lock=true}
+    \item Set ulimits in Docker Compose
+    \item Documented production memory requirements (4GB+)
+\end{itemize}
+
+\subsection{Problem: Logstash Pipeline Errors}
+
+\textbf{Issue}: Logstash failed to parse logs with varied timestamp formats.
+
+\textbf{Solution}:
+\begin{lstlisting}[language=Ruby, caption=Multi-Format Timestamp Parsing]
+date {
+  match => [
+    "[parsed][timestamp]",
+    "ISO8601",
+    "yyyy-MM-dd'T'HH:mm:ss.SSSSSSZ",
+    "yyyy-MM-dd'T'HH:mm:ss.SSSZ",
+    "yyyy-MM-dd HH:mm:ss"
+  ]
+  target => "@timestamp"
+}
+\end{lstlisting}
+
+\section{Database Integration Challenges}
+
+\subsection{Problem: Multi-Database Transactions}
+
+\textbf{Issue}: Maintaining consistency across PostgreSQL, MongoDB, and Elasticsearch was complex.
+
+\textbf{Approach}:
+\begin{itemize}
+    \item PostgreSQL: Primary source of truth for user data
+    \item MongoDB: Eventually consistent for metadata
+    \item Elasticsearch: Optimized for search, rebuilt from sources if needed
+    \item Implemented compensating transactions for failures
+\end{itemize}
+
+\subsection{Problem: MongoDB Connection Pooling}
+
+\textbf{Issue}: Connection exhaustion under high load.
+
+\textbf{Solution}:
+\begin{lstlisting}[language=Python, caption=MongoDB Connection Configuration]
+MONGODB_SETTINGS = {
+    "host": os.getenv("MONGO_HOST"),
+    "maxPoolSize": 100,
+    "minPoolSize": 10,
+    "maxIdleTimeMS": 30000,
+    "waitQueueTimeoutMS": 5000,
+}
+\end{lstlisting}
+
+\section{Frontend Development Challenges}
+
+\subsection{Problem: State Management Complexity}
+
+\textbf{Issue}: Managing real-time log state while allowing filtering and pagination was complex.
+
+\textbf{Solution}:
+\begin{itemize}
+    \item Used React Context for global state
+    \item Implemented virtual scrolling for large log lists
+    \item Added client-side filtering on WebSocket stream
+    \item Limited in-memory buffer to 1000 recent logs
+\end{itemize}
+
+\subsection{Problem: TypeScript Type Safety}
+
+\textbf{Issue}: Log data from Elasticsearch had inconsistent field types.
+
+\textbf{Solution}:
+\begin{lstlisting}[language=TypeScript, caption=Flexible Log Type Definition]
+interface LogEntry {
+  id: string;
+  timestamp: string;
+  level: 'debug' | 'info' | 'warning' | 'error' | 'critical';
+  message: string;
+  source?: string;
+  parsed?: Record<string, unknown>;
+  [key: string]: unknown;
+}
+\end{lstlisting}
+
+\section{Docker and Deployment Challenges}
+
+\subsection{Problem: Service Startup Order}
+
+\textbf{Issue}: Backend failed when databases weren't ready.
+
+\textbf{Solution}:
+\begin{itemize}
+    \item Added health checks to all database services
+    \item Used \code{depends\_on} with \code{condition: service\_healthy}
+    \item Implemented retry logic in application startup
+\end{itemize}
+
+\subsection{Problem: Development vs Production Config}
+
+\textbf{Issue}: Managing environment-specific configurations.
+
+\textbf{Solution}:
+\begin{itemize}
+    \item Created \code{.env.example}, \code{.env.development.example}, \code{.env.production.example}
+    \item Used \code{docker-compose.prod.yml} for production overrides
+    \item Documented all environment variables
+\end{itemize}
+
+\section{Key Lessons Learned}
+
+\begin{enumerate}
+    \item \textbf{Start with health checks}: Every service should have robust health checks from day one
+    \item \textbf{Design for failure}: Implement reconnection and retry logic early
+    \item \textbf{Monitor everything}: Add Prometheus metrics for all critical paths
+    \item \textbf{Document as you go}: Keep configuration and decisions documented
+    \item \textbf{Use appropriate tools}: Choose the right database for each workload
+\end{enumerate}

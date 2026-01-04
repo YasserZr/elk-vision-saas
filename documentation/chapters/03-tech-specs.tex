@@ -1,0 +1,79 @@
+\chapter{Technical Specifications}
+
+\section{Technology Stack}
+
+\begin{table}[H]
+\centering\small
+\begin{tabular}{|l|l|l|}
+\hline
+\textbf{Category} & \textbf{Technology} & \textbf{Version} \\
+\hline
+\multirow{4}{*}{Backend} & Python & 3.11+ \\
+& Django & 4.2 LTS \\
+& Django REST Framework & 3.14 \\
+& Django Channels & 4.0 \\
+\hline
+\multirow{4}{*}{Frontend} & Node.js & 20 LTS \\
+& Next.js & 14.0 \\
+& React & 18 \\
+& TypeScript & 5 \\
+\hline
+\multirow{4}{*}{Databases} & Elasticsearch & 8.11 \\
+& PostgreSQL & 15 \\
+& MongoDB & 7.0 \\
+& Redis & 7 \\
+\hline
+\multirow{3}{*}{Infrastructure} & Docker & 24+ \\
+& Nginx & 1.25 \\
+& Logstash/Kibana & 8.11 \\
+\hline
+\end{tabular}
+\caption{Technology Stack}
+\end{table}
+
+\section{Justifications}
+\begin{itemize}
+    \item \textbf{Django}: Batteries-included framework with built-in auth, ORM, and excellent WebSocket support via Channels
+    \item \textbf{Next.js}: React framework with App Router, SSR, and optimized performance
+    \item \textbf{Multi-DB}: Elasticsearch for search, PostgreSQL for ACID transactions, MongoDB for flexible documents, Redis for real-time
+    \item \textbf{Docker}: Consistent environments and easy horizontal scaling
+\end{itemize}
+
+\section{System Requirements}
+\textbf{Minimum}: 4 CPU cores, 8 GB RAM, 50 GB disk.
+\textbf{Recommended}: 8+ cores, 16 GB RAM, 100 GB SSD, Ubuntu 22.04+.
+
+\section{Data Models}
+
+\subsection{MongoDB: Log Metadata}
+\begin{lstlisting}
+{
+  "upload_id": "uuid",
+  "task_id": "celery-task-id",
+  "tenant_id": "tenant_123",
+  "user_id": 42,
+  "filename": "app.log",
+  "status": "success|pending|failed",
+  "log_count": 1500,
+  "created_at": "2026-01-04T12:00:00Z"
+}
+\end{lstlisting}
+
+\subsection{Elasticsearch: Log Document}
+\begin{lstlisting}
+{
+  "@timestamp": "2026-01-04T12:00:00Z",
+  "level": "error",
+  "message": "Database connection failed",
+  "source": "backend-api",
+  "user_id": 42,
+  "geoip": { "city": "New York", "location": {...} }
+}
+\end{lstlisting}
+
+\subsection{Redis Structures}
+\begin{itemize}
+    \item \textbf{Pub/Sub}: \texttt{logs:realtime} channel for streaming
+    \item \textbf{Cache}: Session and dashboard config storage
+    \item \textbf{Celery}: Task queue and results
+\end{itemize}

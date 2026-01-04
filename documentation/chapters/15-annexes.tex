@@ -1,0 +1,188 @@
+\chapter{Annexes}
+
+\section{API Reference}
+
+\subsection{Authentication Endpoints}
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{|l|l|l|}
+        \hline
+        \textbf{Method} & \textbf{Endpoint} & \textbf{Description} \\
+        \hline
+        POST & /api/auth/register/ & Create user account \\
+        POST & /api/auth/login/ & Obtain auth token \\
+        POST & /api/auth/logout/ & Invalidate token \\
+        GET & /api/auth/user/ & Get current user \\
+        \hline
+    \end{tabular}
+    \caption{Authentication API Endpoints}
+    \label{tab:auth-api}
+\end{table}
+
+\subsection{Logs Endpoints}
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{|l|l|l|}
+        \hline
+        \textbf{Method} & \textbf{Endpoint} & \textbf{Description} \\
+        \hline
+        GET & /api/logs/ & List logs (paginated) \\
+        POST & /api/logs/ & Create log entry \\
+        GET & /api/logs/\{id\}/ & Get log details \\
+        POST & /api/logs/upload/ & Upload log file \\
+        POST & /api/logs/bulk/ & Create multiple logs \\
+        GET & /api/logs/search/ & Search with filters \\
+        GET & /api/logs/stats/ & Get statistics \\
+        \hline
+    \end{tabular}
+    \caption{Logs API Endpoints}
+    \label{tab:logs-api}
+\end{table}
+
+\subsection{WebSocket Endpoints}
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{|l|l|}
+        \hline
+        \textbf{Endpoint} & \textbf{Description} \\
+        \hline
+        ws://host/ws/logs/stream/ & Real-time log streaming \\
+        ws://host/ws/notifications/ & User notifications \\
+        ws://host/ws/metrics/ & Live metrics updates \\
+        \hline
+    \end{tabular}
+    \caption{WebSocket Endpoints}
+    \label{tab:ws-api}
+\end{table}
+
+\section{Environment Variables Reference}
+
+\begin{longtable}{|l|l|l|}
+    \hline
+    \textbf{Variable} & \textbf{Default} & \textbf{Description} \\
+    \hline
+    SECRET\_KEY & - & Django secret key \\
+    DEBUG & False & Debug mode \\
+    ALLOWED\_HOSTS & localhost & Allowed hosts \\
+    \hline
+    POSTGRES\_DB & elk\_vision & Database name \\
+    POSTGRES\_USER & postgres & Database user \\
+    POSTGRES\_PASSWORD & - & Database password \\
+    \hline
+    MONGO\_HOST & mongodb & MongoDB host \\
+    MONGO\_USER & admin & MongoDB user \\
+    MONGO\_PASSWORD & - & MongoDB password \\
+    MONGO\_DB\_NAME & elk\_vision & MongoDB database \\
+    \hline
+    REDIS\_HOST & redis & Redis host \\
+    REDIS\_PORT & 6379 & Redis port \\
+    REDIS\_PASSWORD & - & Redis password \\
+    \hline
+    ELASTICSEARCH\_HOST & localhost:9200 & ES host \\
+    ELASTICSEARCH\_PASSWORD & - & ES password \\
+    \hline
+    NEXT\_PUBLIC\_API\_URL & http://localhost:8000 & Backend URL \\
+    NEXT\_PUBLIC\_WS\_URL & ws://localhost:8000 & WebSocket URL \\
+    \hline
+    \caption{Environment Variables}
+    \label{tab:env-vars}
+\end{longtable}
+
+\section{Port Reference}
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{|l|l|l|}
+        \hline
+        \textbf{Port} & \textbf{Service} & \textbf{Protocol} \\
+        \hline
+        3000 & Next.js Frontend & HTTP \\
+        8000 & Django Backend & HTTP/WebSocket \\
+        5432 & PostgreSQL & TCP \\
+        27017 & MongoDB & TCP \\
+        6379 & Redis & TCP \\
+        9200 & Elasticsearch & HTTP \\
+        5000 & Logstash & TCP/UDP \\
+        5044 & Logstash Beats & TCP \\
+        5601 & Kibana & HTTP \\
+        9090 & Prometheus & HTTP \\
+        3001 & Grafana & HTTP \\
+        5555 & Flower & HTTP \\
+        80/443 & Nginx & HTTP/HTTPS \\
+        \hline
+    \end{tabular}
+    \caption{Service Port Mapping}
+    \label{tab:ports}
+\end{table}
+
+\section{Docker Commands Reference}
+
+\begin{lstlisting}[language=bash, caption=Common Docker Commands]
+# Start all services
+docker compose up -d
+
+# Stop all services
+docker compose down
+
+# View logs
+docker compose logs -f [service]
+
+# Execute command in container
+docker compose exec backend python manage.py shell
+
+# Rebuild services
+docker compose build [service]
+
+# Check service health
+docker compose ps
+
+# Scale services
+docker compose up -d --scale backend=3
+\end{lstlisting}
+
+\section{References}
+
+\subsection{Official Documentation}
+
+\begin{itemize}
+    \item Django Documentation: \url{https://docs.djangoproject.com/}
+    \item Django REST Framework: \url{https://www.django-rest-framework.org/}
+    \item Django Channels: \url{https://channels.readthedocs.io/}
+    \item Next.js Documentation: \url{https://nextjs.org/docs}
+    \item Elasticsearch Guide: \url{https://www.elastic.co/guide/}
+    \item Logstash Reference: \url{https://www.elastic.co/guide/en/logstash/current/}
+    \item Kibana Guide: \url{https://www.elastic.co/guide/en/kibana/current/}
+    \item Docker Documentation: \url{https://docs.docker.com/}
+\end{itemize}
+
+\subsection{Project Resources}
+
+\begin{itemize}
+    \item GitHub Repository: \url{https://github.com/YasserZr/elk-vision-saas}
+    \item API Documentation: \code{http://localhost:8000/api/docs/}
+    \item OpenAPI Schema: \code{http://localhost:8000/api/schema/}
+\end{itemize}
+
+\section{Glossary}
+
+\begin{description}
+    \item[ASGI] Asynchronous Server Gateway Interface - Python async web server protocol
+    \item[Celery] Distributed task queue for Python
+    \item[ELK Stack] Elasticsearch, Logstash, Kibana - log management stack
+    \item[Pub/Sub] Publish/Subscribe messaging pattern
+    \item[REST] Representational State Transfer - API architectural style
+    \item[WebSocket] Full-duplex communication protocol
+    \item[WSGI] Web Server Gateway Interface - Python web server protocol
+\end{description}
+
+\section{License}
+
+This project is licensed under the MIT License. See the LICENSE file in the repository for details.
+
+\vspace{1cm}
+\begin{center}
+    \textbf{Document Generated: \today}
+\end{center}

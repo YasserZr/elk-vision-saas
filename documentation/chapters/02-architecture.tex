@@ -1,0 +1,79 @@
+\chapter{Architecture}
+
+\section{Global Architecture}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{system_architecture_diagram.png}
+    \caption{System Architecture Overview}
+    \label{fig:architecture}
+\end{figure}
+
+The system follows a layered architecture:
+\begin{itemize}
+    \item \textbf{Presentation}: Next.js frontend with React and WebSocket integration
+    \item \textbf{API}: Django REST Framework with Channels for WebSocket support
+    \item \textbf{Processing}: Logstash for log ingestion and transformation
+    \item \textbf{Storage}: PostgreSQL (users), MongoDB (metadata), Elasticsearch (logs), Redis (cache/pubsub)
+\end{itemize}
+
+\section{Data Flow}
+\begin{enumerate}
+    \item Log sources send data to Logstash (TCP:5000, UDP:5000, HTTP:8080, Beats:5044)
+    \item Logstash parses, transforms, and routes logs
+    \item Dual output: Elasticsearch (storage) + Redis Pub/Sub (real-time)
+    \item Real-time listener subscribes to Redis and broadcasts via WebSocket
+    \item Frontend receives logs with sub-second latency
+\end{enumerate}
+
+\section{Component Details}
+
+\subsection{Backend (Django)}
+\begin{itemize}
+    \item \textbf{app.users}: Authentication with token-based auth
+    \item \textbf{app.logs}: Log ingestion, search, file parsing (JSON/CSV/TXT)
+    \item \textbf{app.dashboards}: Dashboard configurations
+    \item \textbf{app.alerts}: Alert rules and notifications
+    \item \textbf{api}: WebSocket consumers (LogStreamConsumer, NotificationConsumer)
+\end{itemize}
+
+\subsection{Frontend (Next.js)}
+\begin{itemize}
+    \item App Router with protected routes
+    \item Real-time components: LiveLogsView, MetricsDisplay
+    \item Custom hooks: useWebSocket, useVisualAlerts
+    \item Analytics with Recharts visualizations
+\end{itemize}
+
+\subsection{ELK Stack}
+\begin{itemize}
+    \item \textbf{Logstash}: Multi-input pipeline with JSON parsing, GeoIP enrichment
+    \item \textbf{Elasticsearch}: Daily indices (\texttt{logs-YYYY.MM.dd}), full-text search
+    \item \textbf{Kibana}: Advanced visualization and custom dashboards
+\end{itemize}
+
+\section{Docker Services}
+15 containerized services orchestrated via Docker Compose:
+
+\begin{table}[H]
+\centering\small
+\begin{tabular}{|l|l|l|}
+\hline
+\textbf{Service} & \textbf{Port} & \textbf{Purpose} \\
+\hline
+frontend & 3000 & Next.js UI \\
+backend & 8000 & Django API \\
+postgres & 5432 & User data \\
+mongodb & 27017 & Log metadata \\
+redis & 6379 & Cache/PubSub \\
+elasticsearch & 9200 & Log storage \\
+logstash & 5000 & Ingestion \\
+kibana & 5601 & Visualization \\
+celery\_worker & - & Async tasks \\
+realtime\_listener & - & Redis-WebSocket bridge \\
+nginx & 80/443 & Reverse proxy \\
+prometheus & 9090 & Metrics \\
+grafana & 3001 & Dashboards \\
+\hline
+\end{tabular}
+\caption{Docker Services}
+\end{table}

@@ -1,0 +1,123 @@
+\documentclass[11pt,a4paper]{report}
+
+% ============================================
+% Packages
+% ============================================
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[english]{babel}
+\usepackage{graphicx}
+\usepackage{geometry}
+\usepackage{titlesec}
+\usepackage{fancyhdr}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{tcolorbox}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{enumitem}
+\usepackage{float}
+\usepackage{caption}
+\usepackage{multicol}
+
+% ============================================
+% Page Layout - Compact
+% ============================================
+\geometry{
+    left=2cm,
+    right=2cm,
+    top=2cm,
+    bottom=2cm
+}
+
+% Reduce spacing
+\setlength{\parskip}{0.3em}
+\setlist{nosep,leftmargin=*}
+
+% ============================================
+% Colors
+% ============================================
+\definecolor{primarycolor}{RGB}{41, 98, 255}
+\definecolor{secondarycolor}{RGB}{0, 150, 136}
+\definecolor{codebackground}{RGB}{248, 248, 248}
+
+% ============================================
+% Hyperref Configuration
+% ============================================
+\hypersetup{
+    colorlinks=true,
+    linkcolor=primarycolor,
+    urlcolor=primarycolor,
+    pdftitle={ELK Vision SaaS - Technical Documentation},
+    pdfauthor={Development Team}
+}
+
+% ============================================
+% Code Listing Style - Compact
+% ============================================
+\lstdefinestyle{codestyle}{
+    backgroundcolor=\color{codebackground},
+    basicstyle=\ttfamily\scriptsize,
+    breaklines=true,
+    frame=single,
+    numbers=none,
+    xleftmargin=5pt,
+    xrightmargin=5pt
+}
+\lstset{style=codestyle}
+
+% ============================================
+% Chapter & Section Formatting - Compact
+% ============================================
+\titleformat{\chapter}[hang]
+{\normalfont\LARGE\bfseries\color{primarycolor}}
+{\thechapter.}{0.5em}{}
+\titlespacing*{\chapter}{0pt}{-20pt}{10pt}
+
+\titleformat{\section}
+{\normalfont\large\bfseries\color{primarycolor}}
+{\thesection}{0.5em}{}
+\titlespacing*{\section}{0pt}{8pt}{4pt}
+
+\titleformat{\subsection}
+{\normalfont\normalsize\bfseries}
+{\thesubsection}{0.5em}{}
+\titlespacing*{\subsection}{0pt}{6pt}{2pt}
+
+% ============================================
+% Header & Footer
+% ============================================
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\leftmark}
+\fancyhead[R]{\small\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+
+% ============================================
+% Graphics Path
+% ============================================
+\graphicspath{{../figures/}}
+
+% ============================================
+% Document Begin
+% ============================================
+\begin{document}
+
+% Cover Page
+\input{chapters/00-cover}
+
+% Table of Contents (compact)
+\tableofcontents
+\newpage
+
+% Chapters
+\input{chapters/01-introduction}
+\input{chapters/02-architecture}
+\input{chapters/03-tech-specs}
+\input{chapters/04-implementation}
+\input{chapters/05-deployment}
+\input{chapters/06-user-guide}
+\input{chapters/07-conclusion}
+
+\end{document}

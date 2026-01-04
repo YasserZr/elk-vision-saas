@@ -1,0 +1,17 @@
+\chapter{Introduction}
+
+\section{Project Context}
+ELK Vision SaaS is an enterprise-grade log monitoring platform that enables organizations to centralize, monitor, and analyze logs in real-time. Built on the ELK Stack (Elasticsearch, Logstash, Kibana) with modern web technologies, it provides scalable log aggregation, search, visualization, and alerting.
+
+\section{Objectives}
+\begin{itemize}
+    \item \textbf{Real-Time Streaming}: Sub-second latency via WebSocket and Redis Pub/Sub
+    \item \textbf{Multi-Source Ingestion}: TCP, UDP, HTTP, and file upload support
+    \item \textbf{Advanced Search}: Elasticsearch-powered full-text search with filtering
+    \item \textbf{Visualization}: Built-in dashboards and Kibana integration
+    \item \textbf{Multi-Tenant}: Secure user isolation and tenant-specific log segregation
+    \item \textbf{Containerized}: Docker-based deployment for scalability
+\end{itemize}
+
+\section{Scenario}
+A typical workflow: (1) Applications send logs to Logstash via TCP, (2) Logstash parses and enriches data, (3) Logs are indexed in Elasticsearch and published to Redis, (4) WebSocket bridge pushes logs to browsers in real-time, (5) Users filter and search logs in the dashboard.

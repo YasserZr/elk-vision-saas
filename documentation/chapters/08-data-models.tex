@@ -1,0 +1,232 @@
+\chapter{Data Models}
+
+\section{MongoDB Data Models}
+
+\subsection{Log Metadata Collection}
+
+The \code{log\_metadata} collection stores information about log uploads and processing:
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{|l|l|l|}
+        \hline
+        \textbf{Field} & \textbf{Type} & \textbf{Description} \\
+        \hline
+        \_id & ObjectId & MongoDB document ID \\
+        upload\_id & String & Unique upload identifier \\
+        task\_id & String & Celery task ID \\
+        tenant\_id & String & Tenant identifier \\
+        user\_id & Integer & User ID (foreign key) \\
+        filename & String & Original file name \\
+        file\_size & Integer & File size in bytes \\
+        file\_type & String & File MIME type \\
+        source & String & Log source application \\
+        environment & String & Environment (dev/staging/prod) \\
+        status & String & Processing status \\
+        log\_count & Integer & Number of logs processed \\
+        processing\_time & Float & Processing duration (seconds) \\
+        errors & Array & Processing error messages \\
+        created\_at & DateTime & Creation timestamp \\
+        processed\_at & DateTime & Completion timestamp \\
+        indexed\_at & DateTime & Elasticsearch indexing time \\
+        \hline
+    \end{tabular}
+    \caption{Log Metadata Document Schema}
+    \label{tab:log-metadata}
+\end{table}
+
+\subsubsection{Status Values}
+
+\begin{itemize}
+    \item \textbf{pending}: Upload received, waiting for processing
+    \item \textbf{processing}: Currently being processed
+    \item \textbf{success}: Successfully processed and indexed
+    \item \textbf{failed}: Processing failed with errors
+\end{itemize}
+
+\subsubsection{MongoDB Indexes}
+
+\begin{lstlisting}[language=Python, caption=MongoDB Index Definitions]
+def create_log_metadata_indexes():
+    collection = get_collection(COLLECTION_LOG_METADATA)
+    
+    # Unique upload ID index
+    collection.create_index("upload_id", unique=True)
+    
+    # Task ID for Celery integration
+    collection.create_index("task_id")
+    
+    # Tenant queries with sorting
+    collection.create_index([
+        ("tenant_id", 1),
+        ("created_at", -1)
+    ])
+    
+    # User filtering
+    collection.create_index([
+        ("tenant_id", 1),
+        ("user_id", 1),
+        ("created_at", -1)
+    ])
+    
+    # Status monitoring
+    collection.create_index([
+        ("status", 1),
+        ("created_at", -1)
+    ])
+\end{lstlisting}
+
+\subsection{Search History Collection}
+
+Stores user search queries for replay and analytics:
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{|l|l|l|}
+        \hline
+        \textbf{Field} & \textbf{Type} & \textbf{Description} \\
+        \hline
+        \_id & ObjectId & MongoDB document ID \\
+        user\_id & Integer & User who performed search \\
+        query & String & Search query text \\
+        filters & Object & Applied filters \\
+        result\_count & Integer & Number of results \\
+        execution\_time & Float & Query duration (ms) \\
+        timestamp & DateTime & When search was performed \\
+        \hline
+    \end{tabular}
+    \caption{Search History Document Schema}
+    \label{tab:search-history}
+\end{table}
+
+\section{Redis Data Models}
+
+\subsection{Cache Structure}
+
+Django cache entries use prefix-based keys:
+
+\begin{lstlisting}[caption=Redis Cache Keys]
+# Session cache
+session:<session_id> -> {session_data}
+
+# User cache
+user:<user_id>:profile -> {user_profile_data}
+
+# Dashboard cache
+dashboard:<dashboard_id>:config -> {dashboard_config}
+
+# Statistics cache (TTL: 5 minutes)
+stats:<tenant_id>:overview -> {aggregated_stats}
+\end{lstlisting}
+
+\subsection{Pub/Sub Channels}
+
+Real-time messaging uses the following channels:
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{|l|l|}
+        \hline
+        \textbf{Channel} & \textbf{Purpose} \\
+        \hline
+        logs:realtime & Real-time log streaming from Logstash \\
+        notifications:<user\_id> & User-specific notifications \\
+        alerts:triggered & Alert trigger events \\
+        metrics:update & System metrics updates \\
+        \hline
+    \end{tabular}
+    \caption{Redis Pub/Sub Channels}
+    \label{tab:redis-channels}
+\end{table}
+
+\subsection{Celery Queue Structure}
+
+\begin{lstlisting}[caption=Celery Redis Keys]
+# Task queue
+celery:default -> [task_message, ...]
+
+# Task results (TTL: 24 hours)
+celery-task-meta-<task_id> -> {
+  "status": "SUCCESS",
+  "result": {...},
+  "traceback": null
+}
+
+# Beat schedule
+celery-beat-schedule -> {schedule_data}
+\end{lstlisting}
+
+\section{PostgreSQL Schema}
+
+\subsection{Core Django Models}
+
+\begin{lstlisting}[language=SQL, caption=PostgreSQL Schema Overview]
+-- User authentication
+CREATE TABLE auth_user (
+    id SERIAL PRIMARY KEY,
+    username VARCHAR(150) UNIQUE NOT NULL,
+    email VARCHAR(254),
+    password VARCHAR(128) NOT NULL,
+    is_active BOOLEAN DEFAULT TRUE,
+    date_joined TIMESTAMP WITH TIME ZONE
+);
+
+-- API tokens
+CREATE TABLE authtoken_token (
+    key VARCHAR(40) PRIMARY KEY,
+    created TIMESTAMP WITH TIME ZONE,
+    user_id INTEGER REFERENCES auth_user(id)
+);
+
+-- Dashboard configuration
+CREATE TABLE dashboards_dashboard (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    user_id INTEGER REFERENCES auth_user(id),
+    config JSONB,
+    created_at TIMESTAMP WITH TIME ZONE,
+    updated_at TIMESTAMP WITH TIME ZONE
+);
+
+-- Alert rules
+CREATE TABLE alerts_alertrule (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    query TEXT,
+    condition JSONB,
+    severity VARCHAR(20),
+    enabled BOOLEAN DEFAULT TRUE,
+    user_id INTEGER REFERENCES auth_user(id)
+);
+\end{lstlisting}
+
+\section{Elasticsearch Document Schema}
+
+\subsection{Log Document Structure}
+
+\begin{lstlisting}[language=json, caption=Elasticsearch Log Document]
+{
+  "@timestamp": "2026-01-04T12:00:00.000Z",
+  "@version": "1",
+  "level": "error",
+  "message": "Database connection failed",
+  "parsed": {
+    "application": "backend-api",
+    "environment": "production",
+    "host": "api-server-01",
+    "trace_id": "abc123def456"
+  },
+  "source": "backend",
+  "tags": ["tcp", "high_priority"],
+  "user_id": 42,
+  "tenant_id": "tenant_123",
+  "geoip": {
+    "city_name": "New York",
+    "country_name": "United States",
+    "location": {
+      "lat": 40.7128,
+      "lon": -74.0060
+    }
+  }
+}
+\end{lstlisting}

@@ -1,0 +1,108 @@
+\chapter{Implementation}
+
+\section{ELK Configuration}
+
+\subsection{Logstash Pipeline}
+\begin{lstlisting}[language=Ruby]
+input {
+  tcp { port => 5000; codec => json_lines }
+  http { port => 8080; codec => json }
+}
+filter {
+  json { source => "message"; target => "parsed" }
+  date { match => ["[parsed][timestamp]", "ISO8601"] }
+  mutate { lowercase => ["[parsed][level]"] }
+  geoip { source => "[parsed][ip]" }
+}
+output {
+  elasticsearch { 
+    hosts => ["elasticsearch:9200"]
+    index => "logs-%{+YYYY.MM.dd}"
+  }
+  redis { 
+    host => "redis"; data_type => "channel"
+    key => "logs:realtime"; codec => json
+  }
+}
+\end{lstlisting}
+
+\section{Code Extracts}
+
+\subsection{WebSocket Consumer (Python)}
+\begin{lstlisting}[language=Python]
+class LogStreamConsumer(AsyncWebsocketConsumer):
+    async def connect(self):
+        self.user = self.scope.get("user")
+        if not self.user.is_authenticated:
+            await self.close(code=4001); return
+        self.group_name = f"logs_{self.user.id}"
+        await self.channel_layer.group_add(
+            self.group_name, self.channel_name)
+        await self.accept()
+
+    async def new_log(self, event):
+        if self._matches_filters(event.get("log")):
+            await self.send(json.dumps({
+                "type": "new_log", "data": event["log"]
+            }))
+\end{lstlisting}
+
+\subsection{WebSocket Hook (TypeScript)}
+\begin{lstlisting}[language=JavaScript]
+export function useWebSocket(endpoint: string) {
+  const [isConnected, setIsConnected] = useState(false);
+  const ws = useRef<WebSocket | null>(null);
+
+  useEffect(() => {
+    ws.current = new WebSocket(`${WS_URL}${endpoint}`);
+    ws.current.onopen = () => setIsConnected(true);
+    ws.current.onclose = () => setIsConnected(false);
+    return () => ws.current?.close();
+  }, [endpoint]);
+  
+  return { isConnected, ws };
+}
+\end{lstlisting}
+
+\section{Tests and Validation}
+
+\subsection{Test Coverage}
+\begin{table}[H]
+\centering\small
+\begin{tabular}{|l|c|c|}
+\hline
+\textbf{Module} & \textbf{Coverage} & \textbf{Tests} \\
+\hline
+Backend (Django) & 80\% & 73 \\
+Frontend (React) & 78\% & 36 \\
+\hline
+\end{tabular}
+\end{table}
+
+\subsection{Performance Metrics}
+\begin{itemize}
+    \item Log ingestion: 10,000+ logs/second
+    \item WebSocket latency: <500ms
+    \item Search response: <200ms typical
+    \item Concurrent users: 100+ tested
+\end{itemize}
+
+\section{Difficulties and Solutions}
+
+\begin{table}[H]
+\centering\small
+\begin{tabular}{|p{4cm}|p{6cm}|}
+\hline
+\textbf{Challenge} & \textbf{Solution} \\
+\hline
+WebSocket stability & Exponential backoff reconnection, heartbeat pings \\
+\hline
+High log latency (3-5s) & Replaced polling with Redis Pub/Sub (<500ms) \\
+\hline
+ES memory issues & Reduced heap to 512MB dev, documented 4GB+ prod \\
+\hline
+Multi-DB consistency & Eventual consistency with compensation \\
+\hline
+\end{tabular}
+\caption{Challenges and Solutions}
+\end{table}

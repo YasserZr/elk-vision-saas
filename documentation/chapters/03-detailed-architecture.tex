@@ -1,0 +1,180 @@
+\chapter{Detailed Architecture}
+
+\section{Frontend Architecture}
+
+\subsection{Next.js Application Structure}
+
+The frontend is built with Next.js 14 using the App Router pattern:
+
+\begin{verbatim}
+frontend/src/
+├── app/                  # Next.js App Router
+│   ├── (dashboard)/      # Protected routes group
+│   │   ├── dashboard/    # Main dashboard
+│   │   ├── live-logs/    # Real-time log viewer
+│   │   └── layout.tsx    # Dashboard layout
+│   ├── login/            # Login page
+│   └── register/         # Registration page
+├── components/           # Reusable React components
+│   ├── analytics/        # Charts and statistics
+│   ├── dashboard/        # Dashboard widgets
+│   ├── realtime/         # Real-time log components
+│   └── ui/               # Base UI components
+├── hooks/                # Custom React hooks
+│   ├── useWebSocket.ts   # WebSocket connection
+│   └── useVisualAlerts.ts
+├── lib/                  # Utility libraries
+│   ├── api.ts            # API client
+│   └── websocket.ts      # WebSocket service
+└── types/                # TypeScript definitions
+\end{verbatim}
+
+\subsection{Real-Time Data Flow}
+
+The frontend maintains persistent WebSocket connections for:
+\begin{itemize}
+    \item \textbf{Log Stream}: \code{ws://host/ws/logs/stream/} - Live log entries
+    \item \textbf{Notifications}: \code{ws://host/ws/notifications/} - Alerts and system events
+    \item \textbf{Metrics}: \code{ws://host/ws/metrics/} - Real-time statistics
+\end{itemize}
+
+\section{Backend Architecture}
+
+\subsection{Django Application Structure}
+
+The backend follows Django best practices with modular apps:
+
+\begin{verbatim}
+backend/
+├── api/                  # Core API module
+│   ├── consumers.py      # WebSocket handlers
+│   ├── realtime.py       # Redis Pub/Sub bridge
+│   └── routing.py        # WebSocket URL routing
+├── app/                  # Business logic apps
+│   ├── users/            # User management
+│   ├── logs/             # Log ingestion & search
+│   ├── dashboards/       # Dashboard configuration
+│   ├── alerts/           # Alert rules & triggers
+│   └── health/           # Health check endpoints
+└── config/               # Django configuration
+    ├── settings.py       # Main settings
+    ├── asgi.py           # ASGI (WebSocket support)
+    └── celery.py         # Celery configuration
+\end{verbatim}
+
+\subsection{WebSocket Consumer Architecture}
+
+\begin{figure}[H]
+    \centering
+    \fbox{\parbox{0.8\textwidth}{
+        \centering
+        \vspace{0.5cm}
+        \textbf{WebSocket Consumer Flow}\\[0.3cm]
+        \small
+        Client $\rightarrow$ Nginx $\rightarrow$ Daphne (ASGI) $\rightarrow$ Django Channels\\
+        $\downarrow$\\
+        Redis Channel Layer $\leftrightarrow$ Consumer Groups\\
+        $\downarrow$\\
+        LogStreamConsumer / NotificationConsumer
+        \vspace{0.5cm}
+    }}
+    \caption{WebSocket Consumer Architecture}
+    \label{fig:websocket-architecture}
+\end{figure}
+
+\subsection{Celery Task Architecture}
+
+Background tasks are managed by Celery with Redis as broker:
+
+\begin{itemize}
+    \item \textbf{celery\_worker}: Executes async tasks (log processing, alerts)
+    \item \textbf{celery\_beat}: Schedules periodic tasks
+    \item \textbf{flower}: Web-based task monitoring (port 5555)
+\end{itemize}
+
+\section{ELK Stack Architecture}
+
+\subsection{Elasticsearch Cluster}
+
+Single-node cluster configuration for development:
+\begin{itemize}
+    \item \textbf{Index Pattern}: \code{logs-YYYY.MM.dd} (daily indices)
+    \item \textbf{Memory}: 512MB (configurable via ES\_JAVA\_OPTS)
+    \item \textbf{Security}: Disabled for development (enabled in production)
+\end{itemize}
+
+\subsection{Logstash Pipeline Architecture}
+
+\begin{figure}[H]
+    \centering
+    \fbox{\parbox{0.9\textwidth}{
+        \centering
+        \vspace{0.5cm}
+        \textbf{Logstash Pipeline Stages}\\[0.5cm]
+        \begin{tabular}{|c|c|c|}
+            \hline
+            \textbf{INPUT} & \textbf{FILTER} & \textbf{OUTPUT} \\
+            \hline
+            TCP (5000) & JSON Parse & Elasticsearch \\
+            UDP (5000) & Timestamp Extract & Redis Pub/Sub \\
+            HTTP (8080) & Level Normalize & \\
+            Beats (5044) & GeoIP Enrich & \\
+            \hline
+        \end{tabular}
+        \vspace{0.5cm}
+    }}
+    \caption{Logstash Pipeline Stages}
+    \label{fig:logstash-pipeline}
+\end{figure}
+
+\section{Database Architecture}
+
+\subsection{PostgreSQL Schema}
+
+PostgreSQL stores Django application data:
+\begin{itemize}
+    \item \textbf{auth\_user}: User accounts and credentials
+    \item \textbf{authtoken\_token}: API authentication tokens
+    \item \textbf{django\_session}: User sessions
+    \item \textbf{dashboards\_*}: Dashboard configurations
+    \item \textbf{alerts\_*}: Alert rules and history
+\end{itemize}
+
+\subsection{MongoDB Collections}
+
+MongoDB stores log-related metadata:
+\begin{itemize}
+    \item \textbf{log\_metadata}: Upload tracking and processing status
+    \item \textbf{search\_history}: User search queries and results
+\end{itemize}
+
+\subsection{Redis Data Structures}
+
+Redis serves multiple purposes:
+\begin{itemize}
+    \item \textbf{Cache}: Django cache backend (\code{db=1})
+    \item \textbf{Celery Broker}: Task queue (\code{db=0})
+    \item \textbf{Channel Layer}: WebSocket groups
+    \item \textbf{Pub/Sub}: Real-time log streaming (\code{logs:realtime})
+\end{itemize}
+
+\section{Security Architecture}
+
+\subsection{Authentication Flow}
+
+\begin{enumerate}
+    \item User submits credentials to \code{/api/auth/login/}
+    \item Backend validates against PostgreSQL user table
+    \item On success, returns authentication token
+    \item Client includes token in \code{Authorization: Token <token>} header
+    \item Backend validates token on each request
+\end{enumerate}
+
+\subsection{Multi-Tenant Isolation}
+
+Each user's data is isolated using:
+\begin{itemize}
+    \item User ID filtering in all database queries
+    \item WebSocket group membership per user
+    \item Elasticsearch index filtering by tenant
+\end{itemize}

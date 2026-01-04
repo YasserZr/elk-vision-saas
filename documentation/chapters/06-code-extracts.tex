@@ -1,0 +1,234 @@
+\chapter{Code Extracts}
+
+This chapter presents significant code extracts from the ELK Vision SaaS project, highlighting key implementation patterns and architectural decisions.
+
+\section{WebSocket Consumer Implementation}
+
+The following extract shows the \code{LogStreamConsumer} class responsible for real-time log streaming to connected clients:
+
+\begin{lstlisting}[language=Python, caption=WebSocket Log Stream Consumer]
+class LogStreamConsumer(AsyncWebsocketConsumer):
+    """WebSocket consumer for real-time log streaming.
+    Streams new log entries as they arrive."""
+
+    async def connect(self):
+        """Handle WebSocket connection."""
+        self.user = self.scope.get("user")
+        
+        if not self.user or not self.user.is_authenticated:
+            await self.close(code=4001)
+            return
+
+        self.user_id = str(self.user.id)
+        self.group_name = f"logs_{self.user_id}"
+        self.filters = {}
+
+        # Join the user-specific group
+        await self.channel_layer.group_add(
+            self.group_name, self.channel_name
+        )
+        await self.accept()
+
+    async def disconnect(self, close_code):
+        """Handle WebSocket disconnection."""
+        await self.channel_layer.group_discard(
+            self.group_name, self.channel_name
+        )
+
+    async def receive(self, text_data):
+        """Handle incoming WebSocket messages."""
+        data = json.loads(text_data)
+        message_type = data.get("type")
+
+        if message_type == "set_filters":
+            self.filters = data.get("filters", {})
+            await self.send(json.dumps({
+                "type": "filters_updated",
+                "filters": self.filters
+            }))
+
+    async def new_log(self, event):
+        """Send new log entry to WebSocket."""
+        log_data = event.get("log", {})
+        
+        # Apply client-side filters
+        if self._matches_filters(log_data):
+            await self.send(json.dumps({
+                "type": "new_log",
+                "data": log_data
+            }))
+\end{lstlisting}
+
+\section{Logstash Pipeline Configuration}
+
+The Logstash pipeline handles multi-source ingestion with parsing and output routing:
+
+\begin{lstlisting}[language=Ruby, caption=Logstash Pipeline Configuration]
+input {
+  tcp {
+    port => 5000
+    codec => json_lines
+    tags => ["tcp"]
+  }
+  
+  http {
+    port => 8080
+    codec => json
+    tags => ["http"]
+  }
+}
+
+filter {
+  # Parse JSON logs
+  if [message] =~ /^\{.*\}$/ {
+    json {
+      source => "message"
+      target => "parsed"
+    }
+  }
+
+  # Extract and format timestamp
+  if [parsed][timestamp] {
+    date {
+      match => ["[parsed][timestamp]", "ISO8601"]
+      target => "@timestamp"
+    }
+  }
+
+  # Normalize log level to lowercase
+  if [parsed][level] {
+    mutate {
+      lowercase => ["[parsed][level]"]
+    }
+  }
+
+  # Add GeoIP enrichment
+  if [parsed][ip] {
+    geoip {
+      source => "[parsed][ip]"
+      target => "geoip"
+    }
+  }
+}
+
+output {
+  # Primary: Elasticsearch for storage/search
+  elasticsearch {
+    hosts => ["${ELASTICSEARCH_HOSTS}"]
+    index => "logs-%{+YYYY.MM.dd}"
+  }
+
+  # Secondary: Redis Pub/Sub for real-time
+  redis {
+    host => "${REDIS_HOST}"
+    data_type => "channel"
+    key => "logs:realtime"
+    codec => json
+  }
+}
+\end{lstlisting}
+
+\section{MongoDB Log Metadata Model}
+
+The \code{LogMetadata} class provides a document model for MongoDB:
+
+\begin{lstlisting}[language=Python, caption=MongoDB LogMetadata Model]
+class LogMetadata:
+    """Log Metadata model stored in MongoDB.
+    Stores metadata about log uploads and processing."""
+
+    def __init__(self, data: dict):
+        self._id = data.get("_id")
+        self.upload_id = data.get("upload_id")
+        self.task_id = data.get("task_id")
+        self.tenant_id = data.get("tenant_id")
+        self.user_id = data.get("user_id")
+        self.filename = data.get("filename")
+        self.file_size = data.get("file_size", 0)
+        self.file_type = data.get("file_type")
+        self.source = data.get("source", "unknown")
+        self.environment = data.get("environment")
+        self.status = data.get("status", "pending")
+        self.log_count = data.get("log_count", 0)
+        self.created_at = data.get("created_at")
+        self.processed_at = data.get("processed_at")
+
+    @classmethod
+    def create(cls, upload_id: str, task_id: str, 
+               tenant_id: str, user_id: int, **kwargs):
+        """Create log metadata entry in MongoDB."""
+        collection = get_collection(COLLECTION_LOG_METADATA)
+        
+        document = {
+            "upload_id": upload_id,
+            "task_id": task_id,
+            "tenant_id": tenant_id,
+            "user_id": user_id,
+            "status": "pending",
+            "created_at": datetime.utcnow(),
+            **kwargs
+        }
+        
+        result = collection.insert_one(document)
+        document["_id"] = result.inserted_id
+        return cls(document)
+
+    @classmethod
+    def get_statistics(cls, tenant_id: str, 
+                       days: int = 30):
+        """Aggregate upload statistics for tenant."""
+        collection = get_collection(COLLECTION_LOG_METADATA)
+        
+        pipeline = [
+            {"$match": {"tenant_id": tenant_id}},
+            {"$group": {
+                "_id": "$status",
+                "count": {"$sum": 1},
+                "total_logs": {"$sum": "$log_count"}
+            }}
+        ]
+        
+        return list(collection.aggregate(pipeline))
+\end{lstlisting}
+
+\section{Frontend WebSocket Hook}
+
+The \code{useWebSocket} hook manages WebSocket connections in React:
+
+\begin{lstlisting}[language=JavaScript, caption=React WebSocket Hook]
+export function useWebSocket(endpoint: string) {
+  const [isConnected, setIsConnected] = useState(false);
+  const [lastMessage, setLastMessage] = useState(null);
+  const ws = useRef<WebSocket | null>(null);
+
+  useEffect(() => {
+    const wsUrl = `${WS_BASE_URL}${endpoint}`;
+    ws.current = new WebSocket(wsUrl);
+
+    ws.current.onopen = () => {
+      setIsConnected(true);
+      console.log('WebSocket connected');
+    };
+
+    ws.current.onmessage = (event) => {
+      const data = JSON.parse(event.data);
+      setLastMessage(data);
+    };
+
+    ws.current.onclose = () => {
+      setIsConnected(false);
+      // Implement reconnection logic
+    };
+
+    return () => ws.current?.close();
+  }, [endpoint]);
+
+  const sendMessage = useCallback((message: object) => {
+    if (ws.current?.readyState === WebSocket.OPEN) {
+      ws.current.send(JSON.stringify(message));
+    }
+  }, []);
+
+  return { isConnected, lastMessage, sendMessage };
+}
+\end{lstlisting}
