@@ -31,7 +31,7 @@ cryptography==41.0.7
 
 # Environment & Configuration
 python-decouple==3.8
-python-dotenv==1.0.0
+python-dotenv==1.2.1
 
 # Utilities
 requests==2.31.0
